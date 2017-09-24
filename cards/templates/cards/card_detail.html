@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+{% load markdown_deux_tags %}
+{% load area_rating %}
+{% block title %}{{ card }}{% endblock %}
+{% block content %}
+    <div id="braindump-detail">
+        <div id="category">
+            <h2>
+                <div class="pull-right">
+                    <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-default">Go to category</a>
+                </div>
+                {{ card.category.name }}
+            </h2>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Card #{{ card.pk }}
+                    <div class="pull-right">
+                        {% area_rating card.area %}
+                    </div>
+                </h3>
+            </div>
+            <div class="panel-body">
+                {{ card.question|markdown }}
+                {% if card.hint %}
+                    <div id="hint">
+                        <hr>
+                        {{ card.hint|markdown }}
+                    </div>
+                {% endif %}
+                <div id="answer">
+                    <hr>
+                    {{ card.answer|markdown }}
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a href="{% url 'card-update' card.pk %}" class="btn btn-default">Update</a>
+                <a href="{% url 'card-delete' card.pk %}" class="btn btn-link">Delete</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

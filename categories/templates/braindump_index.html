@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+{% load markdown_deux_tags %}
+{% block title %}Braindump{% endblock %}
+{% block content %}
+    <h1>Braindump</h1>
+    <div class="row">
+        {% for category in category_list %}
+            <div class="col-xs-6 col-lg-4">
+                <div class="braindump-category">
+                    <h2>
+                        {{ category.name }}
+                        <span class="badge">{{ category.card_set.all|length }}</span>
+                    </h2>
+                    {{ category.description|markdown }}
+                    <p>
+                        {% if category.card_set.all|length == 0 %}
+                            <a href="{% url 'card-create' %}" class="btn btn-default">Create first card</a>
+                        {% else %}
+                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default">Start Braindump</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            {% if forloop.counter|divisibleby:3 %}
+                </div>
+                <div class="row">
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
