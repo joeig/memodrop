@@ -1,9 +1,3 @@
-#braindump,
-#braindump-detail {
-    width: 60%;
-    margin: auto;
-}
-
 #braindump #hint,
 #braindump #answer {
     display: none;
