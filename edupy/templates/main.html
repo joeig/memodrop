@@ -1,4 +1,3 @@
-{# Load the tag library #}
 {% load bootstrap3 %}
 {% load static %}
 <!DOCTYPE html>
@@ -9,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}edupy{% endblock %}</title>
     {% bootstrap_css %}
+    <link href="{% static 'edupy.css' %}" rel="stylesheet">
     <link href="{% static 'braindump.css' %}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>

@@ -7,30 +7,32 @@
             <a href="{% url 'category-create' %}" class="btn btn-default">Create</a>
         </div>
     </h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Cards</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for category in category_list %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td><a href="{% url 'category-detail' category.pk %}">{{ category.name }}</a></td>
-                    <td>{{ category.card_set.all|length }}</td>
-                    <td>
-                        <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default btn-xs">Start Braindump</a>
-                        <a href="{% url 'card-create' %}" class="btn btn-default btn-xs">Create card</a>
-                        <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs">Update</a>
-                    </td>
+                    <th>Category</th>
+                    <th>Cards</th>
+                    <th></th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">No categories yet.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for category in category_list %}
+                    <tr>
+                        <td><a href="{% url 'category-detail' category.pk %}">{{ category.name }}</a></td>
+                        <td>{{ category.card_set.all|length }}</td>
+                        <td>
+                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default btn-xs">Start Braindump</a>
+                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default btn-xs">Create card</a>
+                            <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs">Update</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No categories yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

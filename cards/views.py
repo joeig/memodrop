@@ -1,9 +1,11 @@
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic.list import ListView
+from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from django.contrib import messages
+from django.views.generic.list import ListView
+
 from .models import Card
 
 
@@ -23,10 +25,18 @@ class CardCreate(CreateView):
               'area',
               'category']
 
+    def get_initial(self):
+        # Pre-select desired category:
+        return {
+            'category': self.request.GET.get('category')
+        }
+
     def form_valid(self, form):
         if self.request.POST.get('save') == 'Save and create another':
             form.save()
-            return redirect('card-create')
+            # Pre-select last category:
+            query_string = '?category={}'.format(self.request.POST.get('category'))
+            return HttpResponseRedirect(reverse('card-create') + query_string)
         else:
             return super(CardCreate, self).form_valid(form)
 
@@ -42,7 +52,9 @@ class CardUpdate(UpdateView):
     def form_valid(self, form):
         if self.request.POST.get('save') == 'Save and create another':
             form.save()
-            return redirect('card-create')
+            # Pre-select last category:
+            query_string = '?category={}'.format(self.request.POST.get('category'))
+            return HttpResponseRedirect(reverse('card-create') + query_string)
         else:
             return super(CardUpdate, self).form_valid(form)
 

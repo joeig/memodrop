@@ -7,32 +7,34 @@
             <a href="{% url 'card-create' %}" class="btn btn-default">Create</a>
         </div>
     </h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Question</th>
-            <th>Area</th>
-            <th>Category</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for card in card_list %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
             <tr>
-                <td><a href="{% url 'card-detail' card.pk %}">{{ card.question }}</a></td>
-                <td>{{ card.area }}</td>
-                <td><a href="{% url 'category-detail' card.category.pk %}">{{ card.category.name }}</a></td>
-                <td>
-                    <a href="{% url 'card-reset' card.pk %}" class="btn btn-default btn-xs">Reset</a>
-                    <a href="{% url 'card-update' card.pk %}" class="btn btn-default btn-xs">Update</a>
-                    <a href="{% url 'card-delete' card.pk %}" class="btn btn-link btn-xs">Delete</a>
-                </td>
+                <th>Question</th>
+                <th>Area</th>
+                <th>Category</th>
+                <th></th>
             </tr>
-        {% empty %}
-            <tr>
-                <td colspan="4">No cards yet.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for card in card_list %}
+                <tr>
+                    <td><a href="{% url 'card-detail' card.pk %}">{{ card.question }}</a></td>
+                    <td>{{ card.area }}</td>
+                    <td><a href="{% url 'category-detail' card.category.pk %}">{{ card.category.name }}</a></td>
+                    <td>
+                        <a href="{% url 'card-reset' card.pk %}" class="btn btn-default btn-xs">Reset</a>
+                        <a href="{% url 'card-update' card.pk %}" class="btn btn-default btn-xs">Update</a>
+                        <a href="{% url 'card-delete' card.pk %}" class="btn btn-link btn-xs">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No cards yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

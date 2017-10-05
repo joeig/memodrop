@@ -7,7 +7,7 @@
         <div id="category">
             <h2>
                 <div class="pull-right">
-                    <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-default">Go to category</a>
+                    <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-default">Go to Category</a>
                 </div>
                 {{ card.category.name }}
             </h2>
@@ -35,6 +35,7 @@
                 </div>
             </div>
             <div class="panel-footer">
+                <a href="{% url 'card-reset' card.pk %}" class="btn btn-default">Reset</a>
                 <a href="{% url 'card-update' card.pk %}" class="btn btn-default">Update</a>
                 <a href="{% url 'card-delete' card.pk %}" class="btn btn-link">Delete</a>
             </div>

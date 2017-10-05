@@ -4,46 +4,56 @@
 {% block content %}
     <h1>
         {{ category.name }}
-        <div class="pull-right">
-            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default">Start Braindump</a>
-            <a href="{% url 'category-update' category.pk %}" class="btn btn-default">Update</a>
-            {% if category.card_set.all|length == 0 %}
-                <a href="{% url 'category-delete' category.pk %}" class="btn btn-link">Delete</a>
-            {% endif %}
-        </div>
     </h1>
-    {{ category.description|markdown }}
-    <h2>
-        Cards
-        <a href="{% url 'card-create' %}" class="btn btn-default pull-right">Create card</a>
-    </h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Question</th>
-                <th>Area</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for card in category.card_set.all %}
-                <tr>
-                    <td><a href="{% url 'card-detail' card.pk %}">{{ card.question }}</a></td>
-                    <td>{{ card.area }}</td>
-                    <td>
-                        <a href="{% url 'card-reset' card.pk %}" class="btn btn-default btn-xs">Reset</a>
-                        <a href="{% url 'card-update' card.pk %}" class="btn btn-default btn-xs">Update</a>
-                        <a href="{% url 'card-delete' card.pk %}" class="btn btn-link btn-xs">Delete</a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3">No cards yet.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div id="chart-container" class="col-xs-6 col-lg-4">
+    <div class="clearfix"></div>
+    <p>&nbsp;</p>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{ category.description|markdown }}
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <h2>
+            Cards
+            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default pull-right">Create card</a>
+        </h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Area</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for card in category.card_set.all %}
+                        <tr>
+                            <td><a href="{% url 'card-detail' card.pk %}">{{ card.question }}</a></td>
+                            <td>{{ card.area }}</td>
+                            <td>
+                                <a href="{% url 'card-reset' card.pk %}" class="btn btn-default btn-xs">Reset</a>
+                                <a href="{% url 'card-update' card.pk %}" class="btn btn-default btn-xs">Update</a>
+                                <a href="{% url 'card-delete' card.pk %}" class="btn btn-link btn-xs">Delete</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">No cards yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pull-right">
+        <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default">Start Braindump</a>
+        <a href="{% url 'category-update' category.pk %}" class="btn btn-default">Update Category</a>
+        {% if category.card_set.all|length == 0 %}
+            <a href="{% url 'category-delete' category.pk %}" class="btn btn-link">Delete</a>
+        {% endif %}
+    </div>
+    <div id="chart-container" class="col-xs-6 col-lg-4 hidden-xs">
         <h2>Area distribution</h2>
         <canvas id="chart"></canvas>
         <script>
