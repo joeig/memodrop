@@ -1,11 +1,14 @@
-from django.views.generic.list import ListView
+import random
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import Category
+from django.views.generic.list import ListView
+
 from cards.models import Card
+from .models import Category
 
 
 class CategoryList(ListView):
@@ -52,19 +55,19 @@ def braindump_index(request):
 
 
 def braindump_session(request, category_pk):
-    # order_by('?') returns a random Card object
-    card = Card.objects.filter(
+    # order_by('?') returns *one* random Card object
+    # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
+
+    cards = Card.objects.filter(
         category_id=category_pk,
-        area__lt=6
-    ).order_by('?').first()
+    ).all()
 
-    if not card:
-        messages.warning(request, 'There are no more cards in area 1-5.')
+    distributed_cards = list()
+    for area in range(1, 7):
+        area_cards = list(cards.filter(area=area))
+        distributed_cards += area_cards * int(10 / area)
 
-        # order_by('?') returns a random Card object
-        card = Card.objects.filter(
-            category_id=category_pk
-        ).order_by('?').first()
+    card = random.choice(distributed_cards)
 
     if card:
         context = {
@@ -73,7 +76,7 @@ def braindump_session(request, category_pk):
 
         return render(request, 'braindump_session.html', context)
     else:
-        messages.warning(request, 'There are also no cards in area 6.')
+        messages.warning(request, 'Cannot find any cards for this category.')
         return redirect(request.META.get('HTTP_REFERER'))
 
 
