@@ -2,3 +2,4 @@
 db.sqlite3
 edupy/settings_prod.py
 venv/
+__pycache__
