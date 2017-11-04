@@ -5,3 +5,7 @@
 textarea.form-control {
     height: 100px;
 }
+
+textarea.form-control {
+    font-family: "Menlo", "DejaVu Sans Mono", "Liberation Mono", "Consolas", "Ubuntu Mono", "Courier New", "andale mono", "lucida console", monospace;
+}

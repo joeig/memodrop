@@ -4,12 +4,12 @@
 {% block title %}Braindump: {{ card.category }}{% endblock %}
 {% block content %}
     <div id="braindump" class="col-lg-8 col-lg-offset-2">
-        <h2>
+        <h3>
             <div class="pull-right hidden-xs">
-                <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-default">Go to Category</a>
+                <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-default btn-sm">Go to Category</a>
             </div>
             {{ card.category.name }}
-        </h2>
+        </h3>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -58,9 +58,9 @@
             <div class="col-lg-12">
                 <div class="pull-right">
                     <div class="btn-group">
-                        <a href="{% url 'braindump-session' card.category.pk %}" id="next" class="btn btn-default">Try
+                        <a href="{% url 'braindump-session' card.category.pk %}" id="next" class="btn btn-default btn-sm">Try
                             again</a>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>

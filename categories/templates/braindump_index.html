@@ -7,10 +7,10 @@
         {% for category in category_list %}
             <div class="col-xs-12 col-lg-4">
                 <div class="braindump-category">
-                    <h2>
+                    <h3>
                         {{ category.name }}
                         <span class="badge">{{ category.card_set.all|length }}</span>
-                    </h2>
+                    </h3>
                     {{ category.description|markdown }}
                     <p>
                         {% if category.card_set.all|length == 0 %}
