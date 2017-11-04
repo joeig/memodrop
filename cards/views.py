@@ -66,8 +66,9 @@ class CardDelete(DeleteView):
 
 def card_reset(request, pk):
     card = Card.objects.get(id=pk)
+    prev_area = card.area
     card.reset()
 
-    messages.success(request, 'Card #{} was moved to area 1.'.format(card.pk))
+    messages.success(request, 'Card #{} moved form area {} to area 1.'.format(card.pk, prev_area))
 
     return redirect(request.META.get('HTTP_REFERER'))
