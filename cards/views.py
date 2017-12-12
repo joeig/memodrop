@@ -20,8 +20,8 @@ class CardDetail(DetailView):
 class CardCreate(CreateView):
     model = Card
     fields = ['question',
-              'answer',
               'hint',
+              'answer',
               'area',
               'category']
 
@@ -46,8 +46,8 @@ class CardCreate(CreateView):
 class CardUpdate(UpdateView):
     model = Card
     fields = ['question',
-              'answer',
               'hint',
+              'answer',
               'area',
               'category']
 
