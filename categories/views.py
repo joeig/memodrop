@@ -13,6 +13,8 @@ from .models import Category
 
 class CategoryList(ListView):
     model = Category
+    paginate_by = 25
+    paginate_orphans = 5
 
 
 class CategoryDetail(DetailView):

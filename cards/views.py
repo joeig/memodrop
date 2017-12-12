@@ -11,6 +11,8 @@ from .models import Card
 
 class CardList(ListView):
     model = Card
+    paginate_by = 25
+    paginate_orphans = 5
 
 
 class CardDetail(DetailView):
