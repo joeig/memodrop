@@ -20,7 +20,7 @@
             <tbody>
             {% for card in card_list %}
                 <tr>
-                    <td><a href="{% url 'card-detail' card.pk %}">{{ card.question }}</a></td>
+                    <td><a href="{% url 'card-detail' card.pk %}">{{ card.question|truncatechars:128 }}</a></td>
                     <td>{{ card.area }}</td>
                     <td><a href="{% url 'category-detail' card.category.pk %}">{{ card.category.name }}</a></td>
                     <td>
