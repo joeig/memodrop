@@ -32,7 +32,7 @@ class CardCreate(CreateView):
         }
 
     def form_valid(self, form):
-        if self.request.POST.get('save') == 'Save and create another':
+        if self.request.POST.get('save') == 'Save and Create New':
             form.save()
             # Pre-select last category:
             query_string = '?category={}'.format(self.request.POST.get('category'))
@@ -50,7 +50,7 @@ class CardUpdate(UpdateView):
               'category']
 
     def form_valid(self, form):
-        if self.request.POST.get('save') == 'Save and create another':
+        if self.request.POST.get('save') == 'Save and Create New':
             form.save()
             # Pre-select last category:
             query_string = '?category={}'.format(self.request.POST.get('category'))
