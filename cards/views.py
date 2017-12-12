@@ -32,10 +32,12 @@ class CardCreate(CreateView):
         }
 
     def form_valid(self, form):
+        messages.success(self.request, 'Created card in category "{}".'.format(form.cleaned_data.get('category')))
+
         if self.request.POST.get('save') == 'Save and Create New':
             form.save()
             # Pre-select last category:
-            query_string = '?category={}'.format(self.request.POST.get('category'))
+            query_string = '?category={}'.format(form.cleaned_data.get('category').id)
             return HttpResponseRedirect(reverse('card-create') + query_string)
         else:
             return super(CardCreate, self).form_valid(form)
@@ -50,10 +52,12 @@ class CardUpdate(UpdateView):
               'category']
 
     def form_valid(self, form):
+        messages.success(self.request, 'Updated card in category "{}".'.format(form.cleaned_data.get('category')))
+
         if self.request.POST.get('save') == 'Save and Create New':
             form.save()
             # Pre-select last category:
-            query_string = '?category={}'.format(self.request.POST.get('category'))
+            query_string = '?category={}'.format(form.cleaned_data.get('category').id)
             return HttpResponseRedirect(reverse('card-create') + query_string)
         else:
             return super(CardUpdate, self).form_valid(form)
@@ -63,12 +67,19 @@ class CardDelete(DeleteView):
     model = Card
     success_url = reverse_lazy('card-list')
 
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Card deleted.')
+        return super(CardDelete, self).delete(request, *args, **kwargs)
+
 
 def card_reset(request, pk):
     card = Card.objects.get(id=pk)
     prev_area = card.area
-    card.reset()
 
-    messages.success(request, 'Card #{} moved form area {} to area 1.'.format(card.pk, prev_area))
+    if prev_area != 1:
+        card.reset()
+        messages.success(request, 'Card moved form area {} to area 1.'.format(prev_area))
+    else:
+        messages.success(request, 'Card is already in area 1.')
 
     return redirect(request.META.get('HTTP_REFERER'))

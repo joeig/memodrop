@@ -33,15 +33,27 @@ class CategoryCreate(CreateView):
     model = Category
     fields = ['name', 'description']
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Category created.')
+        return super(CategoryCreate, self).form_valid(form)
+
 
 class CategoryUpdate(UpdateView):
     model = Category
     fields = ['name', 'description']
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Category updated.')
+        return super(CategoryUpdate, self).form_valid(form)
+
 
 class CategoryDelete(DeleteView):
     model = Category
     success_url = reverse_lazy('category-list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Category deleted.')
+        return super(CategoryDelete, self).delete(request, *args, **kwargs)
 
 
 def braindump_index(request):
