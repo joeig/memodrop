@@ -42,14 +42,16 @@ class Card(models.Model):
     def move_forward(self):
         """Increase the area
         """
-        self.area = F('_area') + 1
-        self.save()
+        if self.area < 6:
+            self.area += 1
+            self.save()
 
     def move_backward(self):
         """Decrease the area
         """
-        self.area = F('_area') - 1
-        self.save()
+        if self.area > 1:
+            self.area -= 1
+            self.save()
 
     def reset(self):
         """Set card to area 1
