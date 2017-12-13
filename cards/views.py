@@ -91,7 +91,7 @@ def card_reset(request, pk):
     else:
         messages.success(request, 'Card is already in area 1.')
 
-    return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,))))
 
 
 def card_set_area(request, pk, area):
@@ -101,4 +101,4 @@ def card_set_area(request, pk, area):
     card.save()
     messages.success(request, 'Card moved from area {} to area {}.'.format(prev_area, card.area))
 
-    return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,))))

@@ -2,7 +2,7 @@ import random
 
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
@@ -93,7 +93,7 @@ def braindump_session(request, category_pk):
         return render(request, 'braindump_session.html', context)
     else:
         messages.warning(request, 'Cannot find any cards for this category.')
-        return redirect(request.META.get('HTTP_REFERER'))
+        return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
 
 
 def braindump_ok(request, card_pk, category_pk):
