@@ -1,4 +1,5 @@
 {% extends "main.html" %}
+{% load bootstrap3 %}
 {% block title %}Categories{% endblock %}
 {% block content %}
     <h1>
@@ -38,25 +39,5 @@
         </table>
     </div>
 
-    {% if is_paginated %}
-        <div class="pagination">
-            <ul class="pagination pagination-centered">
-                {% if page_obj.has_previous %}
-                    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-                {% else %}
-                    <li class="disabled"><a href="">&laquo;</a></li>
-                {% endif %}
-
-                {% for i in paginator.page_range %}
-                    <li {% if page_obj.number == i %} class="active" {% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-                {% else %}
-                    <li class="disabled"><a href="">&raquo;</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    {% endif %}
+    {% bootstrap_pagination page_obj %}
 {% endblock %}

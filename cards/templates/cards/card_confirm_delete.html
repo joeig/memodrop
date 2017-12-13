@@ -3,12 +3,17 @@
 {% load markdown_deux_tags %}
 {% block title %}Confirmation{% endblock %}
 {% block content %}
+    <h1>Confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete <strong>{{ card }}</strong>?</p>
+        <p>Are you sure you want to delete <a href="{% url 'card-detail' card.pk %}"><strong>{{ card }}</strong></a> of category <a href="{% url 'category-detail' card.category.pk %}"><strong>{{ card.category }}</strong></a>?</p>
         <div class="panel panel-default">
             <div class="panel-body">
                 {{ card.question|markdown }}
+                <hr>
+                {{ card.hint|markdown }}
+                <hr>
+                {{ card.answer|markdown }}
             </div>
         </div>
         {% buttons %}

@@ -2,9 +2,10 @@
 {% load bootstrap3 %}
 {% block title %}Confirmation{% endblock %}
 {% block content %}
+    <h2>Confirmation</h2>
     <form action="" method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete <strong>{{ category }}</strong>?</p>
+        <p>Are you sure you want to delete the category <a href="{% url 'category-detail' category.pk %}"><strong>{{ category }}</strong></a>?</p>
         {% buttons %}
             <input type="submit" class="btn btn-danger" value="Delete" />
        {% endbuttons %}

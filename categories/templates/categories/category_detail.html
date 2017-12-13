@@ -30,7 +30,7 @@
                 <tbody>
                     {% for card in category.card_set.all %}
                         <tr>
-                            <td><a href="{% url 'card-detail' card.pk %}">{{ card.question|truncatechars:128 }}</a></td>
+                            <td><a href="{% url 'card-detail' card.pk %}" title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
                             <td>{% area_rating card.area %}</td>
                             <td>
                                 <div class="btn-group" role="group">
@@ -48,28 +48,6 @@
                 </tbody>
             </table>
         </div>
-
-        {% if is_paginated %}
-            <div class="pagination">
-                <ul class="pagination pagination-centered">
-                    {% if page_obj.has_previous %}
-                        <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-                    {% else %}
-                        <li class="disabled"><a href="">&laquo;</a></li>
-                    {% endif %}
-
-                    {% for i in paginator.page_range %}
-                        <li {% if page_obj.number == i %} class="active" {% endif %}><a href="?page={{ i }}">{{ i }}</a></li>
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                        <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-                    {% else %}
-                        <li class="disabled"><a href="">&raquo;</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        {% endif %}
     </div>
     <div class="pull-right">
         <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default">Start Braindump</a>
