@@ -25,6 +25,8 @@
                 </div>
                 <div class="row">
             {% endif %}
+        {% empty %}
+            <p><a href="{% url 'category-create' %}" class="btn btn-default">Create first category</a></p>
         {% endfor %}
     </div>
 {% endblock %}
