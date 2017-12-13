@@ -25,8 +25,8 @@ Use these features on your mobile phone or tablet as well!
 Installation
 ------------
 
-1. Install Python 3.6
-2. You may want to create and use a virtual environment
+1. Install Python 3.6 or use Docker
+2. You may want to create a virtual environment
 3. Install the dependencies: `pip install -r requirements.txt`
 4. Production preparation: Copy `edupy/settings.py` to `edupy/settings_prod.py` and adjust the values (set `DEBUG` to `False`, define your database setup etc.)
 5. Create a database or let Django do that for you (it will choose SQLite3 by default)
