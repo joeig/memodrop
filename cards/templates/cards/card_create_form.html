@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+{% load bootstrap3 %}
+{% block title %}Card{% endblock %}
+{% block content %}
+    <h1>Create Card</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <input type="submit" class="btn btn-primary" name="save" value="Save" />
+            <input type="submit" class="btn btn-primary" name="save" value="Save and Create New" />
+       {% endbuttons %}
+    </form>
+{% endblock %}

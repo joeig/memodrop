@@ -4,7 +4,7 @@
     <h1>
         Categories
         <div class="pull-right">
-            <a href="{% url 'category-create' %}" class="btn btn-default">Create</a>
+            <a href="{% url 'category-create' %}" class="btn btn-default">Create Category</a>
         </div>
     </h1>
     <div class="table-responsive">
@@ -25,7 +25,7 @@
                             <div class="btn-group" role="group">
                                 <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default btn-xs">Start Braindump</a>
                                 <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default btn-xs">Create Card</a>
-                                <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs">Update</a>
+                                <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs">Update Category</a>
                             </div>
                         </td>
                     </tr>

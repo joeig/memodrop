@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.urls import reverse
 
 
@@ -14,14 +15,26 @@ class Card(models.Model):
     question = models.TextField()
     answer = models.TextField()
     hint = models.TextField(blank=True)
-    area = models.IntegerField(default=1, choices=AREA_CHOICES)
+    _area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
     category = models.ForeignKey('categories.Category', on_delete=models.PROTECT)
 
     class Meta:
-        ordering = ['area']
+        ordering = ['_area']
 
     def __str__(self):
         return 'Card #{}'.format(self.pk)
+
+    @property
+    def area(self):
+        """Getter for self.area
+        """
+        return self._area
+
+    @area.setter
+    def area(self, value):
+        """Setter for self.area
+        """
+        self._area = value
 
     def get_absolute_url(self):
         return reverse('card-detail', kwargs={'pk': self.pk})
@@ -29,16 +42,14 @@ class Card(models.Model):
     def move_forward(self):
         """Increase the area
         """
-        if self.area != 6:
-            self.area = self.area + 1
-            self.save()
+        self.area = F('_area') + 1
+        self.save()
 
     def move_backward(self):
         """Decrease the area
         """
-        if self.area != 1:
-            self.area = self.area - 1
-            self.save()
+        self.area = F('_area') - 1
+        self.save()
 
     def reset(self):
         """Set card to area 1

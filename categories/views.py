@@ -22,18 +22,19 @@ class CategoryDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoryDetail, self).get_context_data(**kwargs)
-        context['area1'] = Card.objects.filter(category_id=self.object.id, area=1).all()
-        context['area2'] = Card.objects.filter(category_id=self.object.id, area=2).all()
-        context['area3'] = Card.objects.filter(category_id=self.object.id, area=3).all()
-        context['area4'] = Card.objects.filter(category_id=self.object.id, area=4).all()
-        context['area5'] = Card.objects.filter(category_id=self.object.id, area=5).all()
-        context['area6'] = Card.objects.filter(category_id=self.object.id, area=6).all()
+        context['area1'] = Card.objects.filter(category_id=self.object.id, _area=1).all()
+        context['area2'] = Card.objects.filter(category_id=self.object.id, _area=2).all()
+        context['area3'] = Card.objects.filter(category_id=self.object.id, _area=3).all()
+        context['area4'] = Card.objects.filter(category_id=self.object.id, _area=4).all()
+        context['area5'] = Card.objects.filter(category_id=self.object.id, _area=5).all()
+        context['area6'] = Card.objects.filter(category_id=self.object.id, _area=6).all()
         return context
 
 
 class CategoryCreate(CreateView):
     model = Category
     fields = ['name', 'description']
+    template_name_suffix = '_create_form'
 
     def form_valid(self, form):
         messages.success(self.request, 'Category created.')
@@ -43,6 +44,7 @@ class CategoryCreate(CreateView):
 class CategoryUpdate(UpdateView):
     model = Category
     fields = ['name', 'description']
+    template_name_suffix = '_update_form'
 
     def form_valid(self, form):
         messages.success(self.request, 'Category updated.')
@@ -78,7 +80,7 @@ def braindump_session(request, category_pk):
 
     distributed_cards = list()
     for area in range(1, 7):
-        area_cards = list(cards.filter(area=area))
+        area_cards = list(cards.filter(_area=area))
         distributed_cards += area_cards * int(10 / area)
 
     card = random.choice(distributed_cards)
