@@ -3,8 +3,13 @@ from django.urls import reverse
 
 
 class Category(models.Model):
+    MODE_CHOICES = (
+        (1, 'Strict'),
+        (2, 'Defensive'),
+    )
     name = models.CharField(max_length=128)
     description = models.TextField()
+    mode = models.IntegerField(default=1, choices=MODE_CHOICES)
 
     class Meta:
         ordering = ['name']

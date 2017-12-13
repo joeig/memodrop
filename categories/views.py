@@ -33,7 +33,7 @@ class CategoryDetail(DetailView):
 
 class CategoryCreate(CreateView):
     model = Category
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'mode']
     template_name_suffix = '_create_form'
 
     def form_valid(self, form):
@@ -43,7 +43,7 @@ class CategoryCreate(CreateView):
 
 class CategoryUpdate(UpdateView):
     model = Category
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'mode']
     template_name_suffix = '_update_form'
 
     def form_valid(self, form):
@@ -105,6 +105,11 @@ def braindump_ok(request, card_pk, category_pk):
 
 def braindump_nok(request, card_pk, category_pk):
     card = Card.objects.get(id=card_pk)
-    card.reset()
+    category = Category.objects.get(id=category_pk)
+
+    if category.mode == 1:
+        card.reset()
+    elif category.mode == 2:
+        card.move_backward()
 
     return redirect('braindump-session', category_pk=category_pk)

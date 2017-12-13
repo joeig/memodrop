@@ -69,12 +69,17 @@ class CardTestCase(TestCase):
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 2)
 
-    def test_braindump_nok_on_area_3(self):
-        """Test if the "OK" button in braindump works for cards in area 3
+    def test_braindump_strict_nok_on_area_3(self):
+        """Test if the "OK" button in braindump works for cards in area 3 (strict mode)
         """
-        test_card = self.test_cards[0]
-        test_card.area = 3
-        test_card.save()
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1)
+        test_card = Card.objects.create(
+            question='Question 1337',
+            answer='Answer 1337',
+            hint='Hint 1337',
+            category=test_category,
+            area=3,
+        )
 
         url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
         response = self.client.get(url)
@@ -83,12 +88,55 @@ class CardTestCase(TestCase):
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 1)
 
-    def test_braindump_nok_on_area_1(self):
-        """Test if the "OK" button in braindump works for cards in area 1
+    def test_braindump_defensive_nok_on_area_3(self):
+        """Test if the "OK" button in braindump works for cards in area 3 (defensive mode)
         """
-        test_card = self.test_cards[0]
-        test_card.area = 1
-        test_card.save()
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2)
+        test_card = Card.objects.create(
+            question='Question 1337',
+            answer='Answer 1337',
+            hint='Hint 1337',
+            category=test_category,
+            area=3,
+        )
+
+        url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        refreshed_test_card = Card.objects.get(pk=test_card.pk)
+        self.assertEqual(refreshed_test_card.area, 2)
+
+    def test_braindump_strict_nok_on_area_1(self):
+        """Test if the "Not OK" button in braindump works for cards in area 1 (strict mode)
+        """
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1)
+        test_card = Card.objects.create(
+            question='Question 1337',
+            answer='Answer 1337',
+            hint='Hint 1337',
+            category=test_category,
+            area=1,
+        )
+
+        url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        refreshed_test_card = Card.objects.get(pk=test_card.pk)
+        self.assertEqual(refreshed_test_card.area, 1)
+
+    def test_braindump_defensive_nok_on_area_1(self):
+        """Test if the "Not OK" button in braindump works for cards in area 3 (defensive mode)
+        """
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2)
+        test_card = Card.objects.create(
+            question='Question 1337',
+            answer='Answer 1337',
+            hint='Hint 1337',
+            category=test_category,
+            area=1,
+        )
 
         url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
         response = self.client.get(url)
