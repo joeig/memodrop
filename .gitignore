@@ -1,5 +1,6 @@
 *.pyc
 db.sqlite3
 edupy/settings_prod.py
+deploy.sh
 venv/
 __pycache__
