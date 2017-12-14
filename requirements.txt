@@ -1,4 +1,4 @@
-Django==1.11.5
+Django==1.11.8
 django-bootstrap3==9.0.0
 django-markdown-deux==1.0.5
 markdown2==2.3.4
