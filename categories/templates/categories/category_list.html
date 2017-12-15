@@ -20,13 +20,13 @@
             <tbody>
                 {% for category in category_list %}
                     <tr>
-                        <td><a href="{% url 'category-detail' category.pk %}">{{ category.name }}</a></td>
+                        <td><a href="{% url 'category-detail' category.pk %}" title="{{ category.name }}">{{ category.name }}</a></td>
                         <td>{{ category.card_set.all|length }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default btn-xs">Start Braindump</a>
-                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default btn-xs">Create Card</a>
-                                <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs">Update Category</a>
+                                <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default btn-xs" title="Start a Braindump session for all cards in this category">Start Braindump</a>
+                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default btn-xs" title="Create a new card in this category">Create Card</a>
+                                <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs" title="Edit this category">Update Category</a>
                             </div>
                         </td>
                     </tr>

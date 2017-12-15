@@ -14,9 +14,9 @@
                     {{ category.description|markdown }}
                     <p>
                         {% if category.card_set.all|length == 0 %}
-                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default">Create first card</a>
+                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default" title="Create the first card in this category">Create first card</a>
                         {% else %}
-                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default">Start Braindump</a>
+                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default" title="Start a Braindump session for all cards in this category">Start Braindump</a>
                         {% endif %}
                     </p>
                 </div>
@@ -26,7 +26,7 @@
                 <div class="row">
             {% endif %}
         {% empty %}
-            <p><a href="{% url 'category-create' %}" class="btn btn-default">Create first category</a></p>
+            <p><a href="{% url 'category-create' %}" class="btn btn-default" title="Create the first category">Create first category</a></p>
         {% endfor %}
     </div>
 {% endblock %}
