@@ -1,6 +1,7 @@
 {% extends "main.html" %}
 {% load markdown_deux_tags %}
 {% load area_rating %}
+{% load card_controls %}
 {% block title %}{{ category }}{% endblock %}
 {% block content %}
     <h1>
@@ -32,13 +33,7 @@
                         <tr>
                             <td><a href="{% url 'card-detail' card.pk %}" title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
                             <td>{% area_rating card.area %}</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{% url 'card-reset' card.pk %}" class="btn btn-default btn-xs {% if card.area == 1 %}disabled{% endif %}" title="Move this card to area 1">Reset</a>
-                                    <a href="{% url 'card-update' card.pk %}" class="btn btn-default btn-xs" title="Edit this card">Update</a>
-                                    <a href="{% url 'card-delete' card.pk %}" class="btn btn-default btn-xs" title="Delete this card">Delete</a>
-                                </div>
-                            </td>
+                            <td>{% card_controls card %}</td>
                         </tr>
                     {% empty %}
                         <tr>

@@ -3,8 +3,10 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('area_rating.html')
+@register.inclusion_tag('templatetags/area_rating.html')
 def area_rating(area):
+    """Display a graphic indicator showing the area
+    """
     areas = list()
     missing_areas = list()
 

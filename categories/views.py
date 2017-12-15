@@ -67,7 +67,7 @@ def braindump_index(request):
         'category_list': category_list,
     }
 
-    return render(request, 'braindump_index.html', context)
+    return render(request, 'braindump/braindump_index.html', context)
 
 
 def braindump_session(request, category_pk):
@@ -90,7 +90,7 @@ def braindump_session(request, category_pk):
             'card': card,
         }
 
-        return render(request, 'braindump_session.html', context)
+        return render(request, 'braindump/braindump_session.html', context)
     else:
         messages.warning(request, 'Cannot find any cards for this category.')
         return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
