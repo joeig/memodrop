@@ -11,16 +11,22 @@ from .models import Card
 
 
 class CardList(ListView):
+    """List all cards
+    """
     model = Card
     paginate_by = 25
     paginate_orphans = 5
 
 
 class CardDetail(DetailView):
+    """Show detailed information about a card
+    """
     model = Card
 
 
 class CardCreate(CreateView):
+    """Create a new card
+    """
     model = Card
     fields = ['question',
               'hint',
@@ -48,6 +54,8 @@ class CardCreate(CreateView):
 
 
 class CardUpdate(UpdateView):
+    """Update a card
+    """
     model = Card
     fields = ['question',
               'hint',
@@ -69,6 +77,8 @@ class CardUpdate(UpdateView):
 
 
 class CardDelete(DeleteView):
+    """Delete a card
+    """
     model = Card
     success_url = reverse_lazy('card-list')
 
@@ -78,6 +88,8 @@ class CardDelete(DeleteView):
 
 
 def card_reset(request, pk):
+    """Handle clicks on the "Reset" button of a card
+    """
     card = Card.objects.get(id=pk)
     prev_area = card.area
 
@@ -95,6 +107,8 @@ def card_reset(request, pk):
 
 
 def card_set_area(request, pk, area):
+    """Handle manual movements of a card
+    """
     card = Card.objects.get(id=pk)
     prev_area = card.area
     card.area = area

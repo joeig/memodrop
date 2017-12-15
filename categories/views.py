@@ -12,12 +12,16 @@ from .models import Category
 
 
 class CategoryList(ListView):
+    """List all categories
+    """
     model = Category
     paginate_by = 25
     paginate_orphans = 5
 
 
 class CategoryDetail(DetailView):
+    """Show detailed information about a category
+    """
     model = Category
 
     def get_context_data(self, **kwargs):
@@ -32,6 +36,8 @@ class CategoryDetail(DetailView):
 
 
 class CategoryCreate(CreateView):
+    """Create a new category
+    """
     model = Category
     fields = ['name', 'description', 'mode']
     template_name_suffix = '_create_form'
@@ -42,6 +48,8 @@ class CategoryCreate(CreateView):
 
 
 class CategoryUpdate(UpdateView):
+    """Update a category
+    """
     model = Category
     fields = ['name', 'description', 'mode']
     template_name_suffix = '_update_form'
@@ -61,6 +69,8 @@ class CategoryDelete(DeleteView):
 
 
 def braindump_index(request):
+    """List all possible Braindump sessions
+    """
     category_list = Category.objects.all()
 
     context = {
@@ -71,6 +81,8 @@ def braindump_index(request):
 
 
 def braindump_session(request, category_pk):
+    """Run a Braindump session for all cards in a certain category
+    """
     # order_by('?') returns *one* random Card object
     # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
 
@@ -97,6 +109,8 @@ def braindump_session(request, category_pk):
 
 
 def braindump_ok(request, card_pk, category_pk):
+    """Handle clicks on the "OK" button in Braindump
+    """
     card = Card.objects.get(id=card_pk)
     card.move_forward()
 
@@ -104,6 +118,8 @@ def braindump_ok(request, card_pk, category_pk):
 
 
 def braindump_nok(request, card_pk, category_pk):
+    """Handle clicks on the "Not OK" button on Braindump
+    """
     card = Card.objects.get(id=card_pk)
     category = Category.objects.get(id=category_pk)
 
