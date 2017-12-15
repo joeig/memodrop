@@ -8,7 +8,7 @@ class Category(models.Model):
         (2, 'Defensive'),
     )
     name = models.CharField(max_length=128)
-    description = models.TextField()
+    description = models.TextField(verbose_name='Description (Markdown)')
     mode = models.IntegerField(default=1, choices=MODE_CHOICES)
 
     class Meta:
