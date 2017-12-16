@@ -28,12 +28,12 @@ Installation
 1. Install Python 3.6 or use Docker
 2. You may want to create a virtual environment
 3. Install the dependencies: `pip install -r requirements.txt`
-4. Production preparation: Copy `edupy/settings.py` to `edupy/settings_prod.py` and adjust the values (change `SECRET_KEY`, set `DEBUG` to `False`, define your database setup etc.)
+4. Production preparation: Copy `edupy/settings/production.py.dist` to `edupy/settings/production.py` and adjust the values
 5. Create a database or let Django do that for you (it will choose SQLite3 by default)
-6. Migrate the database: `python manage.py migrate [--settings edupy.settings_prod]`
-7. Start the application as WSGI (alternative for developers: `python manage.py runserver [--settings edupy.settings_prod]`)
+6. Migrate the database: `python manage.py migrate [--settings edupy.settings.prod]`
+7. Start the application as WSGI (alternative for developers: `python manage.py runserver [--settings edupy.settings.prod]`)
 
 Development
 -----------
 
-Feel free to run some unit tests: `python manage.py test`
+Feel free to write and run some unit tests after you've finished your work: `python manage.py test`
