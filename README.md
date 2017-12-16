@@ -1,7 +1,7 @@
 edupy
 =====
 
-Implementation of [flash cards](https://en.wikipedia.org/wiki/Flashcard) in Python 3 and Django.
+Rapid learning process for people with tight schedules. Implementation of [flash cards](https://en.wikipedia.org/wiki/Flashcard) in Python 3 and Django.
 
 Features
 --------
@@ -25,13 +25,13 @@ Use these features on your mobile phone or tablet as well!
 Installation
 ------------
 
-1. Install Python 3.6 or use Docker
+1. Install Python 3.6 or use the `Dockerfile`
 2. You may want to create a virtual environment
 3. Install the dependencies: `pip install -r requirements.txt`
 4. Production preparation: Copy `edupy/settings/production.py.dist` to `edupy/settings/production.py` and adjust the values
 5. Create a database or let Django do that for you (it will choose SQLite3 by default)
-6. Migrate the database: `python manage.py migrate [--settings edupy.settings.prod]`
-7. Start the application as WSGI (alternative for developers: `python manage.py runserver [--settings edupy.settings.prod]`)
+6. Migrate the database: `python manage.py migrate [--settings edupy.settings.production]`
+7. Start the application as WSGI (alternative for developers: `python manage.py runserver [--settings edupy.settings.production]`)
 
 Development
 -----------
