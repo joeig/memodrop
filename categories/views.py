@@ -83,28 +83,43 @@ def braindump_index(request):
 def braindump_session(request, category_pk):
     """Run a Braindump session for all cards in a certain category
     """
+
+    min_area, max_area = braindump_validate_min_max_area(request)
+
+    # Handle query string:
+    query_string = braindump_generate_min_max_area_query_string(min_area, max_area)
+    if query_string:
+        query_string = '?{}'.format(query_string)
+
     # order_by('?') returns *one* random Card object
     # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
 
+    # Query the desired cards:
     cards = Card.objects.filter(
         category_id=category_pk,
+        _area__gte=min_area,
+        _area__lte=max_area,
     ).all()
 
-    distributed_cards = list()
-    for area in range(1, 7):
-        area_cards = list(cards.filter(_area=area))
-        distributed_cards += area_cards * int(10 / area)
+    # Sort the cards by occurrence:
+    try:
+        distributed_cards = list()
+        for area in range(min_area, max_area + 1):
+            area_cards = list(cards.filter(_area=area))
+            distributed_cards += area_cards * int(10 / area)
 
-    card = random.choice(distributed_cards)
+        card = random.choice(distributed_cards)
 
-    if card:
         context = {
             'card': card,
+            'braindump_ok_query_string': query_string,
+            'braindump_nok_query_string': query_string,
+            'braindump_try_again_query_string': query_string,
         }
 
         return render(request, 'braindump/braindump_session.html', context)
-    else:
-        messages.warning(request, 'Cannot find any cards for this category.')
+    except IndexError:
+        messages.warning(request, 'Cannot find any cards for this category in the desired areas.')
         return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
 
 
@@ -114,7 +129,14 @@ def braindump_ok(request, card_pk, category_pk):
     card = Card.objects.get(id=card_pk)
     card.move_forward()
 
-    return redirect('braindump-session', category_pk=category_pk)
+    min_area, max_area = braindump_validate_min_max_area(request)
+
+    # Handle query string:
+    query_string = braindump_generate_min_max_area_query_string(min_area, max_area)
+    if query_string:
+        query_string = '?{}'.format(query_string)
+
+    return redirect('{}{}'.format(reverse('braindump-session', args=(category_pk,)), query_string))
 
 
 def braindump_nok(request, card_pk, category_pk):
@@ -128,4 +150,47 @@ def braindump_nok(request, card_pk, category_pk):
     elif category.mode == 2:
         card.move_backward()
 
-    return redirect('braindump-session', category_pk=category_pk)
+    min_area, max_area = braindump_validate_min_max_area(request)
+
+    # Handle query string:
+    query_string = braindump_generate_min_max_area_query_string(min_area, max_area)
+    if query_string:
+        query_string = '?{}'.format(query_string)
+
+    return redirect('{}{}'.format(reverse('braindump-session', args=(category_pk,)), query_string))
+
+
+def braindump_validate_min_max_area(request):
+    """Validate min_area and max_area query string attributes
+    """
+    # Validate the min area:
+    min_area = int(request.GET.get('min_area', 1))
+    if not 1 <= min_area <= 6:
+        messages.error(request, 'The first area is area 1.')
+        return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
+
+    # Validate the max area:
+    max_area = int(request.GET.get('max_area', 6))
+    if not 1 <= max_area <= 6:
+        messages.error(request, 'The last area is area 6.')
+        return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
+
+    if max_area < min_area:
+        messages.error(request, 'The max area cannot be lower than the min area.')
+        return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
+
+    return min_area, max_area
+
+
+def braindump_generate_min_max_area_query_string(min_area=1, max_area=6):
+    """Build a query string containing min_area and max_area
+    """
+    query_string = dict()
+
+    if min_area != 1:
+        query_string['min_area'] = min_area
+
+    if max_area != 6:
+        query_string['max_area'] = max_area
+
+    return '&'.join('{}={}'.format(key, value) for key, value in query_string.items())

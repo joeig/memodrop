@@ -46,10 +46,10 @@
                     </div>
                     <div class="horizontal-spacer hidden-lg">&nbsp;</div>
                     <div class="col-xs-6 col-lg-3">
-                        <a href="{% url 'braindump-ok' card.category.pk card.pk %}" class="btn btn-success btn-block" title="Move this card to the next area">OK</a>
+                        <a href="{% url 'braindump-ok' card.category.pk card.pk %}{{ braindump_ok_query_string }}" class="btn btn-success btn-block" title="Move this card to the next area">OK</a>
                     </div>
                     <div class="col-xs-6 col-lg-3">
-                        <a href="{% url 'braindump-nok' card.category.pk card.pk %}" class="btn btn-danger btn-block" title="{% if card.category.mode == 1 %}Move this card to area 1{% elif card.category.mode == 2 %}Move this card to the previous area{% endif %}">Not OK</a>
+                        <a href="{% url 'braindump-nok' card.category.pk card.pk %}{{ braindump_nok_query_string }}" class="btn btn-danger btn-block" title="{% if card.category.mode == 1 %}Move this card to area 1{% elif card.category.mode == 2 %}Move this card to the previous area{% endif %}">Not OK</a>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <div class="col-lg-12">
                 <div class="pull-right">
                     <div class="btn-group">
-                        <a href="{% url 'braindump-session' card.category.pk %}" id="next" class="btn btn-default btn-sm" title="Choose another card">Try again</a>
+                        <a href="{% url 'braindump-session' card.category.pk %}{{ braindump_try_again_query_string }}" id="next" class="btn btn-default btn-sm" title="Choose another card">Try again</a>
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>

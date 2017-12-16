@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from cards.models import Card
 from categories.models import Category
+from categories.views import braindump_validate_min_max_area, braindump_generate_min_max_area_query_string
 
 
 class CardTestCase(TestCase):
@@ -168,3 +169,34 @@ class CardTestCase(TestCase):
 
         with self.assertRaises(ObjectDoesNotExist):
             Category.objects.get(pk=test_category.pk)
+
+    def test_validate_min_max_area_default(self):
+        """Test if the default min_area and max_area query string attributes can be validated properly
+        """
+        class DummyRequest:
+            GET = dict()
+
+        self.assertEqual(braindump_validate_min_max_area(DummyRequest), (1, 6))
+
+    def test_validate_min_max_area_custom(self):
+        """Test if custom min_area and max_area query string attributes can be validated properly
+        """
+        class DummyRequest:
+            GET = {
+                'min_area': 3,
+                'max_area': 5,
+            }
+
+        self.assertEqual(braindump_validate_min_max_area(DummyRequest), (3, 5))
+
+    def test_generate_min_max_area_query_string_default(self):
+        """Test if the query string for default min_area and max_area query string attributes can be generated properly
+        """
+        self.assertEqual(braindump_generate_min_max_area_query_string(1, 6), '')
+
+    def test_generate_min_max_area_query_string_custom(self):
+        """Test if the query string for custom min_area and max_area query string attributes can be generated properly
+        """
+        self.assertEqual(braindump_generate_min_max_area_query_string(2, 4), 'min_area=2&max_area=4')
+        self.assertEqual(braindump_generate_min_max_area_query_string(2, 6), 'min_area=2')
+        self.assertEqual(braindump_generate_min_max_area_query_string(1, 4), 'max_area=4')
