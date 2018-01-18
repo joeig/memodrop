@@ -22,6 +22,10 @@ You don't have any clue what your flash card is talking about? No problem, just 
 
 Use these features on your mobile phone or tablet as well!
 
+### REST API
+
+If you intend to migrate your existing cards, just use the `/api/categories/` and `/api/cards/` endpoints.
+
 Installation
 ------------
 
