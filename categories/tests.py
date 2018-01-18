@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from cards.models import Card
 from categories.models import Category
-from categories.views import braindump_validate_min_max_area, braindump_generate_min_max_area_query_string
+from categories.views.gui import braindump_validate_min_max_area, braindump_generate_min_max_area_query_string
 
 
 class CardTestCase(TestCase):

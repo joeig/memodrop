@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
 from cards.models import Card
-from .models import Category
+from categories.models import Category
 
 
 class CategoryList(ListView):

@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import CardCreate, CardDelete, CardDetail, CardList, CardUpdate, card_reset, card_set_area
+from cards.views.gui import CardCreate, CardDelete, CardDetail, CardList, CardUpdate, card_reset, card_set_area
 
 urlpatterns = [
     url(r'^$', CardList.as_view(), name='card-list'),

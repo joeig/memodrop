@@ -21,4 +21,4 @@ class Category(models.Model):
         return reverse('category-detail', kwargs={'pk': self.pk})
 
     def get_cards_for_area(self, area):
-        return self.card_set.filter(area=area)
+        return self.cards.filter(area=area)

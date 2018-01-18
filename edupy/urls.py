@@ -19,6 +19,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url=reverse_lazy('braindump-index'), permanent=False), name='index'),
-    url(r'^categories/', include('categories.urls')),
-    url(r'^cards/', include('cards.urls')),
+    url(r'^categories/', include('categories.urls.gui')),
+    url(r'^cards/', include('cards.urls.gui')),
+    url(r'^api/categories/', include('categories.urls.api')),
+    url(r'^api/cards/', include('cards.urls.api')),
 ]

@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap3',
     'markdown_deux',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -102,4 +103,12 @@ BOOTSTRAP3 = {
     'base_url': STATIC_URL + 'bootstrap-3.3.7/',
     'css_url': STATIC_URL + 'bootstrap-3.3.7/bootstrap.min.css',
     'javascript_url': STATIC_URL + 'bootstrap-3.3.7/bootstrap.min.js',
+}
+
+
+# REST Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 30,
 }

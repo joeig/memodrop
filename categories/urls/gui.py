@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import CategoryList, CategoryDetail, CategoryCreate, CategoryUpdate, CategoryDelete, braindump_index, \
+from categories.views.gui import CategoryList, CategoryDetail, CategoryCreate, CategoryUpdate, CategoryDelete, braindump_index, \
     braindump_session, braindump_ok, braindump_nok
 
 urlpatterns = [

@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import F
 from django.urls import reverse
 
 
@@ -16,7 +15,7 @@ class Card(models.Model):
     answer = models.TextField(verbose_name='Answer (Markdown)')
     hint = models.TextField(blank=True, verbose_name='Hint (Markdown)')
     _area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
-    category = models.ForeignKey('categories.Category', on_delete=models.PROTECT)
+    category = models.ForeignKey('categories.Category', on_delete=models.PROTECT, related_name='cards')
 
     class Meta:
         ordering = ['_area']

@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for card in category.card_set.all %}
+                    {% for card in category.cards.all %}
                         <tr>
                             <td><a href="{% url 'card-detail' card.pk %}" title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
                             <td>{% area_rating card.area %}</td>
@@ -47,7 +47,7 @@
     <div class="pull-right">
         <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default" title="Start a Braindump session for all cards in this category">Start Braindump</a>
         <a href="{% url 'category-update' category.pk %}" class="btn btn-default" title="Edit this category">Update Category</a>
-        {% if category.card_set.all|length == 0 %}
+        {% if category.cards.all|length == 0 %}
             <a href="{% url 'category-delete' category.pk %}" class="btn btn-link" title="Delete this category">Delete</a>
         {% endif %}
     </div>
