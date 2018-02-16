@@ -3,6 +3,8 @@ edupy
 
 Rapid learning process for people with tight schedules. Implementation of [flash cards](https://en.wikipedia.org/wiki/Flashcard) in Python 3 and Django.
 
+[![Build Status](https://travis-ci.org/joeig/edupy.svg?branch=master)](https://travis-ci.org/joeig/edupy)
+
 Features
 --------
 
