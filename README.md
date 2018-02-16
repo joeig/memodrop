@@ -31,7 +31,7 @@ If you intend to migrate your existing cards, just use the `/api/categories/` an
 Installation
 ------------
 
-1. Install Python 3.6 or use the `Dockerfile`
+1. Install Python 3.6 or `docker pull joeig/edupy`
 2. You may want to create a virtual environment
 3. Install the dependencies: `pip install -r requirements.txt`
 4. Production preparation: Copy `edupy/settings/production.py.dist` to `edupy/settings/production.py` and adjust the values
