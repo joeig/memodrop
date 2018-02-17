@@ -14,26 +14,14 @@ class Card(models.Model):
     question = models.TextField(verbose_name='Question (Markdown)')
     answer = models.TextField(verbose_name='Answer (Markdown)')
     hint = models.TextField(blank=True, verbose_name='Hint (Markdown)')
-    _area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
+    area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
     category = models.ForeignKey('categories.Category', on_delete=models.PROTECT, related_name='cards')
 
     class Meta:
-        ordering = ['_area']
+        ordering = ['area']
 
     def __str__(self):
         return 'Card #{}'.format(self.pk)
-
-    @property
-    def area(self):
-        """Getter for self.area
-        """
-        return self._area
-
-    @area.setter
-    def area(self, value):
-        """Setter for self.area
-        """
-        self._area = value
 
     def get_absolute_url(self):
         return reverse('card-detail', kwargs={'pk': self.pk})

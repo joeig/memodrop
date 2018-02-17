@@ -31,7 +31,7 @@ class CardCreate(CreateView):
     fields = ['question',
               'hint',
               'answer',
-              '_area',
+              'area',
               'category']
     template_name_suffix = '_create_form'
 
@@ -60,7 +60,7 @@ class CardUpdate(UpdateView):
     fields = ['question',
               'hint',
               'answer',
-              '_area',
+              'area',
               'category']
     template_name_suffix = '_update_form'
 
