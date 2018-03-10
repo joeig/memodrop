@@ -1,12 +1,14 @@
+import math
+
 from django.test import TestCase, Client
 from django.urls import reverse
 
+from braindump.views import Braindump
 from cards.models import Card
 from categories.models import Category
-from braindump.views import Braindump
 
 
-class CardTestCase(TestCase):
+class BraindumpTestCase(TestCase):
     test_cards = list()
 
     def setUp(self):
@@ -158,3 +160,26 @@ class CardTestCase(TestCase):
         self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(2, 4), 'min_area=2&max_area=4')
         self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(2, 6), 'min_area=2')
         self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(1, 4), 'max_area=4')
+
+    def test_probability_weighted_area(self):
+        """Test if the probabilities are OK
+        """
+        # How many samples do you want to collect?
+        cycles = 10000
+
+        # Initialize occurrence counter:
+        occurrences = dict()
+        for _ in range(1, 7):
+            occurrences[_] = 0
+
+        # Collect samples:
+        for _ in range(cycles):
+            sample = Braindump.get_probability_weighted_area()
+            occurrences[sample] += 1
+
+        # Check occurrance share:
+        for _ in range(1, 7):
+            probability = 1 / 2 ** _
+            share = occurrences[_] / cycles
+            # Allow relative tolerance of 20 %:
+            self.assertTrue(math.isclose(probability, share, rel_tol=0.2))

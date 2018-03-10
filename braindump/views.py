@@ -1,4 +1,4 @@
-import random
+import numpy
 
 from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
@@ -11,7 +11,6 @@ from categories.models import Category
 class BraindumpIndex(TemplateView):
     """List all possible Braindump sessions
     """
-
     template_name = "braindump/braindump_index.html"
 
     def get_context_data(self):
@@ -27,8 +26,9 @@ class BraindumpIndex(TemplateView):
 class BraindumpSession(View):
     """Run a Braindump session for all cards in a certain category
     """
-
     def get(self, request, category_pk):
+        # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
+
         min_area, max_area = Braindump.braindump_validate_min_max_area(request)
 
         # Handle query string:
@@ -36,25 +36,33 @@ class BraindumpSession(View):
         if query_string:
             query_string = '?{}'.format(query_string)
 
-        # order_by('?') returns *one* random Card object
-        # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
-
-        # Query the desired cards:
-        cards = Card.objects.filter(
+        # Correct min/max area for getting only options with actually existing cards
+        # (this does not exclude areas *between* min_area and max_area!):
+        card_filter = Card.objects.filter(
             category_id=category_pk,
             area__gte=min_area,
             area__lte=max_area,
-        ).all()
+        ).order_by('area')
+        adjusted_min_area = card_filter.first().area
+        adjusted_max_area = card_filter.last().area
 
-        # Sort the cards by occurrence:
-        try:
-            distributed_cards = list()
-            for area in range(min_area, max_area + 1):
-                area_cards = list(cards.filter(area=area))
-                distributed_cards += area_cards * int(10 / area)
+        # If no card matches the selected area, retry:
+        card = False
+        retries = 0
+        while not card and retries < 10:
+            # Select an area:
+            randomly_selected_area = Braindump.get_probability_weighted_area(adjusted_min_area, adjusted_max_area)
 
-            card = random.choice(distributed_cards)
+            # Query a random card of the selected area (order_by('?') returns *one* random Card object):
+            card = Card.objects.filter(
+                category_id=category_pk,
+                area=randomly_selected_area
+            ).order_by('?').first()
 
+            retries += 1
+
+        if card:
+            # Render a Braindump session containing the selected card:
             context = {
                 'card': card,
                 'braindump_ok_query_string': query_string,
@@ -63,7 +71,7 @@ class BraindumpSession(View):
             }
 
             return render(request, 'braindump/braindump_session.html', context)
-        except IndexError:
+        else:
             messages.warning(request, 'Cannot find any cards for this category in the desired areas.')
             return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
 
@@ -90,7 +98,6 @@ class BraindumpOK(RedirectView):
 class BraindumpNOK(RedirectView):
     """Handle clicks on the "Not OK" button on Braindump
     """
-
     def get_redirect_url(self, card_pk, category_pk):
         card = Card.objects.get(id=card_pk)
         category = Category.objects.get(id=category_pk)
@@ -146,3 +153,21 @@ class Braindump:
             query_string['max_area'] = max_area
 
         return '&'.join('{}={}'.format(key, value) for key, value in query_string.items())
+
+    @staticmethod
+    def get_probability_weighted_area(min_area=1, max_area=6):
+        """Generate a random area by probability
+        """
+        # Generate range of selected areas:
+        area_range = numpy.arange(min_area, max_area + 1)
+
+        # Generate probability:
+        area_probability = list()
+        for _ in range(len(area_range)):
+            area_probability.append(1 / 2 ** _)
+
+        # Normalization of the probability:
+        area_probability = numpy.array(area_probability)
+        area_probability /= area_probability.sum()
+
+        return numpy.random.choice(area_range, 1, p=area_probability)[0]
