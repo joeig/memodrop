@@ -10,6 +10,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Application definition
 
 INSTALLED_APPS = [
+    'braindump.apps.BraindumpConfig',
     'categories.apps.CategoriesConfig',
     'cards.apps.CardsConfig',
     'django.contrib.auth',
