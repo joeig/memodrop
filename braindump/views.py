@@ -1,7 +1,7 @@
 import numpy
 
 from django.contrib import messages
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.generic import TemplateView, View, RedirectView
 
 from cards.models import Card
@@ -27,6 +27,8 @@ class BraindumpSession(View):
     """Run a Braindump session for all cards in a certain category
     """
     def get(self, request, category_pk):
+        get_object_or_404(Category, pk=category_pk)
+
         # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
 
         min_area, max_area = Braindump.braindump_validate_min_max_area(request)
@@ -82,7 +84,7 @@ class BraindumpOK(RedirectView):
     def get_redirect_url(self, card_pk, category_pk):
         """Handle clicks on the "OK" button in Braindump
         """
-        card = Card.objects.get(id=card_pk)
+        card = get_object_or_404(Card, pk=card_pk)
         card.move_forward()
 
         min_area, max_area = Braindump.braindump_validate_min_max_area(self.request)
@@ -99,8 +101,8 @@ class BraindumpNOK(RedirectView):
     """Handle clicks on the "Not OK" button on Braindump
     """
     def get_redirect_url(self, card_pk, category_pk):
-        card = Card.objects.get(id=card_pk)
-        category = Category.objects.get(id=category_pk)
+        card = get_object_or_404(Card, pk=card_pk)
+        category = get_object_or_404(Category, pk=category_pk)
 
         if category.mode == 1:
             card.reset()
