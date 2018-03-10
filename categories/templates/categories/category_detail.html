@@ -9,29 +9,90 @@
     </h1>
     <div class="clearfix"></div>
     <p>&nbsp;</p>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {{ category.description|markdown }}
+    {% if category.cards.all|length == 0 %}
+        <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-primary btn-lg"
+           title="Create the first card in this category">Create First Card</a>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+    {% endif %}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {{ category.description|markdown }}
+                </div>
+            </div>
         </div>
+        {% if category.cards.all|length %}
+            <div class="col-lg-6">
+                <div id="chart-container">
+                    <canvas id="chart"></canvas>
+                    <script>
+                        var ctx = $("#chart");
+                        var chart_data = {
+                            datasets: [{
+                                data: [
+                                    {{ area1|length }},
+                                    {{ area2|length }},
+                                    {{ area3|length }},
+                                    {{ area4|length }},
+                                    {{ area5|length }},
+                                    {{ area6|length }}
+                                ],
+                                backgroundColor: [
+                                    '#f96585',
+                                    '#fccb64',
+                                    '#3f9bd9',
+                                    '#88f976',
+                                    '#57ddf9',
+                                    '#f35af9'
+                                ]
+                            }],
+                            labels: [
+                                'Area 1',
+                                'Area 2',
+                                'Area 3',
+                                'Area 4',
+                                'Area 5',
+                                'Area 6'
+                            ]
+                        };
+                        var chart_options = {
+                            legend: {
+                                position: 'right'
+                            }
+                        };
+                        new Chart(ctx, {
+                            type: 'pie',
+                            data: chart_data,
+                            options: chart_options
+                        });
+                    </script>
+                </div>
+            </div>
+        {% endif %}
     </div>
-    <div class="col-lg-12">
-        <h2>
-            Cards
-            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default pull-right" title="Create a new card in this category">Create Card</a>
-        </h2>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
+    {% if category.cards.all|length %}
+        <div class="col-lg-12">
+            <h2>
+                Cards
+                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default pull-right"
+                   title="Create a new card in this category">Create Card</a>
+            </h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
                     <tr>
                         <th>Question</th>
                         <th>Area</th>
                         <th></th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for card in category.cards.all %}
                         <tr>
-                            <td><a href="{% url 'card-detail' card.pk %}" title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
+                            <td><a href="{% url 'card-detail' card.pk %}"
+                                   title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
                             <td>{% area_rating card.area %}</td>
                             <td>{% card_controls card %}</td>
                         </tr>
@@ -40,60 +101,21 @@
                             <td colspan="3">No cards yet.</td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class="pull-right">
-        <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default" title="Start a Braindump session for all cards in this category">Start Braindump</a>
-        <a href="{% url 'category-update' category.pk %}" class="btn btn-default" title="Edit this category">Update Category</a>
-        {% if category.cards.all|length == 0 %}
-            <a href="{% url 'category-delete' category.pk %}" class="btn btn-link" title="Delete this category">Delete</a>
+        {% if category.cards.all|length %}
+            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default"
+               title="Start a Braindump session for all cards in this category">Start Braindump</a>
         {% endif %}
-    </div>
-    <div id="chart-container" class="col-xs-6 col-lg-4 hidden-xs">
-        <h2>Area distribution</h2>
-        <canvas id="chart"></canvas>
-        <script>
-            var ctx = $("#chart");
-            var chart_data = {
-                datasets: [{
-                    data: [
-                        {{ area1|length }},
-                        {{ area2|length }},
-                        {{ area3|length }},
-                        {{ area4|length }},
-                        {{ area5|length }},
-                        {{ area6|length }}
-                    ],
-                    backgroundColor: [
-                        '#f96585',
-                        '#fccb64',
-                        '#3f9bd9',
-                        '#88f976',
-                        '#57ddf9',
-                        '#f35af9'
-                    ]
-                }],
-                labels: [
-                    'Area 1',
-                    'Area 2',
-                    'Area 3',
-                    'Area 4',
-                    'Area 5',
-                    'Area 6'
-                ]
-            };
-            var chart_options = {
-                legend: {
-                    position: 'right'
-                }
-            };
-            new Chart(ctx,{
-                type: 'pie',
-                data: chart_data,
-                options: chart_options
-            });
-        </script>
+        <a href="{% url 'category-update' category.pk %}" class="btn btn-default" title="Edit this category">Update
+            Category</a>
+        {% if category.cards.all|length == 0 %}
+            <a href="{% url 'category-delete' category.pk %}" class="btn btn-link"
+               title="Delete this category">Delete</a>
+        {% endif %}
     </div>
 {% endblock %}

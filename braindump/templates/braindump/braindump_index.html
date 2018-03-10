@@ -9,16 +9,35 @@
                 <div class="braindump-category">
                     <h3>
                         {{ category.name }}
-                        <span class="badge">{{ category.cards.all|length }}</span>
                     </h3>
-                    {{ category.description|markdown }}
                     <p>
-                        {% if category.cards.all|length == 0 %}
-                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default" title="Create the first card in this category">Create first card</a>
-                        {% else %}
-                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default" title="Start a Braindump session for all cards in this category">Start Braindump</a>
-                        {% endif %}
+                        <span class="label label-primary">{{ category.cards.all|length }} Card{{ category.cards.all|length|pluralize }}</span>
+                        <span class="label {% if category.mode == 1 %}label-danger{% else %}label-warning{% endif %}">{{ category.get_mode_display }} Mode</span>
                     </p>
+                    <div class="braindump-category-description">
+                        {{ category.description|markdown }}
+                    </div>
+                    <div class="btn-group">
+                        {% if category.cards.all|length == 0 %}
+                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default"
+                               title="Create the first card in this category">Create First Card</a>
+                        {% else %}
+                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default"
+                               title="Start a Braindump session for all cards in this category">Start Braindump</a>
+                        {% endif %}
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'category-detail' category.pk %}" title="Show details about this category">Details</a></li>
+                            {% if category.cards.all|length != 0 %}
+                                <li><a href="{% url 'card-create' %}?category={{ category.pk }}"
+                                   title="Create a new card in this category">Create Card</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'category-update' category.pk %}" title="Edit this category">Update Category</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             {% if forloop.counter|divisibleby:3 %}
@@ -26,7 +45,8 @@
                 <div class="row">
             {% endif %}
         {% empty %}
-            <p><a href="{% url 'category-create' %}" class="btn btn-default" title="Create the first category">Create first category</a></p>
+            <p><a href="{% url 'category-create' %}" class="btn btn-default" title="Create the first category">Create
+                First Category</a></p>
         {% endfor %}
-    </div>
+        </div>
 {% endblock %}

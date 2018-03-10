@@ -29,11 +29,20 @@
             <div class="collapse navbar-collapse" id="nav">
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'braindump-index' %}">Braindump</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'category-list' %}">Categories</a></li>
                     <li><a href="{% url 'card-list' %}">Cards</a></li>
                 </ul>
+                <div class="navbar-form navbar-right">
+                    <div class="btn-group">
+                        <a href="{% url 'card-create' %}" class="btn btn-default" title="Create a new card">Create Card</a>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'category-create' %}" title="Create a new category">Create Category</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
