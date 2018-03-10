@@ -45,7 +45,9 @@
                 <div class="row">
             {% endif %}
         {% empty %}
-            <p><a href="{% url 'category-create' %}" class="btn btn-default" title="Create the first category">Create
+            <div class="clearfix"></div>
+            <p>&nbsp;</p>
+            <p><a href="{% url 'category-create' %}" class="btn btn-primary btn-lg" title="Create the first category">Create
                 First Category</a></p>
         {% endfor %}
         </div>
