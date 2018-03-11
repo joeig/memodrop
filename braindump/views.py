@@ -14,7 +14,7 @@ class BraindumpIndex(TemplateView):
     template_name = "braindump/braindump_index.html"
 
     def get_context_data(self):
-        category_list = Category.objects.all()
+        category_list = Category.objects.order_by('last_interaction').reverse().all()
 
         context = {
             'category_list': category_list,
@@ -86,6 +86,8 @@ class BraindumpOK(RedirectView):
         """
         card = get_object_or_404(Card, pk=card_pk)
         card.move_forward()
+        card.set_last_interaction()
+        card.category.set_last_interaction()
 
         min_area, max_area = Braindump.braindump_validate_min_max_area(self.request)
 
@@ -108,6 +110,9 @@ class BraindumpNOK(RedirectView):
             card.reset()
         elif category.mode == 2:
             card.move_backward()
+
+        card.set_last_interaction()
+        card.category.set_last_interaction()
 
         min_area, max_area = Braindump.braindump_validate_min_max_area(self.request)
 

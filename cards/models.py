@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 class Card(models.Model):
@@ -16,6 +17,7 @@ class Card(models.Model):
     hint = models.TextField(blank=True, verbose_name='Hint (Markdown)')
     area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
     category = models.ForeignKey('categories.Category', on_delete=models.PROTECT, related_name='cards')
+    last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
 
     class Meta:
         ordering = ['area']
@@ -44,4 +46,8 @@ class Card(models.Model):
         """Set card to area 1
         """
         self.area = 1
+        self.save()
+
+    def set_last_interaction(self, last_interaction=timezone.now()):
+        self.last_interaction = last_interaction
         self.save()
