@@ -49,5 +49,7 @@ class Card(models.Model):
         self.save()
 
     def set_last_interaction(self, last_interaction=timezone.now()):
+        """Set date and time of last interaction
+        """
         self.last_interaction = last_interaction
         self.save()

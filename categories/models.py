@@ -20,11 +20,17 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """Get the absolute URL to a single card
+        """
         return reverse('category-detail', kwargs={'pk': self.pk})
 
     def get_cards_for_area(self, area):
+        """Get all cards of a specific area
+        """
         return self.cards.filter(area=area)
 
     def set_last_interaction(self, last_interaction=timezone.now()):
+        """Set date and time of last interaction
+        """
         self.last_interaction = last_interaction
         self.save()
