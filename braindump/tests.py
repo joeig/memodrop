@@ -3,7 +3,7 @@ import math
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from braindump.views import Braindump
+from braindump.views import BraindumpViewMixin
 from cards.models import Card
 from categories.models import Category
 
@@ -136,7 +136,8 @@ class BraindumpTestCase(TestCase):
         class DummyRequest:
             GET = dict()
 
-        self.assertEqual(Braindump.braindump_validate_min_max_area(DummyRequest), (1, 6))
+        bvm = BraindumpViewMixin()
+        self.assertEqual(bvm.validate_min_max_area(DummyRequest), (1, 6))
 
     def test_validate_min_max_area_custom(self):
         """Test if custom min_area and max_area query string attributes can be validated properly
@@ -147,19 +148,22 @@ class BraindumpTestCase(TestCase):
                 'max_area': 5,
             }
 
-        self.assertEqual(Braindump.braindump_validate_min_max_area(DummyRequest), (3, 5))
+        bvm = BraindumpViewMixin()
+        self.assertEqual(bvm.validate_min_max_area(DummyRequest), (3, 5))
 
     def test_generate_min_max_area_query_string_default(self):
         """Test if the query string for default min_area and max_area query string attributes can be generated properly
         """
-        self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(1, 6), '')
+        bvm = BraindumpViewMixin()
+        self.assertEqual(bvm.generate_min_max_area_query_string(1, 6), '')
 
     def test_generate_min_max_area_query_string_custom(self):
         """Test if the query string for custom min_area and max_area query string attributes can be generated properly
         """
-        self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(2, 4), 'min_area=2&max_area=4')
-        self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(2, 6), 'min_area=2')
-        self.assertEqual(Braindump.braindump_generate_min_max_area_query_string(1, 4), 'max_area=4')
+        bvm = BraindumpViewMixin()
+        self.assertEqual(bvm.generate_min_max_area_query_string(2, 4), 'min_area=2&max_area=4')
+        self.assertEqual(bvm.generate_min_max_area_query_string(2, 6), 'min_area=2')
+        self.assertEqual(bvm.generate_min_max_area_query_string(1, 4), 'max_area=4')
 
     def test_probability_weighted_area(self):
         """Test if the probabilities are OK
@@ -174,7 +178,8 @@ class BraindumpTestCase(TestCase):
 
         # Collect samples:
         for _ in range(cycles):
-            sample = Braindump.get_probability_weighted_area()
+            bvm = BraindumpViewMixin()
+            sample = bvm.get_probability_weighted_area()
             occurrences[sample] += 1
 
         # Check occurrance share:
