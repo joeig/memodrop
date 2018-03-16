@@ -18,7 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3',
+    'bootstrap4',
+    'fa',
     'markdown_deux',
     'rest_framework',
 ]
@@ -100,10 +101,18 @@ STATIC_URL = '/static/'
 
 # Bootstrap
 
-BOOTSTRAP3 = {
-    'base_url': STATIC_URL + 'bootstrap-3.3.7/',
-    'css_url': STATIC_URL + 'bootstrap-3.3.7/bootstrap.min.css',
-    'javascript_url': STATIC_URL + 'bootstrap-3.3.7/bootstrap.min.js',
+BOOTSTRAP4 = {
+    'base_url': STATIC_URL + 'bootstrap-4.0.0/',
+    'css_url': STATIC_URL + 'bootstrap-4.0.0/bootstrap.min.css',
+    'popper_url': STATIC_URL + 'popper-1.12.9/popper.min.js',
+    'javascript_url': STATIC_URL + 'bootstrap-4.0.0/bootstrap.min.js',
+}
+
+
+# Font Awesome
+
+FONT_AWESOME = {
+    'url': STATIC_URL + 'fa-4.7.0/font-awesome.min.css',
 }
 
 

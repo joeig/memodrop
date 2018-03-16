@@ -1,5 +1,5 @@
 <div class="btn-group" role="group">
-    <a href="{% url 'card-reset' card.pk %}" class="btn btn-default btn-xs {% if card.area == 1 %}disabled{% endif %}" title="Move this card to area 1">Reset</a>
-    <a href="{% url 'card-update' card.pk %}" class="btn btn-default btn-xs" title="Edit this card">Update</a>
-    <a href="{% url 'card-delete' card.pk %}" class="btn btn-default btn-xs" title="Delete this card">Delete</a>
+    <a href="{% url 'card-reset' card.pk %}" class="btn btn-light btn-xs {% if card.area == 1 %}disabled{% endif %}" title="Move this card to area 1">Reset</a>
+    <a href="{% url 'card-update' card.pk %}" class="btn btn-light btn-xs" title="Edit this card">Update</a>
+    <a href="{% url 'card-delete' card.pk %}" class="btn btn-light btn-xs" title="Delete this card">Delete</a>
 </div>

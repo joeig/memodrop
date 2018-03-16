@@ -1,13 +1,13 @@
 {% extends "main.html" %}
 {% load area_rating %}
 {% load card_controls %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% block title %}Cards{% endblock %}
 {% block content %}
     <h1>
         Cards
-        <div class="pull-right">
-            <a href="{% url 'card-create' %}" class="btn btn-default" title="Create a new card">Create Card</a>
+        <div class="float-right">
+            <a href="{% url 'card-create' %}" class="btn btn-light" title="Create a new card">Create Card</a>
         </div>
     </h1>
     <div class="table-responsive">

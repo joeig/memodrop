@@ -10,7 +10,7 @@ def area_rating(area):
     areas = list()
     missing_areas = list()
 
-    for a in range(0, area):
+    for a in range(0, area - 1):
         areas.append(a)
 
     for a in range(0, 6 - area):

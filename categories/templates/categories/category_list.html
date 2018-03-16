@@ -1,11 +1,11 @@
 {% extends "main.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% block title %}Categories{% endblock %}
 {% block content %}
     <h1>
         Categories
-        <div class="pull-right">
-            <a href="{% url 'category-create' %}" class="btn btn-default" title="Create a new category">Create Category</a>
+        <div class="float-right">
+            <a href="{% url 'category-create' %}" class="btn btn-light" title="Create a new category">Create Category</a>
         </div>
     </h1>
     <div class="table-responsive">
@@ -26,9 +26,9 @@
                         <td>{{ category.get_mode_display }} Mode</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{% url 'braindump-session' category.pk %}" class="btn btn-default btn-xs" title="Start a Braindump session for all cards in this category">Start Braindump</a>
-                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-default btn-xs" title="Create a new card in this category">Create Card</a>
-                                <a href="{% url 'category-update' category.pk %}" class="btn btn-default btn-xs" title="Edit this category">Update Category</a>
+                                <a href="{% url 'braindump-session' category.pk %}" class="btn btn-light btn-xs" title="Start a Braindump session for all cards in this category">Start Braindump</a>
+                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-light btn-xs" title="Create a new card in this category">Create Card</a>
+                                <a href="{% url 'category-update' category.pk %}" class="btn btn-light btn-xs" title="Edit this category">Update Category</a>
                             </div>
                         </td>
                     </tr>

@@ -1,1 +1,1 @@
-<div class="area-rating" title="Area {{ areas|length }}">{% for a in areas %}<span class="glyphicon glyphicon-star"></span>{% endfor %}{% for a in missing_areas %}<span class="glyphicon glyphicon-star-empty"></span>{% endfor %}</div>
+{% load font_awesome %}<div class="area-rating" title="Area {{ areas|length }}">{% for a in areas %}{% fa 'fa-check-square' %}&nbsp;{% endfor %}{% for a in missing_areas %}{% fa 'fa-square' %}&nbsp;{% endfor %}</div>

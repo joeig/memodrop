@@ -1,5 +1,6 @@
 Django==1.11.10
-django-bootstrap3==9.1.0
+django-bootstrap4==0.0.6
+django-fa==1.0.0
 django-markdown-deux==1.0.5
 djangorestframework==3.7.7
 markdown2==2.3.5
