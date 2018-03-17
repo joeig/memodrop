@@ -2,6 +2,6 @@
 .coverage
 db.sqlite3
 edupy/settings/production.py
-deploy.sh
+local_scripts/
 venv/
 __pycache__

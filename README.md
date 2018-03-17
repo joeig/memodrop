@@ -31,8 +31,6 @@ If you intend to migrate your existing cards, just use the `/api/categories/` an
 Screenshots
 -----------
 
-![Braindump session (mobile optimized)](/docs/screenshots/braindump_session_mobile.png?raw=true | width=100)
-
 * [Braindump session page](/docs/screenshots/braindump_session.png?raw=true)
 * [Braindump session page (mobile optimized)](/docs/screenshots/braindump_session_mobile.png?raw=true)
 * [Index page](/docs/screenshots/braindump_index.png?raw=true)
