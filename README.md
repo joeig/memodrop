@@ -39,7 +39,26 @@ Installation
 6. Migrate the database: `python manage.py migrate [--settings edupy.settings.production]`
 7. Start the application as WSGI (alternative for developers: `python manage.py runserver [--settings edupy.settings.production]`)
 
-Development
------------
+Contribution
+------------
 
-Feel free to write and run some unit tests after you've finished your work: `python manage.py test`
+Setup the development environment:
+
+~~~ bash
+pip install -r requirements.txt
+pip install -r requirements_dev.txt
+~~~
+
+There are some fixtures for different scenarios:
+
+~~~ bash
+python manage.py loaddata demo_categories
+python manage.py loaddata demo_cards
+~~~
+
+Feel free to write and run some unit tests after you've finished your work.
+
+~~~ bash
+coverage run manage.py test .
+coverage report
+~~~
