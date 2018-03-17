@@ -2,7 +2,7 @@
 {% load markdown_deux_tags %}
 {% block title %}Braindump{% endblock %}
 {% block content %}
-    <h1>Braindump</h1>
+    <h1 class="my-5">Braindump</h1>
     <div class="row">
         {% for category in category_list %}
             <div class="col-12 col-lg-4">
@@ -19,13 +19,14 @@
                     </div>
                     <div class="btn-group">
                         {% if category.cards.all|length == 0 %}
-                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-secondary"
+                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary"
                                title="Create the first card in this category">Create First Card</a>
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         {% else %}
-                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-secondary"
+                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-primary"
                                title="Start a Braindump session for all cards in this category">Start Braindump</a>
+                           <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         {% endif %}
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu">
                             <a href="{% url 'category-detail' category.pk %}" class="dropdown-item" title="Show details about this category">Details</a>
                             {% if category.cards.all|length != 0 %}

@@ -3,7 +3,7 @@
 {% load markdown_deux_tags %}
 {% block title %}Confirmation{% endblock %}
 {% block content %}
-    <h1>Confirmation</h1>
+    <h1 class="my-5">Confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
         <p>Are you sure you want to delete <a href="{% url 'card-detail' card.pk %}"><strong>{{ card }}</strong></a> of

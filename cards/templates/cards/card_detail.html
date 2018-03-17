@@ -3,21 +3,19 @@
 {% load area_rating %}
 {% block title %}{{ card }}{% endblock %}
 {% block content %}
-    <div id="braindump-detail" class="col-lg-8 mr-auto ml-auto">
-        <h5>
+    <div id="braindump-detail" class="col-lg-8 mx-auto">
+        <h1 class="h5 my-3">
             <div class="float-right d-none d-sm-block">
                 <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-link btn-sm">Go to Category</a>
             </div>
             {{ card.category.name }}
-        </h5>
+        </h1>
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">
-                    Card #{{ card.pk }}
-                    <div class="float-right">
-                        {% area_rating card.area %}
-                    </div>
-                </h5>
+                Card #{{ card.pk }}
+                <div class="float-right">
+                    {% area_rating card.area %}
+                </div>
             </div>
             <div class="card-body">
                 {{ card.question|markdown }}

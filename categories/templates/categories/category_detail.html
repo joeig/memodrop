@@ -4,7 +4,7 @@
 {% load card_controls %}
 {% block title %}{{ category }}{% endblock %}
 {% block content %}
-    <h1>
+    <h1 class="my-5">
         {{ category.name }}
     </h1>
     <div class="clearfix"></div>
@@ -74,9 +74,9 @@
     </div>
     {% if category.cards.all|length %}
         <div class="col-lg-12">
-            <h2>
+            <h2 class="my-5">
                 Cards
-                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-light float-right"
+                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary float-right"
                    title="Create a new card in this category">Create Card</a>
             </h2>
             <div class="table-responsive">
@@ -108,10 +108,10 @@
     {% endif %}
     <div class="float-right">
         {% if category.cards.all|length %}
-            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-light"
+            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary"
                title="Start a Braindump session for all cards in this category">Start Braindump</a>
         {% endif %}
-        <a href="{% url 'category-update' category.pk %}" class="btn btn-light" title="Edit this category">Update
+        <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary" title="Edit this category">Update
             Category</a>
         {% if category.cards.all|length == 0 %}
             <a href="{% url 'category-delete' category.pk %}" class="btn btn-link"

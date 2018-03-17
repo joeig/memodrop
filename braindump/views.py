@@ -96,6 +96,7 @@ class BraindumpSession(View, BraindumpViewMixin):
     def get(self, request, category_pk):
         get_object_or_404(Category, pk=category_pk)
         query_string = self.handle_query_string(request)
+        card_error = False
 
         # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
 
@@ -108,35 +109,42 @@ class BraindumpSession(View, BraindumpViewMixin):
             area__gte=min_area,
             area__lte=max_area,
         ).order_by('area')
-        adjusted_min_area = card_filter.first().area
-        adjusted_max_area = card_filter.last().area
 
-        # If no card matches the selected area, retry:
-        card = False
-        retries = 0
-        while not card and retries < 10:
-            # Select an area:
-            randomly_selected_area = self.get_probability_weighted_area(adjusted_min_area, adjusted_max_area)
+        if card_filter.exists():
+            adjusted_min_area = card_filter.first().area
+            adjusted_max_area = card_filter.last().area
 
-            # Query a random card of the selected area (order_by('?') returns *one* random Card object):
-            card = Card.objects.filter(
-                category_id=category_pk,
-                area=randomly_selected_area
-            ).order_by('?').first()
+            # If no card matches the selected area, retry:
+            card = False
+            retries = 0
+            while not card and retries < 10:
+                # Select an area:
+                randomly_selected_area = self.get_probability_weighted_area(adjusted_min_area, adjusted_max_area)
 
-            retries += 1
+                # Query a random card of the selected area (order_by('?') returns *one* random Card object):
+                card = Card.objects.filter(
+                    category_id=category_pk,
+                    area=randomly_selected_area
+                ).order_by('?').first()
 
-        if card:
-            # Render a Braindump session containing the selected card:
-            context = {
-                'card': card,
-                'braindump_ok_query_string': query_string,
-                'braindump_nok_query_string': query_string,
-                'braindump_try_again_query_string': query_string,
-            }
+                retries += 1
 
-            return render(request, 'braindump/braindump_session.html', context)
+            if card:
+                # Render a Braindump session containing the selected card:
+                context = {
+                    'card': card,
+                    'braindump_ok_query_string': query_string,
+                    'braindump_nok_query_string': query_string,
+                    'braindump_try_again_query_string': query_string,
+                }
+
+                return render(request, 'braindump/braindump_session.html', context)
+            else:
+                card_error = True
         else:
+            card_error = True
+
+        if card_error:
             messages.warning(request, 'Cannot find any cards for this category in the desired areas.')
             return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
 
