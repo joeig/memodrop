@@ -1,0 +1,40 @@
+---
+- model: categories.category
+  pk: 1
+  fields:
+    name: Strict Category
+    description: The first demo category.
+    mode: 1
+    last_interaction: '2018-03-17 09:20:00Z'
+- model: categories.category
+  pk: 2
+  fields:
+    name: Defensive Category
+    description: The second demo category.
+    mode: 2
+    last_interaction: '2018-03-17 09:20:00Z'
+- model: categories.category
+  pk: 3
+  fields:
+    name: Category With One Single Card
+    description: The third demo category.
+    mode: 1
+    last_interaction: '2018-03-17 09:20:00Z'
+- model: categories.category
+  pk: 4
+  fields:
+    name: Empty Category
+    description: The fourth demo category.
+    mode: 2
+    last_interaction: '2018-03-17 09:20:00Z'
+- model: categories.category
+  pk: 5
+  fields:
+    name: Markdown Stuff
+    description: >
+      **Strong**
+
+
+      [Link to localhost](http://localhost/)
+    mode: 1
+    last_interaction: '2018-03-17 09:20:00Z'
