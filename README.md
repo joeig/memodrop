@@ -28,6 +28,16 @@ Use these features on your mobile phone or tablet as well!
 
 If you intend to migrate your existing cards, just use the `/api/categories/` and `/api/cards/` endpoints.
 
+Screenshots
+-----------
+
+![Braindump session (mobile optimized)](/docs/screenshots/braindump_session_mobile.png?raw=true)
+
+* [Braindump session page](/docs/screenshots/braindump_session.png?raw=true)
+* [Braindump session page (mobile optimized)](/docs/screenshots/braindump_session_mobile.png?raw=true)
+* [Index page](/docs/screenshots/braindump_index.png?raw=true)
+* [Category detail page](/docs/screenshots/category_detail.png?raw=true)
+
 Installation
 ------------
 
