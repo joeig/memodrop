@@ -1,6 +1,8 @@
-{% extends "main.html" %}
+{% extends "main_authorized.html" %}
+{% load static %}
 {% load markdown_deux_tags %}
 {% block title %}Braindump{% endblock %}
+{% block custom_stylesheet_links %}<link href="{% static 'braindump.css' %}" rel="stylesheet">{% endblock %}
 {% block content %}
     <h1 class="my-5">Braindump</h1>
     <div class="row">

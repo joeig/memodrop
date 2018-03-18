@@ -1,13 +1,15 @@
-from categories.models import Category
-from categories.serializers import CategorySerializer
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+from categories.serializers import CategorySerializer
+from categories.views.gui import CategoryBelongsUserMixin
 
 
-class APICategoryList(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
+class APICategoryList(CategoryBelongsUserMixin, generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = CategorySerializer
 
 
-class APICategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
+class APICategoryDetail(CategoryBelongsUserMixin, generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = CategorySerializer

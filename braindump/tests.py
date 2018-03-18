@@ -1,5 +1,6 @@
 import math
 
+from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -14,40 +15,65 @@ class BraindumpTestCase(TestCase):
     def setUp(self):
         """Set up test scenario
         """
+        self.test_user = User.objects.create_user('test')
+        self.test_category = Category.objects.create(name='Category 1', description='Description 1',
+                                                     owner=self.test_user)
         self.client = Client()
-        test_category = Category.objects.create(name='Category 1', description='Description 1')
+        self.client.force_login(self.test_user)
 
         for i in range(1, 11):
             test_card = Card.objects.create(
                 question='Question {}'.format(i),
                 answer='Answer {}'.format(i),
                 hint='Hint {}'.format(i),
-                category=test_category,
+                category=self.test_category,
             )
             self.test_cards.append(test_card)
 
+        self.foreign_test_user = User.objects.create_user('foreigner')
+        self.foreign_test_category = Category.objects.create(name='Category Foreign', description='Description Foreign',
+                                                             owner=self.foreign_test_user)
+        self.foreign_client = Client()
+        self.foreign_client.force_login(self.foreign_test_user)
+        self.foreign_test_card = Card.objects.create(
+            question='Question Foreign',
+            answer='Answer Foreign',
+            hint='Hint Foreign',
+            category=self.foreign_test_category,
+        )
+
     def test_braindump_index(self):
-        """Test if the braindump index is displayed sucessfully
+        """Test if the braindump index is displayed successfully
         """
         url = reverse('braindump-index')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_braindump_session(self):
-        """Test if the braindump session starts sucessfully
+        """Test if the braindump session starts successfully
         """
         test_card = self.test_cards[0]
-
         url = reverse('braindump-session', args=(test_card.category.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_unauth_braindump_session(self):
+        """Test if the braindump session fails if the user is not allowed to access
+        """
+        url = reverse('braindump-session', args=(self.foreign_test_card.category.pk,))
+
+        foreign_response = self.foreign_client.get(url)
+        self.assertEqual(foreign_response.status_code, 200)
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_braindump_ok(self):
         """Test if the "OK" button in braindump works
         """
         test_card = self.test_cards[0]
-
         url = reverse('braindump-ok', args=(test_card.category.pk, test_card.pk))
+
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
@@ -57,7 +83,8 @@ class BraindumpTestCase(TestCase):
     def test_braindump_strict_nok_on_area_3(self):
         """Test if the "OK" button in braindump works for cards in area 3 (strict mode)
         """
-        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1)
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1,
+                                                owner=self.test_user)
         test_card = Card.objects.create(
             question='Question 1337',
             answer='Answer 1337',
@@ -65,7 +92,6 @@ class BraindumpTestCase(TestCase):
             category=test_category,
             area=3,
         )
-
         url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -76,7 +102,8 @@ class BraindumpTestCase(TestCase):
     def test_braindump_defensive_nok_on_area_3(self):
         """Test if the "OK" button in braindump works for cards in area 3 (defensive mode)
         """
-        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2)
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2,
+                                                owner=self.test_user)
         test_card = Card.objects.create(
             question='Question 1337',
             answer='Answer 1337',
@@ -84,7 +111,6 @@ class BraindumpTestCase(TestCase):
             category=test_category,
             area=3,
         )
-
         url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -95,7 +121,8 @@ class BraindumpTestCase(TestCase):
     def test_braindump_strict_nok_on_area_1(self):
         """Test if the "Not OK" button in braindump works for cards in area 1 (strict mode)
         """
-        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1)
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1,
+                                                owner=self.test_user)
         test_card = Card.objects.create(
             question='Question 1337',
             answer='Answer 1337',
@@ -103,7 +130,6 @@ class BraindumpTestCase(TestCase):
             category=test_category,
             area=1,
         )
-
         url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -114,7 +140,8 @@ class BraindumpTestCase(TestCase):
     def test_braindump_defensive_nok_on_area_1(self):
         """Test if the "Not OK" button in braindump works for cards in area 3 (defensive mode)
         """
-        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2)
+        test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2,
+                                                owner=self.test_user)
         test_card = Card.objects.create(
             question='Question 1337',
             answer='Answer 1337',
@@ -122,7 +149,6 @@ class BraindumpTestCase(TestCase):
             category=test_category,
             area=1,
         )
-
         url = reverse('braindump-nok', args=(test_card.category.pk, test_card.pk))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)

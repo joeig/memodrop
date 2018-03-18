@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -8,19 +9,23 @@ from cards.models import Card
 from categories.models import Category
 
 
-class CategoryList(ListView):
+class CategoryBelongsUserMixin:
+    """Mixin that returns all categories belonging to the authorized user
+    """
+    def get_queryset(self):
+        return Category.objects.all_of_user(self.request.user)
+
+
+class CategoryList(LoginRequiredMixin, CategoryBelongsUserMixin, ListView):
     """List all categories
     """
-    model = Category
     paginate_by = 25
     paginate_orphans = 5
 
 
-class CategoryDetail(DetailView):
+class CategoryDetail(LoginRequiredMixin, CategoryBelongsUserMixin, DetailView):
     """Show detailed information about a category
     """
-    model = Category
-
     def get_context_data(self, **kwargs):
         context = super(CategoryDetail, self).get_context_data(**kwargs)
         context['area1'] = Card.objects.filter(category_id=self.object.id, area=1).all()
@@ -32,7 +37,7 @@ class CategoryDetail(DetailView):
         return context
 
 
-class CategoryCreate(CreateView):
+class CategoryCreate(LoginRequiredMixin, CategoryBelongsUserMixin, CreateView):
     """Create a new category
     """
     model = Category
@@ -41,13 +46,13 @@ class CategoryCreate(CreateView):
 
     def form_valid(self, form):
         messages.success(self.request, 'Category created.')
+        form.instance.owner = self.request.user
         return super(CategoryCreate, self).form_valid(form)
 
 
-class CategoryUpdate(UpdateView):
+class CategoryUpdate(LoginRequiredMixin, CategoryBelongsUserMixin, UpdateView):
     """Update a category
     """
-    model = Category
     fields = ['name', 'description', 'mode']
     template_name_suffix = '_update_form'
 
@@ -56,8 +61,9 @@ class CategoryUpdate(UpdateView):
         return super(CategoryUpdate, self).form_valid(form)
 
 
-class CategoryDelete(DeleteView):
-    model = Category
+class CategoryDelete(LoginRequiredMixin, CategoryBelongsUserMixin, DeleteView):
+    """Delete a category
+    """
     success_url = reverse_lazy('category-list')
 
     def delete(self, request, *args, **kwargs):

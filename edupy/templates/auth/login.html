@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block custom_stylesheet_links %}
+    <link href="{% static 'login.css' %}" rel="stylesheet">{% endblock %}
+{% block custom_body_classes %}text-center{% endblock %}
+{% block body %}
+    <form method="post" action="{% url 'auth-login' %}" class="form-signin">
+        <h1 class="mb-4">edupy</h1>
+        <h2 class="h3 mb-3 font-weight-normal">Please sign in</h2>
+
+        {% if form.errors %}
+            <div class="alert alert-danger fade show">
+                Your username and password didn't match. Please try again.
+            </div>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+                <div class="alert alert-warning fade show">
+                    Your account doesn't have access to this page. To proceed, please login with an account that has
+                    access.
+                </div>
+            {% else %}
+                <div class="alert alert-warning fade show">
+                    Please login to see this page.
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% csrf_token %}
+        <input type="text" id="id_username" name="username" class="form-control" placeholder="Username" maxlength="254"
+               required autofocus>
+        <input type="password" id="id_password" name="password" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+{% endblock %}

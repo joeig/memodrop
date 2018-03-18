@@ -3,6 +3,18 @@ from django.urls import reverse
 from django.utils import timezone
 
 
+class CardManager(models.Manager):
+    def all_of_user(self, user):
+        """Returns all cards belonging to the authorized user
+        """
+        return self.filter(category__owner=user).all()
+
+    def get_of_user(self, user, *args, **kwargs):
+        """Returns a card belonging to the authorized user
+        """
+        return self.filter(category__owner=user).get(*args, **kwargs)
+
+
 class Card(models.Model):
     AREA_CHOICES = (
         (1, '1'),
@@ -16,8 +28,9 @@ class Card(models.Model):
     answer = models.TextField(verbose_name='Answer (Markdown)')
     hint = models.TextField(blank=True, verbose_name='Hint (Markdown)')
     area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
-    category = models.ForeignKey('categories.Category', on_delete=models.PROTECT, related_name='cards')
+    category = models.ForeignKey('categories.Category', on_delete=models.CASCADE, related_name='cards')
     last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
+    objects = CardManager()
 
     class Meta:
         ordering = ['area']

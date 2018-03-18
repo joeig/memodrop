@@ -1,8 +1,10 @@
-{% extends "main.html" %}
+{% extends "main_authorized.html" %}
+{% load static %}
 {% load markdown_deux_tags %}
 {% load area_rating %}
 {% load card_controls %}
 {% block title %}{{ category }}{% endblock %}
+{% block custom_javascript_tags %}<script src="{% static 'chart-2.7.0/chart.bundle.min.js' %}"></script>{% endblock %}
 {% block content %}
     <h1 class="my-5">
         {{ category.name }}
@@ -113,9 +115,6 @@
         {% endif %}
         <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary" title="Edit this category">Update
             Category</a>
-        {% if category.cards.all|length == 0 %}
-            <a href="{% url 'category-delete' category.pk %}" class="btn btn-link"
-               title="Delete this category">Delete</a>
-        {% endif %}
-    </div>
+        <a href="{% url 'category-delete' category.pk %}" class="btn btn-link" title="Delete this category">Delete</a>
+</div>
 {% endblock %}

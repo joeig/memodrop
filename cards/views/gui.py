@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -8,23 +10,30 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
 from cards.models import Card
+from categories.models import Category
 
 
-class CardList(ListView):
+class CardBelongsUserMixin:
+    """Mixin that returns all cards belonging to the authorized user
+    """
+    def get_queryset(self):
+        return Card.objects.all_of_user(self.request.user)
+
+
+class CardList(LoginRequiredMixin, CardBelongsUserMixin, ListView):
     """List all cards
     """
-    model = Card
     paginate_by = 25
     paginate_orphans = 5
 
 
-class CardDetail(DetailView):
+class CardDetail(LoginRequiredMixin, CardBelongsUserMixin, DetailView):
     """Show detailed information about a card
     """
-    model = Card
+    pass
 
 
-class CardCreate(CreateView):
+class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
     """Create a new card
     """
     model = Card
@@ -34,6 +43,11 @@ class CardCreate(CreateView):
               'area',
               'category']
     template_name_suffix = '_create_form'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['category'].queryset = Category.objects.all_of_user(self.request.user)
+        return form
 
     def get_initial(self):
         # Pre-select desired category:
@@ -53,10 +67,9 @@ class CardCreate(CreateView):
             return super(CardCreate, self).form_valid(form)
 
 
-class CardUpdate(UpdateView):
+class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
     """Update a card
     """
-    model = Card
     fields = ['question',
               'hint',
               'answer',
@@ -76,10 +89,9 @@ class CardUpdate(UpdateView):
             return super(CardUpdate, self).form_valid(form)
 
 
-class CardDelete(DeleteView):
+class CardDelete(LoginRequiredMixin, CardBelongsUserMixin, DeleteView):
     """Delete a card
     """
-    model = Card
     success_url = reverse_lazy('card-list')
 
     def delete(self, request, *args, **kwargs):
@@ -87,10 +99,11 @@ class CardDelete(DeleteView):
         return super(CardDelete, self).delete(request, *args, **kwargs)
 
 
+@login_required
 def card_reset(request, pk):
     """Handle clicks on the "Reset" button of a card
     """
-    card = Card.objects.get(id=pk)
+    card = Card.objects.get_of_user(request.user, id=pk)
     prev_area = card.area
 
     if prev_area != 1:
@@ -106,10 +119,11 @@ def card_reset(request, pk):
     return redirect(request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,))))
 
 
+@login_required
 def card_set_area(request, pk, area):
     """Handle manual movements of a card
     """
-    card = Card.objects.get(id=pk)
+    card = Card.objects.get_of_user(request.user, id=pk)
     prev_area = card.area
     card.area = area
     card.save()

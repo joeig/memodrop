@@ -1,6 +1,6 @@
 *.pyc
 .coverage
-db.sqlite3
+db.sqlite3*
 edupy/settings/production.py
 local_scripts/
 venv/

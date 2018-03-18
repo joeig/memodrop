@@ -1,7 +1,9 @@
-{% extends "main.html" %}
+{% extends "main_authorized.html" %}
+{% load static %}
 {% load markdown_deux_tags %}
 {% load area_rating %}
 {% block title %}Braindump: {{ card.category }}{% endblock %}
+{% block custom_stylesheet_links %}<link href="{% static 'braindump.css' %}" rel="stylesheet">{% endblock %}
 {% block content %}
     <div id="braindump" class="col-lg-8 mx-auto">
         <h1 class="h5 my-3">
@@ -72,4 +74,5 @@
             </div>
         </div>
     </div>
+    <script src="{% static 'braindump.js' %}"></script>
 {% endblock %}

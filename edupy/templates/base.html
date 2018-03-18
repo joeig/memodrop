@@ -1,0 +1,22 @@
+{% load bootstrap4 %}
+{% load font_awesome %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}edupy{% endblock %}</title>
+    {% bootstrap_css %}
+    {% fa_css %}
+    <link href="{% static 'edupy.css' %}" rel="stylesheet">
+    {% block custom_stylesheet_links %}{% endblock %}
+    <script src="{% static 'jquery-3.2.1/jquery.min.js' %}"></script>
+    {% bootstrap_javascript %}
+    {% block custom_javascript_tags %}{% endblock %}
+</head>
+<body class="{% block custom_body_classes %}{% endblock %}">
+    {% block body %}{% endblock %}
+</body>
+</html>

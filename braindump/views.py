@@ -1,6 +1,7 @@
 import numpy
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.generic import TemplateView, View, RedirectView
 
@@ -73,13 +74,13 @@ class BraindumpViewMixin:
         return numpy.random.choice(area_range, 1, p=area_probability)[0]
 
 
-class BraindumpIndex(TemplateView):
+class BraindumpIndex(LoginRequiredMixin, TemplateView):
     """List all possible Braindump sessions
     """
-    template_name = "braindump/braindump_index.html"
+    template_name = 'braindump/braindump_index.html'
 
     def get_context_data(self):
-        category_list = Category.objects.order_by('last_interaction').reverse().all()
+        category_list = Category.objects.all_of_user(self.request.user).order_by('last_interaction').reverse().all()
 
         context = {
             'category_list': category_list,
@@ -88,15 +89,14 @@ class BraindumpIndex(TemplateView):
         return context
 
 
-class BraindumpSession(View, BraindumpViewMixin):
+class BraindumpSession(LoginRequiredMixin, View, BraindumpViewMixin):
     """Run a Braindump session for all cards in a certain category
     """
     http_method_names = ['get']
 
     def get(self, request, category_pk):
-        get_object_or_404(Category, pk=category_pk)
+        get_object_or_404(Category.objects.all_of_user(self.request.user), pk=category_pk)
         query_string = self.handle_query_string(request)
-        card_error = False
 
         # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
 
@@ -104,7 +104,7 @@ class BraindumpSession(View, BraindumpViewMixin):
 
         # Correct min/max area for getting only options with actually existing cards
         # (this does not exclude areas *between* min_area and max_area!):
-        card_filter = Card.objects.filter(
+        card_filter = Card.objects.all_of_user(self.request.user).filter(
             category_id=category_pk,
             area__gte=min_area,
             area__lte=max_area,
@@ -122,7 +122,7 @@ class BraindumpSession(View, BraindumpViewMixin):
                 randomly_selected_area = self.get_probability_weighted_area(adjusted_min_area, adjusted_max_area)
 
                 # Query a random card of the selected area (order_by('?') returns *one* random Card object):
-                card = Card.objects.filter(
+                card = Card.objects.all_of_user(self.request.user).filter(
                     category_id=category_pk,
                     area=randomly_selected_area
                 ).order_by('?').first()
@@ -149,13 +149,13 @@ class BraindumpSession(View, BraindumpViewMixin):
             return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
 
 
-class BraindumpOK(RedirectView, BraindumpViewMixin):
+class BraindumpOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
     """Handle clicks on the "OK" button in Braindump
     """
     permanent = False
 
     def get_redirect_url(self, card_pk, category_pk):
-        card = get_object_or_404(Card, pk=card_pk)
+        card = get_object_or_404(Card.objects.all_of_user(self.request.user), pk=card_pk)
         card.move_forward()
         card.set_last_interaction()
         card.category.set_last_interaction()
@@ -165,14 +165,14 @@ class BraindumpOK(RedirectView, BraindumpViewMixin):
         return '{}{}'.format(reverse('braindump-session', args=(category_pk,)), query_string)
 
 
-class BraindumpNOK(RedirectView, BraindumpViewMixin):
+class BraindumpNOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
     """Handle clicks on the "Not OK" button on Braindump
     """
     permanent = False
 
     def get_redirect_url(self, card_pk, category_pk):
-        card = get_object_or_404(Card, pk=card_pk)
-        category = get_object_or_404(Category, pk=category_pk)
+        card = get_object_or_404(Card.objects.all_of_user(self.request.user), pk=card_pk)
+        category = get_object_or_404(Category.objects.all_of_user(self.request.user), pk=category_pk)
 
         if category.mode == 1:
             card.reset()

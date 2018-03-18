@@ -14,14 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
+from rest_framework.authtoken import views as api_token_views
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url=reverse_lazy('braindump-index'), permanent=False), name='index'),
-    url(r'^braindump/', include('braindump.urls')),
-    url(r'^categories/', include('categories.urls.gui')),
-    url(r'^cards/', include('cards.urls.gui')),
+    url(r'^$',
+        RedirectView.as_view(url=reverse_lazy('braindump-index'), permanent=False),
+        name='index'),
+    url(r'^auth/login/$',
+        auth_views.LoginView.as_view(template_name='auth/login.html'),
+        name='auth-login'),
+    url(r'^auth/logout/$',
+        auth_views.logout_then_login,
+        name='auth-logout'),
+    url(r'^admin/', admin.site.urls),
+    url(r'^api/auth-token/', api_token_views.obtain_auth_token),
     url(r'^api/categories/', include('categories.urls.api')),
     url(r'^api/cards/', include('cards.urls.api')),
+    url(r'^braindump/', include('braindump.urls')),
+    url(r'^cards/', include('cards.urls.gui')),
+    url(r'^categories/', include('categories.urls.gui')),
 ]

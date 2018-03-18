@@ -1,6 +1,19 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+
+
+class CategoryManager(models.Manager):
+    def all_of_user(self, owner):
+        """Returns all categories belonging to the authorized user
+        """
+        return self.filter(owner=owner).all()
+
+    def get_of_user(self, owner, *args, **kwargs):
+        """Returns a category belonging to the authorized user
+        """
+        return self.filter(owner=owner).get(*args, **kwargs)
 
 
 class Category(models.Model):
@@ -12,6 +25,8 @@ class Category(models.Model):
     description = models.TextField(verbose_name='Description (Markdown)')
     mode = models.IntegerField(default=1, choices=MODE_CHOICES)
     last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    objects = CategoryManager()
 
     class Meta:
         ordering = ['name']
