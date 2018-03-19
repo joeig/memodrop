@@ -43,14 +43,40 @@ Screenshots
 Installation
 ------------
 
-1. Install Python 3.6 or `docker pull joeig/edupy`
-2. You may want to create a virtual environment
+### Docker setup
+
+~~~ bash
+docker pull joeig/edupy:latest
+docker run -d -p 8000:8000 joeig/edupy:latest scripts/standalone_service.sh
+~~~
+
+This command starts a standalone web service with a local SQlite database in development mode. In this case, the database file is part of the container volume.
+
+**A few words about production usage:** You should mount a custom settings file to `edupy/settings/production.py` (template: `production.py.dist`) containing the configuration for an external DBMS like PostgreSQL or MySQL. Also consider to use the WSGI interface instead of the standalone web service.
+
+Run the production container like this:
+
+~~~ bash
+docker run -d -v /path/to/your/production.py:/usr/src/app/edupy/settings/production.py:ro -e DJANGO_SETTINGS_MODULE=edupy.settings.production -p 8000:8000 joeig/edupy:latest scripts/standalone_service.sh
+~~~
+
+Now proceed to create the initial super-user:
+
+~~~ bash
+docker exec -ti <container ID> python manage.py createsuperuser
+~~~
+
+### Manual setup
+
+1. Install Python 3.6
+2. You may want to create a virtual environment now
 3. Install the dependencies: `pip install -r requirements.txt`
 4. Production preparation: Copy `edupy/settings/production.py.dist` to `edupy/settings/production.py` and adjust the values
 5. Create a database or let Django do that for you (it will choose SQLite3 by default)
 6. Migrate the database: `python manage.py migrate [--settings edupy.settings.production]`
 7. Create a super-user account: `python manage.py createsuperuser [--settings edupy.settings.production]`
-8. Start the application as WSGI (alternative for developers: `python manage.py runserver [--settings edupy.settings.production]`)
+8. * Start the application as WSGI
+   * Alternative: Start the standalone web service: `python manage.py runserver [--settings edupy.settings.production]`
 
 Create regular user accounts
 ----------------------------
@@ -84,7 +110,7 @@ pip install -r requirements_dev.txt
 There are some fixtures for different scenarios:
 
 ~~~ bash
-python manage.py loaddata demo_users
+python manage.py loaddata demo_users  # Demo credentials in categories/fixtures/demo_users.yaml
 python manage.py loaddata demo_categories
 python manage.py loaddata demo_cards
 ~~~

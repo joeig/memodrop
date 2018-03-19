@@ -9,5 +9,4 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3.6/site-packages/
 COPY . .
 EXPOSE 8000
-RUN chmod +x ./docker-entrypoint.sh
-ENTRYPOINT ./docker-entrypoint.sh
+RUN chmod +x ./scripts/*.sh
