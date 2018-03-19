@@ -6,7 +6,7 @@
 {% block title %}{{ category }}{% endblock %}
 {% block custom_javascript_tags %}<script src="{% static 'chart-2.7.0/chart.bundle.min.js' %}"></script>{% endblock %}
 {% block content %}
-    <h1 class="my-5">
+    <h1 class="my-sm-2 my-lg-5">
         {{ category.name }}
     </h1>
     <div class="clearfix"></div>
@@ -26,7 +26,7 @@
             </div>
         </div>
         {% if category.cards.all|length %}
-            <div class="col-lg-6">
+            <div class="my-3 my-lg-0 col-lg-6">
                 <div id="chart-container">
                     <canvas id="chart"></canvas>
                     <script>
@@ -76,7 +76,7 @@
     </div>
     {% if category.cards.all|length %}
         <div class="col-lg-12">
-            <h2 class="my-5">
+            <h2 class="my-sm-2 my-lg-5">
                 Cards
                 <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary float-right"
                    title="Create a new card in this category">Create Card</a>

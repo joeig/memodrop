@@ -5,7 +5,7 @@
 {% block body %}
     <nav class="navbar navbar-dark bg-primary sticky-top navbar-expand-lg mb-3">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">memodrop</a>
+            <a class="navbar-brand" href="{% url 'index' %}">{% block brand %}memodrop{% endblock %}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav"
                     aria-controls="navToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

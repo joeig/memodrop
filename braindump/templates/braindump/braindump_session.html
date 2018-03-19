@@ -5,14 +5,14 @@
 {% block title %}Braindump: {{ card.category }}{% endblock %}
 {% block custom_stylesheet_links %}<link href="{% static 'braindump.css' %}" rel="stylesheet">{% endblock %}
 {% block content %}
-    <div id="braindump" class="col-lg-8 mx-auto">
+    <div id="braindump" class="col-lg-8 mx-auto px-0">
         <h1 class="h5 my-3">
             <div class="float-right d-none d-sm-block">
                 <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-link btn-sm" title="Go to the category">Go to Category</a>
             </div>
             {{ card.category.name }}
         </h1>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header">
                     Card #{{ card.pk }}
                     <div class="float-right">
@@ -54,7 +54,6 @@
                 </div>
             </div>
         </div>
-    <br />
         <div class="row">
             <div class="col-lg-12">
                 <div class="float-right">
