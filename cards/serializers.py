@@ -5,14 +5,16 @@ from categories.models import Category
 
 
 class CategoryForeignKey(serializers.PrimaryKeyRelatedField):
-    def get_queryset(self):
+    def _get_user(self):
         # Try to retrieve the current user:
         user = None
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
             user = request.user
+        return user
 
-        return Category.objects.all_of_user(user)
+    def get_queryset(self):
+        return Category.objects.all_of_user(self._get_user())
 
 
 class CardSerializer(serializers.ModelSerializer):

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
-from rest_framework.authtoken import views as api_token_views
+from rest_framework.authtoken import views as auth_token_views
 
 urlpatterns = [
     url(r'^$',
@@ -31,7 +31,8 @@ urlpatterns = [
         auth_views.logout_then_login,
         name='auth-logout'),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/auth-token/', api_token_views.obtain_auth_token),
+    url(r'^api/auth/', include('rest_framework.urls')),
+    url(r'^api/auth-token/', auth_token_views.obtain_auth_token),
     url(r'^api/categories/', include('categories.urls.api')),
     url(r'^api/cards/', include('cards.urls.api')),
     url(r'^braindump/', include('braindump.urls')),
