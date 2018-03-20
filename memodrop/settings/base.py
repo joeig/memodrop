@@ -36,7 +36,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'edupy.urls'
+ROOT_URLCONF = 'memodrop.urls'
 
 TEMPLATES = [
     {
@@ -56,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'edupy.wsgi.application'
+WSGI_APPLICATION = 'memodrop.wsgi.application'
 
 
 # Password validation

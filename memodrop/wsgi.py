@@ -1,5 +1,5 @@
 """
-WSGI config for edupy project.
+WSGI config for memodrop project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "edupy.settings.production")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "memodrop.settings.production")
 
 application = get_wsgi_application()

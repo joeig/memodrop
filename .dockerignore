@@ -2,7 +2,7 @@
 .coverage
 db.sqlite3*
 docs/
-edupy/settings/production.py
+memodrop/settings/production.py
 local_scripts/
 venv/
 __pycache__
