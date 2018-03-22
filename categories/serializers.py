@@ -13,7 +13,8 @@ class CategorySerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'last_interaction')
 
     def _get_user(self):
-        # Try to retrieve the current user:
+        """Try to retrieve the current user
+        """
         user = None
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
