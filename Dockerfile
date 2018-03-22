@@ -10,3 +10,4 @@ COPY --from=build /usr/local/lib/python3.6/site-packages/ /usr/local/lib/python3
 COPY . .
 EXPOSE 8000
 RUN chmod +x ./scripts/*.sh
+CMD scripts/standalone_service.sh

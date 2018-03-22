@@ -47,7 +47,7 @@ Installation
 
 ~~~ bash
 docker pull joeig/memodrop:latest
-docker run -d -p 8000:8000 joeig/memodrop:latest scripts/standalone_service.sh
+docker run -d -p 8000:8000 joeig/memodrop:latest
 ~~~
 
 This command starts a standalone web service with a local SQlite database in development mode. In this case, the database file is part of the container volume.
@@ -57,7 +57,7 @@ This command starts a standalone web service with a local SQlite database in dev
 Run the production container like this:
 
 ~~~ bash
-docker run -d -v /path/to/your/production.py:/usr/src/app/memodrop/settings/production.py:ro -e DJANGO_SETTINGS_MODULE=memodrop.settings.production -p 8000:8000 joeig/memodrop:latest scripts/standalone_service.sh
+docker run -d -v /path/to/your/production.py:/usr/src/app/memodrop/settings/production.py:ro -e DJANGO_SETTINGS_MODULE=memodrop.settings.production -p 8000:8000 joeig/memodrop:latest
 ~~~
 
 Now proceed to create the initial super-user:
