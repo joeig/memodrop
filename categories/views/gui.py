@@ -13,7 +13,7 @@ class CategoryBelongsUserMixin:
     """Mixin that returns all categories belonging to the authorized user
     """
     def get_queryset(self):
-        return Category.objects.all_of_user(self.request.user)
+        return Category.user_objects.all(self.request.user)
 
 
 class CategoryList(LoginRequiredMixin, CategoryBelongsUserMixin, ListView):

@@ -17,7 +17,7 @@ class CardBelongsUserMixin:
     """Mixin that returns all cards belonging to the authorized user
     """
     def get_queryset(self):
-        return Card.objects.all_of_user(self.request.user)
+        return Card.user_objects.all(self.request.user)
 
 
 class CardList(LoginRequiredMixin, CardBelongsUserMixin, ListView):
@@ -46,7 +46,7 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['category'].queryset = Category.objects.all_of_user(self.request.user)
+        form.fields['category'].queryset = Category.user_objects.all(self.request.user)
         return form
 
     def get_initial(self):
@@ -103,7 +103,7 @@ class CardDelete(LoginRequiredMixin, CardBelongsUserMixin, DeleteView):
 def card_reset(request, pk):
     """Handle clicks on the "Reset" button of a card
     """
-    card = Card.objects.get_of_user(request.user, id=pk)
+    card = Card.user_objects.get(request.user, id=pk)
     prev_area = card.area
 
     if prev_area != 1:
@@ -123,7 +123,7 @@ def card_reset(request, pk):
 def card_set_area(request, pk, area):
     """Handle manual movements of a card
     """
-    card = Card.objects.get_of_user(request.user, id=pk)
+    card = Card.user_objects.get(request.user, id=pk)
     prev_area = card.area
     card.area = area
     card.save()
