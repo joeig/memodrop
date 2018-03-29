@@ -1,5 +1,11 @@
 [run]
 source = .
+branch = True
+omit =
+  manage.py
+  memodrop/settings/production.py.dist
+  memodrop/wsgi.py
+  venv/*
 
 [report]
 show_missing = True
