@@ -10,12 +10,14 @@
             This category contains {{ category.cards.all|length }} card{{ category.cards.all|length|pluralize }}:
             <ul>
                 {% for card in category.cards.all %}
-                    <li>{{ card.question }}</li>
+                    <li><a href="{% url 'card-detail' card.pk %}" title="{{ card.question }}">{{ card.question }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         {% endif %}
         <p>Are you sure you want to delete the category <a
-                href="{% url 'category-detail' category.pk %}"><strong>{{ category }}</strong></a>?</p>
+                href="{% url 'category-detail' category.pk %}"
+                title="{{ category }}"><strong>{{ category }}</strong></a>?</p>
         {% buttons %}
             <input type="submit" class="btn btn-danger" value="Delete"/>
         {% endbuttons %}
