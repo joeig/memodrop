@@ -56,15 +56,40 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
         }
 
     def form_valid(self, form):
-        messages.success(self.request, 'Created card in category "{}".'.format(form.cleaned_data.get('category')))
-
         if self.request.POST.get('save') == 'Save and Create New':
-            form.save()
+            card_object = form.save()
+
             # Pre-select last category:
-            query_string = '?category={}'.format(form.cleaned_data.get('category').id)
-            return HttpResponseRedirect(reverse('card-create') + query_string)
+            query_string = '?category={}'.format(card_object.category.pk)
+            resp = HttpResponseRedirect(reverse('card-create') + query_string)
+
+            messages.success(
+                self.request,
+                mark_safe(
+                    'Created <a href="{}">card</a> in category <a href="{}">"{}"</a>.'.format(
+                        reverse('card-detail', args=(card_object.pk,)),
+                        reverse('category-detail', args=(card_object.category.pk,)),
+                        card_object.category,
+                    )
+                )
+            )
         else:
-            return super(CardCreate, self).form_valid(form)
+            resp = super(CardCreate, self).form_valid(form)
+
+            messages.success(
+                self.request,
+                mark_safe(
+                    'Created <a href="{}">card</a> in category <a href="{}">"{}"</a>. '
+                    '<a href="{}">Create New</a>'.format(
+                        reverse('card-detail', args=(self.object.pk,)),
+                        reverse('category-detail', args=(self.object.category.pk,)),
+                        self.object.category,
+                        reverse('card-create') + '?category={}'.format(self.object.category.pk),
+                    )
+                )
+            )
+
+        return resp
 
 
 class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
@@ -78,15 +103,40 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
     template_name_suffix = '_update_form'
 
     def form_valid(self, form):
-        messages.success(self.request, 'Updated card in category "{}".'.format(form.cleaned_data.get('category')))
-
         if self.request.POST.get('save') == 'Save and Create New':
-            form.save()
+            card_object = form.save()
+
             # Pre-select last category:
-            query_string = '?category={}'.format(form.cleaned_data.get('category').id)
-            return HttpResponseRedirect(reverse('card-create') + query_string)
+            query_string = '?category={}'.format(card_object.category.pk)
+            resp = HttpResponseRedirect(reverse('card-create') + query_string)
+
+            messages.success(
+                self.request,
+                mark_safe(
+                    'Updated <a href="{}">card</a> in category <a href="{}">"{}"</a>. '.format(
+                        reverse('card-detail', args=(card_object.pk,)),
+                        reverse('category-detail', args=(card_object.category.pk,)),
+                        card_object.category,
+                    )
+                )
+            )
         else:
-            return super(CardUpdate, self).form_valid(form)
+            resp = super(CardUpdate, self).form_valid(form)
+
+            messages.success(
+                self.request,
+                mark_safe(
+                    'Updated <a href="{}">card</a> in category <a href="{}">"{}"</a>. '
+                    '<a href="{}">Create New</a>'.format(
+                        reverse('card-detail', args=(self.object.pk,)),
+                        reverse('category-detail', args=(self.object.category.pk,)),
+                        self.object.category,
+                        reverse('card-create') + '?category={}'.format(self.object.category.pk),
+                    )
+                )
+            )
+
+        return resp
 
 
 class CardDelete(LoginRequiredMixin, CardBelongsUserMixin, DeleteView):
