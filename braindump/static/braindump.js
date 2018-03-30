@@ -1,9 +1,9 @@
 $("#braindump #show-hint").click(function() {
     $("#braindump #hint").show();
-    $(this).attr("disabled", "disabled");
+    $(this).addClass("disabled");
 });
 
 $("#braindump #show-answer").click(function() {
     $("#braindump #answer").show();
-    $(this).attr("disabled", "disabled");
+    $(this).addClass("disabled");
 });
