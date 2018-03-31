@@ -2,7 +2,7 @@
 {% load bootstrap4 %}
 {% block title %}Confirmation{% endblock %}
 {% block content %}
-    <h1 class="my-sm-2 my-lg-5">Delete Confirmation</h1>
+    <h1 class="my-2 my-lg-5">Delete Confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
         <p>Your last interaction with this category was {{ category.last_interaction|timesince }} ago.</p>
