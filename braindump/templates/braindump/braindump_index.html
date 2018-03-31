@@ -9,48 +9,54 @@
     <div class="card-columns">
         {% for category in category_list %}
             <div class="card bg-light">
-            <div class="card-body">
-                <h4 class="card-title">
-                    {{ category.name }}
-                </h4>
-                <p class="card-text">
-                    <span class="badge badge-primary">{{ category.cards.all|length }} Card{{ category.cards.all|length|pluralize }}</span>
-                    <span class="badge {% if category.mode == 1 %}badge-danger{% else %}badge-warning{% endif %}">{{ category.get_mode_display }} Mode</span>
-                </p>
-                <div class="card-text my-4">
-                    {{ category.description|markdown }}
-                </div>
-                <div class="btn-group my-2">
-                    {% if category.cards.all|length == 0 %}
-                        <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary"
-                           title="Create the first card in this category">Create First Card</a>
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"></button>
-                    {% else %}
-                        <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-primary"
-                           title="Start a Braindump session for all cards in this category">Start Braindump</a>
-                        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"></button>
-                    {% endif %}
-                    <div class="dropdown-menu">
-                        <a href="{% url 'category-detail' category.pk %}" class="dropdown-item"
-                           title="Show details about this category">Details</a>
-                        {% if category.cards.all|length != 0 %}
-                            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="dropdown-item"
-                               title="Create a new card in this category">Create Card</a>
-                        {% endif %}
-                        <a href="{% url 'category-update' category.pk %}" class="dropdown-item"
-                           title="Edit this category">Update Category</a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {{ category.name }}
+                    </h4>
+                    <p class="card-text">
+                        <span class="badge badge-primary">{{ category.cards.all|length }} Card{{ category.cards.all|length|pluralize }}</span>
+                        <span class="badge {% if category.mode == 1 %}badge-danger{% else %}badge-warning{% endif %}">{{ category.get_mode_display }} Mode</span>
+                    </p>
+                    <div class="card-text my-4">
+                        {{ category.description|markdown }}
                     </div>
+                    <div class="btn-group my-2">
+                        {% if category.cards.all|length == 0 %}
+                            <a href="{% url 'card-create' %}?category={{ category.pk }}"
+                               class="btn btn-outline-secondary"
+                               title="Create the first card in this category">Create First Card</a>
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false"></button>
+                        {% else %}
+                            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-primary"
+                               title="Start a Braindump session for all cards in this category">Start Braindump</a>
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false"></button>
+                        {% endif %}
+                        <div class="dropdown-menu">
+                            <a href="{% url 'category-detail' category.pk %}" class="dropdown-item"
+                               title="Show details about this category">Details</a>
+                            {% if category.cards.all|length != 0 %}
+                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="dropdown-item"
+                                   title="Create a new card in this category">Create Card</a>
+                            {% endif %}
+                            <a href="{% url 'category-update' category.pk %}" class="dropdown-item"
+                               title="Edit this category">Update Category</a>
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        <small class="text-muted">Last session {{ category.last_interaction|timesince }} ago</small>
+                    </p>
                 </div>
-                <p class="card-text"><small class="text-muted">Last session {{ category.last_interaction|timesince }} ago</small></p>
             </div>
-            </div>
-        {% empty %}
-            <div class="clearfix"></div>
-            <p>&nbsp;</p>
-            <p><a href="{% url 'category-create' %}" class="btn btn-primary btn-lg" title="Create the first category">Create
-                First Category</a></p>
         {% endfor %}
     </div>
+    {% if category_list|length == 0 %}
+        <div class="jumbotron">
+            <p class="lead">You have not created any categories yet.</p>
+            <p><a href="{% url 'category-create' %}" class="btn btn-primary btn-lg" title="Create the first category">Create
+                First Category</a></p>
+        </div>
+    {% endif %}
 {% endblock %}

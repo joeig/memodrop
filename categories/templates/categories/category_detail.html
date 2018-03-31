@@ -12,24 +12,24 @@
         {{ category.name }}
     </h1>
     <div class="clearfix"></div>
-    <p>&nbsp;</p>
 
     {% if category.cards.all|length == 0 %}
-        <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-primary btn-lg"
-           title="Create the first card in this category">Create First Card</a>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
+        <div class="jumbotron">
+            <p class="lead">This category does not contain any cards yet.</p>
+            <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-primary btn-lg"
+               title="Create the first card in this category">Create First Card</a>
+        </div>
     {% endif %}
 
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    {{ category.description|markdown }}
+    {% if category.cards.all|length %}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        {{ category.description|markdown }}
+                    </div>
                 </div>
             </div>
-        </div>
-        {% if category.cards.all|length %}
             <div class="my-3 my-lg-0 col-lg-6">
                 <div id="chart-container">
                     <canvas id="chart"></canvas>
@@ -76,10 +76,8 @@
                     </script>
                 </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
 
-    {% if category.cards.all|length %}
         <div class="col-lg-12">
             <h2 class="my-sm-2 my-lg-5">
                 Cards
