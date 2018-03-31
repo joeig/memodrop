@@ -8,7 +8,7 @@
     <h1 class="my-sm-2 my-lg-5">Braindump</h1>
     <div class="card-columns">
         {% for category in category_list %}
-            <div class="card">
+            <div class="card bg-light">
             <div class="card-body">
                 <h4 class="card-title">
                     {{ category.name }}
@@ -17,10 +17,10 @@
                     <span class="badge badge-primary">{{ category.cards.all|length }} Card{{ category.cards.all|length|pluralize }}</span>
                     <span class="badge {% if category.mode == 1 %}badge-danger{% else %}badge-warning{% endif %}">{{ category.get_mode_display }} Mode</span>
                 </p>
-                <div class="card-text">
+                <div class="card-text my-4">
                     {{ category.description|markdown }}
                 </div>
-                <div class="btn-group">
+                <div class="btn-group my-2">
                     {% if category.cards.all|length == 0 %}
                         <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary"
                            title="Create the first card in this category">Create First Card</a>
@@ -43,6 +43,7 @@
                            title="Edit this category">Update Category</a>
                     </div>
                 </div>
+                <p class="card-text"><small class="text-muted">Last session {{ category.last_interaction|timesince }} ago</small></p>
             </div>
             </div>
         {% empty %}

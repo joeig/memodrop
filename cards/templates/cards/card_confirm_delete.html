@@ -3,12 +3,9 @@
 {% load markdown_deux_tags %}
 {% block title %}Confirmation{% endblock %}
 {% block content %}
-    <h1 class="my-sm-2 my-lg-5">Confirmation</h1>
+    <h1 class="my-sm-2 my-lg-5">Delete Confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
-        <p>Are you sure you want to delete <a href="{% url 'card-detail' card.pk %}"><strong>{{ card }}</strong></a> of
-            category <a href="{% url 'category-detail' card.category.pk %}"><strong>{{ card.category }}</strong></a>?
-        </p>
         <div class="card mb-3">
             <div class="card-body">
                 {{ card.question|markdown }}
@@ -20,6 +17,10 @@
                 {{ card.answer|markdown }}
             </div>
         </div>
+        <p>Are you sure you want to delete <a href="{% url 'card-detail' card.pk %}"><strong>{{ card }}</strong></a> of
+            category <a href="{% url 'category-detail' card.category.pk %}"><strong>{{ card.category }}</strong></a>?
+            This action cannot be undone.
+        </p>
         {% buttons %}
             <input type="submit" class="btn btn-danger" value="Delete"/>
         {% endbuttons %}

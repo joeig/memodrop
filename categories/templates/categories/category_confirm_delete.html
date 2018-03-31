@@ -2,7 +2,7 @@
 {% load bootstrap4 %}
 {% block title %}Confirmation{% endblock %}
 {% block content %}
-    <h1 class="my-sm-2 my-lg-5">Confirmation</h1>
+    <h1 class="my-sm-2 my-lg-5">Delete Confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
         <p>Your last interaction with this category was {{ category.last_interaction|timesince }} ago.</p>
@@ -17,7 +17,7 @@
         {% endif %}
         <p>Are you sure you want to delete the category <a
                 href="{% url 'category-detail' category.pk %}"
-                title="{{ category }}"><strong>{{ category }}</strong></a>?</p>
+                title="{{ category }}"><strong>{{ category }}</strong></a>? This action cannot be undone.</p>
         {% buttons %}
             <input type="submit" class="btn btn-danger" value="Delete"/>
         {% endbuttons %}
