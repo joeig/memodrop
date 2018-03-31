@@ -44,6 +44,15 @@ class CategoryCreate(LoginRequiredMixin, CategoryBelongsUserMixin, CreateView):
     fields = ['name', 'description', 'mode']
     template_name_suffix = '_create_form'
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['description'].help_text = 'You can use Markdown.'
+        form.fields['mode'].help_text = """
+<strong>Strict Mode:</strong> Incorrectly answered cards are moved back to the first area.<br>
+<strong>Defensive Mode:</strong> Incorrectly answered cards are moved back to the previous area.
+"""
+        return form
+
     def form_valid(self, form):
         messages.success(self.request, 'Category created.')
         form.instance.owner = self.request.user
@@ -55,6 +64,15 @@ class CategoryUpdate(LoginRequiredMixin, CategoryBelongsUserMixin, UpdateView):
     """
     fields = ['name', 'description', 'mode']
     template_name_suffix = '_update_form'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['description'].help_text = 'You can use Markdown.'
+        form.fields['mode'].help_text = """
+<strong>Strict Mode:</strong> Incorrectly answered cards are moved back to the first area.<br>
+<strong>Defensive Mode:</strong> Incorrectly answered cards are moved back to the previous area.
+"""
+        return form
 
     def form_valid(self, form):
         messages.success(self.request, 'Category updated.')

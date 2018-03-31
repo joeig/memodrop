@@ -46,6 +46,9 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
+        form.fields['question'].help_text = 'You can use Markdown.'
+        form.fields['hint'].help_text = 'You can use Markdown.'
+        form.fields['answer'].help_text = 'You can use Markdown.'
         form.fields['category'].queryset = Category.user_objects.all(self.request.user)
         return form
 
@@ -101,6 +104,14 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
               'area',
               'category']
     template_name_suffix = '_update_form'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['question'].help_text = 'You can use Markdown.'
+        form.fields['hint'].help_text = 'You can use Markdown.'
+        form.fields['answer'].help_text = 'You can use Markdown.'
+        form.fields['category'].queryset = Category.user_objects.all(self.request.user)
+        return form
 
     def form_valid(self, form):
         if self.request.POST.get('save') == 'Save and Create New':

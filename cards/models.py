@@ -24,9 +24,9 @@ class Card(models.Model):
         (5, '5'),
         (6, '6'),
     )
-    question = models.TextField(verbose_name='Question (Markdown)')
-    answer = models.TextField(verbose_name='Answer (Markdown)')
-    hint = models.TextField(blank=True, verbose_name='Hint (Markdown)')
+    question = models.TextField(verbose_name='Question')
+    answer = models.TextField(verbose_name='Answer')
+    hint = models.TextField(blank=True, verbose_name='Hint')
     area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
     category = models.ForeignKey('categories.Category', on_delete=models.CASCADE, related_name='cards')
     last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)

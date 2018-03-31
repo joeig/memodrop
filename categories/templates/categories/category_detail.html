@@ -4,19 +4,23 @@
 {% load area_rating %}
 {% load card_controls %}
 {% block title %}{{ category }}{% endblock %}
-{% block custom_javascript_tags %}<script src="{% static 'chart-2.7.0/chart.bundle.min.js' %}"></script>{% endblock %}
+{% block custom_javascript_tags %}
+    <script src="{% static 'chart-2.7.0/chart.bundle.min.js' %}"></script>
+{% endblock %}
 {% block content %}
     <h1 class="my-sm-2 my-lg-5">
         {{ category.name }}
     </h1>
     <div class="clearfix"></div>
     <p>&nbsp;</p>
+
     {% if category.cards.all|length == 0 %}
         <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-primary btn-lg"
            title="Create the first card in this category">Create First Card</a>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
     {% endif %}
+
     <div class="row">
         <div class="col-lg-6">
             <div class="card">
@@ -74,11 +78,13 @@
             </div>
         {% endif %}
     </div>
+
     {% if category.cards.all|length %}
         <div class="col-lg-12">
             <h2 class="my-sm-2 my-lg-5">
                 Cards
-                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary float-right"
+                <a href="{% url 'card-create' %}?category={{ category.pk }}"
+                   class="btn btn-outline-secondary float-right"
                    title="Create a new card in this category">Create Card</a>
             </h2>
             <div class="table-responsive">
@@ -86,8 +92,8 @@
                     <thead>
                     <tr>
                         <th>Question</th>
-                        <th>Area</th>
-                        <th></th>
+                        <th class="d-none d-md-table-cell">Area</th>
+                        <th class="d-none d-md-table-cell"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -95,8 +101,8 @@
                         <tr>
                             <td><a href="{% url 'card-detail' card.pk %}"
                                    title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
-                            <td>{% area_rating card.area %}</td>
-                            <td>{% card_controls card %}</td>
+                            <td class="d-none d-md-table-cell">{% area_rating card.area %}</td>
+                            <td class="d-none d-md-table-cell">{% card_controls card %}</td>
                         </tr>
                     {% empty %}
                         <tr>
@@ -108,6 +114,7 @@
             </div>
         </div>
     {% endif %}
+
     <div class="float-right">
         {% if category.cards.all|length %}
             <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary"
@@ -116,5 +123,5 @@
         <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary" title="Edit this category">Update
             Category</a>
         <a href="{% url 'category-delete' category.pk %}" class="btn btn-link" title="Delete this category">Delete</a>
-</div>
+    </div>
 {% endblock %}

@@ -22,7 +22,7 @@ class Category(models.Model):
         (2, 'Defensive'),
     )
     name = models.CharField(max_length=128)
-    description = models.TextField(verbose_name='Description (Markdown)')
+    description = models.TextField(verbose_name='Description')
     mode = models.IntegerField(default=1, choices=MODE_CHOICES)
     last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
