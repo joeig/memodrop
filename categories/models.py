@@ -45,8 +45,10 @@ class Category(models.Model):
         """
         return self.cards.filter(area=area)
 
-    def set_last_interaction(self, last_interaction=timezone.now()):
+    def set_last_interaction(self, last_interaction=False):
         """Set date and time of last interaction
         """
+        if not last_interaction:
+            last_interaction = timezone.now()
         self.last_interaction = last_interaction
         self.save()
