@@ -70,7 +70,7 @@ docker exec -ti <container ID> python manage.py createsuperuser
 
 1. Install Python 3.6
 2. You may want to create a virtual environment now
-3. Install the dependencies: `pip install -r requirements.txt`
+3. Install the dependencies: `python setup.py install`
 4. Production preparation: Copy `memodrop/settings/production.py.dist` to `memodrop/settings/production.py` and adjust the values
 5. Create a database or let Django do that for you (it will choose SQLite3 by default)
 6. Migrate the database: `python manage.py migrate [--settings memodrop.settings.production]`
@@ -100,24 +100,38 @@ $ curl -X POST --data "username=<username>&password=<password>" "http://127.0.0.
 Contribution
 ------------
 
+### Setup
+
 Setup the development environment:
 
 ~~~ bash
-pip install -r requirements.txt
-pip install -r requirements_dev.txt
+python setup.py develop
+pip install -e ".[dev]"
 ~~~
 
 There are some fixtures for different scenarios:
 
 ~~~ bash
-python manage.py loaddata demo_users  # Demo credentials in categories/fixtures/demo_users.yaml
+python manage.py loaddata demo_users  # use demo credentials from categories/fixtures/demo_users.yaml
 python manage.py loaddata demo_categories
 python manage.py loaddata demo_cards
 ~~~
+
+### Test
 
 Feel free to write and run some unit tests after you've finished your work.
 
 ~~~ bash
 coverage run manage.py test .
 coverage report
+~~~
+
+### Release
+
+Commit and tag your work (following the [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) guidelines):
+
+~~~ bash
+git commit
+git tag v1.2.3
+git push origin master --tags
 ~~~

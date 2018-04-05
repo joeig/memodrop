@@ -1,6 +1,9 @@
 *.pyc
 .coverage
+*.egg-info/
+build/
 db.sqlite3*
+dist/
 memodrop/settings/production.py
 local_scripts/
 venv/
