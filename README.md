@@ -124,6 +124,7 @@ Feel free to write and run some unit tests after you've finished your work.
 ~~~ bash
 coverage run manage.py test .
 coverage report
+flake8
 ~~~
 
 ### Release

@@ -35,6 +35,7 @@ setup(
             'coverage==4.5.1',
             'PyYAML==3.12',
             'setuptools==39.0.1',
+            'flake8==3.5.0',
         ],
     },
 )
