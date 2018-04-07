@@ -1,8 +1,11 @@
-import numpy
+from datetime import timedelta
 
+import numpy
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.utils import timezone
 from django.views.generic import TemplateView, View, RedirectView
 
 from cards.models import Card
@@ -124,7 +127,8 @@ class BraindumpSession(LoginRequiredMixin, View, BraindumpViewMixin):
                 # Query a random card of the selected area (order_by('?') returns *one* random Card object):
                 card = Card.user_objects.all(self.request.user).filter(
                     category_id=category_pk,
-                    area=randomly_selected_area
+                    area=randomly_selected_area,
+                    postpone_until__lte=timezone.now()
                 ).order_by('?').first()
 
                 retries += 1
@@ -145,12 +149,16 @@ class BraindumpSession(LoginRequiredMixin, View, BraindumpViewMixin):
             card_error = True
 
         if card_error:
-            messages.warning(request, 'Cannot find any cards for this category in the desired areas.')
-            return redirect(request.META.get('HTTP_REFERER', reverse('braindump-index')))
+            messages.warning(
+                request,
+                'Cannot find any cards for this category in the desired areas. '
+                'Is it possible that you postponed all possible cards?'
+            )
+            return redirect(reverse('braindump-index'))
 
 
 class BraindumpOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
-    """Handle clicks on the "OK" button in Braindump
+    """Handle clicks on the "OK" button
     """
     permanent = False
 
@@ -166,7 +174,7 @@ class BraindumpOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
 
 
 class BraindumpNOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
-    """Handle clicks on the "Not OK" button on Braindump
+    """Handle clicks on the "Not OK" button
     """
     permanent = False
 
@@ -178,6 +186,31 @@ class BraindumpNOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
             card.reset()
         elif category.mode == 2:
             card.move_backward()
+
+        card.set_last_interaction()
+        card.category.set_last_interaction()
+
+        query_string = self.handle_query_string(self.request)
+
+        return '{}{}'.format(reverse('braindump-session', args=(category_pk,)), query_string)
+
+
+class BraindumpPostpone(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
+    """Handle clicks on the "Postpone" button
+    """
+    permanent = False
+
+    def get_redirect_url(self, card_pk, category_pk, seconds):
+        card = get_object_or_404(Card.user_objects.all(self.request.user), pk=card_pk)
+
+        if int(seconds) > settings.BRAINDUMP_MAX_POSTPONE_SECONDS:
+            messages.error(
+                self.request,
+                'Cannot postpone a card for more than {} seconds.'.format(settings.BRAINDUMP_MAX_POSTPONE_SECONDS)
+            )
+        else:
+            card.postpone_until = timezone.now() + timedelta(seconds=int(seconds))
+            messages.info(self.request, 'Ok, I will not show the card for 15 minutes from now.')
 
         card.set_last_interaction()
         card.category.set_last_interaction()

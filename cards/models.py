@@ -30,6 +30,7 @@ class Card(models.Model):
     area = models.IntegerField(default=1, choices=AREA_CHOICES, verbose_name='Area')
     category = models.ForeignKey('categories.Category', on_delete=models.CASCADE, related_name='cards')
     last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
+    postpone_until = models.DateTimeField(auto_now_add=True, blank=True)
     objects = models.Manager()
     user_objects = CardUserManager()
 
@@ -68,4 +69,18 @@ class Card(models.Model):
         if not last_interaction:
             last_interaction = timezone.now()
         self.last_interaction = last_interaction
+        self.save()
+
+    def postponed(self):
+        """Return true if card has been postponed
+        """
+        if self.postpone_until > timezone.now():
+            return True
+        else:
+            return False
+
+    def expedite(self):
+        """Reset postpone marker
+        """
+        self.postpone_until = timezone.now()
         self.save()

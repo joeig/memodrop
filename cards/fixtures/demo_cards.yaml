@@ -8,6 +8,7 @@
     area: 1
     category: 1
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 2
   fields:
@@ -17,6 +18,7 @@
     area: 2
     category: 1
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 3
   fields:
@@ -26,6 +28,7 @@
     area: 3
     category: 1
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 4
   fields:
@@ -35,6 +38,7 @@
     area: 4
     category: 1
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 5
   fields:
@@ -44,6 +48,7 @@
     area: 5
     category: 1
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 6
   fields:
@@ -53,6 +58,7 @@
     area: 6
     category: 1
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 7
   fields:
@@ -62,6 +68,7 @@
     area: 1
     category: 2
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 8
   fields:
@@ -71,6 +78,7 @@
     area: 2
     category: 2
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 9
   fields:
@@ -80,6 +88,7 @@
     area: 3
     category: 2
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 10
   fields:
@@ -89,6 +98,7 @@
     area: 4
     category: 2
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 11
   fields:
@@ -98,6 +108,7 @@
     area: 5
     category: 2
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 12
   fields:
@@ -107,6 +118,7 @@
     area: 6
     category: 2
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 13
   fields:
@@ -115,6 +127,7 @@
     area: 1
     category: 3
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 14
   fields:
@@ -139,6 +152,7 @@
     area: 1
     category: 5
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 15
   fields:
@@ -147,3 +161,4 @@
     area: 1
     category: 6
     last_interaction: '2018-03-17 13:37:00Z'
+    postpone_until: '2018-03-17 13:37:00Z'

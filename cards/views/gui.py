@@ -2,9 +2,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils.safestring import mark_safe
+from django.views.generic import RedirectView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
@@ -69,8 +70,9 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Created <a href="{}">card</a> in category <a href="{}">"{}"</a>.'.format(
+                    'Created <a href="{}">{}</a> in category <a href="{}">"{}"</a>.'.format(
                         reverse('card-detail', args=(card_object.pk,)),
+                        card_object,
                         reverse('category-detail', args=(card_object.category.pk,)),
                         card_object.category,
                     )
@@ -82,9 +84,10 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Created <a href="{}">card</a> in category <a href="{}">"{}"</a>. '
+                    'Created <a href="{}">{}</a> in category <a href="{}">"{}"</a>. '
                     '<a href="{}">Create New</a>'.format(
                         reverse('card-detail', args=(self.object.pk,)),
+                        self.object,
                         reverse('category-detail', args=(self.object.category.pk,)),
                         self.object.category,
                         reverse('card-create') + '?category={}'.format(self.object.category.pk),
@@ -124,8 +127,9 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Updated <a href="{}">card</a> in category <a href="{}">"{}"</a>. '.format(
+                    'Updated <a href="{}">{}</a> in category <a href="{}">"{}"</a>. '.format(
                         reverse('card-detail', args=(card_object.pk,)),
+                        card_object,
                         reverse('category-detail', args=(card_object.category.pk,)),
                         card_object.category,
                     )
@@ -137,9 +141,10 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Updated <a href="{}">card</a> in category <a href="{}">"{}"</a>. '
+                    'Updated <a href="{}">{}</a> in category <a href="{}">"{}"</a>. '
                     '<a href="{}">Create New</a>'.format(
                         reverse('card-detail', args=(self.object.pk,)),
+                        self.object,
                         reverse('category-detail', args=(self.object.category.pk,)),
                         self.object.category,
                         reverse('card-create') + '?category={}'.format(self.object.category.pk),
@@ -160,11 +165,29 @@ class CardDelete(LoginRequiredMixin, CardBelongsUserMixin, DeleteView):
         return super(CardDelete, self).delete(request, *args, **kwargs)
 
 
+class CardExpedite(LoginRequiredMixin, CardBelongsUserMixin, RedirectView):
+    """Expedite a card (undo postpone)
+    """
+    permanent = False
+
+    def get_redirect_url(self, pk):
+        card = get_object_or_404(self.get_queryset(), pk=pk)
+        card.expedite()
+        messages.success(
+            self.request,
+            mark_safe('The postpone marker of <a href="{}">{}</a> has been removed.'.format(
+                reverse('card-detail', args=(card.pk,)),
+                card
+            ))
+        )
+        return self.request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,)))
+
+
 @login_required
 def card_reset(request, pk):
     """Handle clicks on the "Reset" button of a card
     """
-    card = Card.user_objects.get(request.user, id=pk)
+    card = get_object_or_404(Card.user_objects.all(request.user), pk=pk)
     prev_area = card.area
 
     if prev_area != 1:
@@ -172,7 +195,7 @@ def card_reset(request, pk):
         undo_url = reverse('card-set-area', args=(card.pk, prev_area))
         messages.success(
             request,
-            mark_safe('Card moved from area {} to area 1. <a href="{}">Undo</a>'.format(prev_area, undo_url))
+            mark_safe('{} moved from area {} to area 1. <a href="{}">Undo</a>'.format(card, prev_area, undo_url))
         )
     else:
         messages.success(request, 'Card is already in area 1.')
@@ -184,10 +207,10 @@ def card_reset(request, pk):
 def card_set_area(request, pk, area):
     """Handle manual movements of a card
     """
-    card = Card.user_objects.get(request.user, id=pk)
+    card = get_object_or_404(Card.user_objects.all(request.user), pk=pk)
     prev_area = card.area
     card.area = area
     card.save()
-    messages.success(request, 'Card moved from area {} to area {}.'.format(prev_area, card.area))
+    messages.success(request, '{} moved from area {} to area {}.'.format(card, prev_area, card.area))
 
     return redirect(request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,))))

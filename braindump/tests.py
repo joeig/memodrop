@@ -1,8 +1,10 @@
 import math
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.utils import timezone
 
 from braindump.views import BraindumpViewMixin
 from cards.models import Card
@@ -42,14 +44,14 @@ class BraindumpTestCase(TestCase):
             category=self.foreign_test_category,
         )
 
-    def test_braindump_index(self):
+    def test_index(self):
         """Test if the braindump index is displayed successfully
         """
         url = reverse('braindump-index')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_braindump_session(self):
+    def test_session(self):
         """Test if the braindump session starts successfully
         """
         test_card = self.test_cards[0]
@@ -68,7 +70,7 @@ class BraindumpTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_braindump_ok(self):
+    def test_ok(self):
         """Test if the "OK" button in braindump works
         """
         test_card = self.test_cards[0]
@@ -80,7 +82,7 @@ class BraindumpTestCase(TestCase):
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 2)
 
-    def test_braindump_strict_nok_on_area_3(self):
+    def test_strict_nok_on_area_3(self):
         """Test if the "OK" button in braindump works for cards in area 3 (strict mode)
         """
         test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1,
@@ -99,7 +101,7 @@ class BraindumpTestCase(TestCase):
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 1)
 
-    def test_braindump_defensive_nok_on_area_3(self):
+    def test_defensive_nok_on_area_3(self):
         """Test if the "OK" button in braindump works for cards in area 3 (defensive mode)
         """
         test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2,
@@ -118,7 +120,7 @@ class BraindumpTestCase(TestCase):
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 2)
 
-    def test_braindump_strict_nok_on_area_1(self):
+    def test_strict_nok_on_area_1(self):
         """Test if the "Not OK" button in braindump works for cards in area 1 (strict mode)
         """
         test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=1,
@@ -137,7 +139,7 @@ class BraindumpTestCase(TestCase):
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 1)
 
-    def test_braindump_defensive_nok_on_area_1(self):
+    def test_defensive_nok_on_area_1(self):
         """Test if the "Not OK" button in braindump works for cards in area 3 (defensive mode)
         """
         test_category = Category.objects.create(name='Category 1337', description='Description 1337', mode=2,
@@ -155,6 +157,33 @@ class BraindumpTestCase(TestCase):
 
         refreshed_test_card = Card.objects.get(pk=test_card.pk)
         self.assertEqual(refreshed_test_card.area, 1)
+
+    def test_postpone(self):
+        """Test if the "Postpone" button works
+        """
+        test_card = self.test_cards[0]
+        postpone_seconds = settings.BRAINDUMP_MAX_POSTPONE_SECONDS
+        url = reverse('braindump-postpone', args=(test_card.category.pk, test_card.pk, postpone_seconds))
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        refreshed_test_card = Card.objects.get(pk=test_card.pk)
+        self.assertGreater(refreshed_test_card.postpone_until, timezone.now())
+
+    def test_postpone_too_high(self):
+        """Test if the "Postpone" button doesn't work if the value exceeds the configured setting
+        """
+        # We need the most recent timestamps, so we're refreshing the reference at this point:
+        test_card = Card.objects.get(pk=self.test_cards[0].pk)
+        postpone_seconds = settings.BRAINDUMP_MAX_POSTPONE_SECONDS + 1
+        url = reverse('braindump-postpone', args=(test_card.category.pk, test_card.pk, postpone_seconds))
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        refreshed_test_card = Card.objects.get(pk=test_card.pk)
+        self.assertEqual(refreshed_test_card.postpone_until, test_card.postpone_until)
 
     def test_validate_min_max_area_default(self):
         """Test if the default min_area and max_area query string attributes can be validated properly

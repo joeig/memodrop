@@ -63,6 +63,8 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu">
+                            <a href="{% url 'braindump-postpone' card.category.pk card.pk 900 %}" class="dropdown-item" title="Edit this card">Postpone for 15 min</a>
+                            <div class="dropdown-divider"></div>
                             <a href="{% url 'card-update' card.pk %}" class="dropdown-item" title="Edit this card">Update</a>
                             <a href="{% url 'card-delete' card.pk %}" class="dropdown-item" title="Delete this card">Delete</a>
                             <div class="dropdown-divider"></div>

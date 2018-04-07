@@ -97,8 +97,13 @@
                     <tbody>
                     {% for card in category.cards.all %}
                         <tr>
-                            <td><a href="{% url 'card-detail' card.pk %}"
-                                   title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
+                            <td>
+                                <a href="{% url 'card-detail' card.pk %}"
+                                   title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a>
+                                {% if card.postponed %}
+                                (postponed)
+                                {% endif %} 
+                            </td>
                             <td class="d-none d-md-table-cell">{% area_rating card.area %}</td>
                             <td class="d-none d-md-table-cell">{% card_controls card %}</td>
                         </tr>

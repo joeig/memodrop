@@ -1,5 +1,6 @@
 <div class="btn-group" role="group">
-    <a href="{% url 'card-reset' card.pk %}" class="btn btn-outline-secondary btn-sm {% if card.area == 1 %}disabled{% endif %}" title="Move this card to area 1">Reset</a>
+    <a href="{% url 'card-reset' card.pk %}" class="btn btn-outline-secondary btn-sm{% if card.area == 1 %} disabled{% endif %}" title="Move this card to area 1">Reset</a>
+    <a href="{% url 'card-expedite' card.pk %}" class="btn btn-outline-secondary btn-sm{% if not card.postponed %} disabled{% endif %}" title="Remove the postpone marker">Expedite</a>
     <a href="{% url 'card-update' card.pk %}" class="btn btn-outline-secondary btn-sm" title="Edit this card">Update</a>
     <a href="{% url 'card-delete' card.pk %}" class="btn btn-outline-secondary btn-sm" title="Delete this card">Delete</a>
 </div>

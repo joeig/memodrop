@@ -28,14 +28,14 @@ class CardTestCase(TestCase):
             )
             self.test_cards.append(test_card)
 
-    def test_category_list(self):
+    def test_list(self):
         """Test if the category list is displayed sucessfully
         """
         url = reverse('category-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_category_detail(self):
+    def test_detail(self):
         """Test if the category list is displayed sucessfully
         """
         test_card = self.test_cards[0]

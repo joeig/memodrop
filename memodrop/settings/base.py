@@ -134,3 +134,8 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = 'auth-login'
 LOGIN_REDIRECT_URL = 'index'
+
+
+# Braindump
+
+BRAINDUMP_MAX_POSTPONE_SECONDS = 3600
