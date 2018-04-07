@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from cards.models import Card
 from categories.models import Category
 
 
