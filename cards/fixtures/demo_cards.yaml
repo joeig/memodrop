@@ -5,129 +5,90 @@
     question: Question 1
     answer: Answer 1
     hint: Hint 1
-    area: 1
     category: 1
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 2
   fields:
     question: Question 2
     answer: Answer 2
     hint: Hint 2
-    area: 2
     category: 1
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 3
   fields:
     question: Question 3
     answer: Answer 3
     hint: Hint 3
-    area: 3
     category: 1
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 4
   fields:
     question: Question 4
     answer: Answer 4
     hint: Hint 4
-    area: 4
     category: 1
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 5
   fields:
     question: Question 5
     answer: Answer 5
     hint: Hint 5
-    area: 5
     category: 1
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 6
   fields:
     question: Question 6
     answer: Answer 6
     hint: Hint 6
-    area: 6
     category: 1
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 7
   fields:
     question: Question 1
     answer: Answer 1
     hint: Hint 1
-    area: 1
     category: 2
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 8
   fields:
     question: Question 2
     answer: Answer 2
     hint: Hint 2
-    area: 2
     category: 2
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 9
   fields:
     question: Question 3
     answer: Answer 3
     hint: Hint 3
-    area: 3
     category: 2
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 10
   fields:
     question: Question 4
     answer: Answer 4
     hint: Hint 4
-    area: 4
     category: 2
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 11
   fields:
     question: Question 5
     answer: Answer 5
     hint: Hint 5
-    area: 5
     category: 2
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 12
   fields:
     question: Question 6
     answer: Answer 6
     hint: Hint 6
-    area: 6
     category: 2
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 13
   fields:
     question: Question without hint
     answer: Answer without hint
-    area: 1
     category: 3
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 14
   fields:
@@ -149,16 +110,10 @@
       ## Headline 2
 
       ### Headline 3
-    area: 1
     category: 5
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'
 - model: cards.card
   pk: 15
   fields:
     question: First question of user number 2
     answer: First answer of user number 2
-    area: 1
     category: 6
-    last_interaction: '2018-03-17 13:37:00Z'
-    postpone_until: '2018-03-17 13:37:00Z'

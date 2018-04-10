@@ -23,5 +23,5 @@ class CardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Card
-        fields = ('id', 'question', 'answer', 'hint', 'area', 'category', 'last_interaction')
-        read_only_fields = ('id', 'last_interaction')
+        fields = ('id', 'question', 'answer', 'hint', 'category')
+        read_only_fields = ('id',)

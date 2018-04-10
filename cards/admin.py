@@ -4,8 +4,8 @@ from cards.models import Card
 
 
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('question', 'area', 'category', 'last_interaction')
-    list_filter = ('area', 'category')
+    list_display = ('question', 'category')
+    list_filter = ('category',)
     search_fields = ('question', 'hint', 'answer')
 
 

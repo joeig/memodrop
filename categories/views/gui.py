@@ -5,7 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
-from cards.models import Card
+from braindump.models import CardPlacement
 from categories.models import Category
 
 
@@ -28,12 +28,16 @@ class CategoryDetail(LoginRequiredMixin, CategoryBelongsUserMixin, DetailView):
     """
     def get_context_data(self, **kwargs):
         context = super(CategoryDetail, self).get_context_data(**kwargs)
-        context['area1'] = Card.objects.filter(category_id=self.object.id, area=1).all()
-        context['area2'] = Card.objects.filter(category_id=self.object.id, area=2).all()
-        context['area3'] = Card.objects.filter(category_id=self.object.id, area=3).all()
-        context['area4'] = Card.objects.filter(category_id=self.object.id, area=4).all()
-        context['area5'] = Card.objects.filter(category_id=self.object.id, area=5).all()
-        context['area6'] = Card.objects.filter(category_id=self.object.id, area=6).all()
+        context['card_placements'] = CardPlacement.user_objects.all(self.request.user).filter(
+            card__category=self.object.id,
+        ).all()
+
+        for i in range(1, 7):
+            context['area{}'.format(i)] = CardPlacement.user_objects.all(self.request.user).filter(
+                card__category=self.object.id,
+                area=i,
+            ).all()
+
         return context
 
 

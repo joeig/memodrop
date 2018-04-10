@@ -1,15 +1,13 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils.safestring import mark_safe
-from django.views.generic import RedirectView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
+from braindump.models import CardPlacement
 from cards.models import Card
 from categories.models import Category
 
@@ -26,12 +24,19 @@ class CardList(LoginRequiredMixin, CardBelongsUserMixin, ListView):
     """
     paginate_by = 25
     paginate_orphans = 5
+    template_name = 'cards/card_list.html'
+
+    def get_queryset(self):
+        return CardPlacement.user_objects.all(self.request.user)
 
 
 class CardDetail(LoginRequiredMixin, CardBelongsUserMixin, DetailView):
     """Show detailed information about a card
     """
-    pass
+    def get_context_data(self, **kwargs):
+        context = super(CardDetail, self).get_context_data(**kwargs)
+        context['card_placement'] = CardPlacement.card_user_objects.get(self.object, self.request.user)
+        return context
 
 
 class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
@@ -41,7 +46,6 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
     fields = ['question',
               'hint',
               'answer',
-              'area',
               'category']
     template_name_suffix = '_create_form'
 
@@ -104,7 +108,6 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
     fields = ['question',
               'hint',
               'answer',
-              'area',
               'category']
     template_name_suffix = '_update_form'
 
@@ -163,54 +166,3 @@ class CardDelete(LoginRequiredMixin, CardBelongsUserMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'Card deleted.')
         return super(CardDelete, self).delete(request, *args, **kwargs)
-
-
-class CardExpedite(LoginRequiredMixin, CardBelongsUserMixin, RedirectView):
-    """Expedite a card (undo postpone)
-    """
-    permanent = False
-
-    def get_redirect_url(self, pk):
-        card = get_object_or_404(self.get_queryset(), pk=pk)
-        card.expedite()
-        messages.success(
-            self.request,
-            mark_safe('The postpone marker of <a href="{}">{}</a> has been removed.'.format(
-                reverse('card-detail', args=(card.pk,)),
-                card
-            ))
-        )
-        return self.request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,)))
-
-
-@login_required
-def card_reset(request, pk):
-    """Handle clicks on the "Reset" button of a card
-    """
-    card = get_object_or_404(Card.user_objects.all(request.user), pk=pk)
-    prev_area = card.area
-
-    if prev_area != 1:
-        card.reset()
-        undo_url = reverse('card-set-area', args=(card.pk, prev_area))
-        messages.success(
-            request,
-            mark_safe('{} moved from area {} to area 1. <a href="{}">Undo</a>'.format(card, prev_area, undo_url))
-        )
-    else:
-        messages.success(request, 'Card is already in area 1.')
-
-    return redirect(request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,))))
-
-
-@login_required
-def card_set_area(request, pk, area):
-    """Handle manual movements of a card
-    """
-    card = get_object_or_404(Card.user_objects.all(request.user), pk=pk)
-    prev_area = card.area
-    card.area = area
-    card.save()
-    messages.success(request, '{} moved from area {} to area {}.'.format(card, prev_area, card.area))
-
-    return redirect(request.META.get('HTTP_REFERER', reverse('card-detail', args=(card.pk,))))

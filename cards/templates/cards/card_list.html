@@ -21,16 +21,16 @@
             </tr>
             </thead>
             <tbody>
-            {% for card in card_list %}
+            {% for card_placement in object_list %}
                 <tr>
-                    <td><a href="{% url 'card-detail' card.pk %}" title="{{ card.question }}">{{ card.question|truncatechars:128 }}</a></td>
-                    <td>{% area_rating card.area %}</td>
-                    <td><a href="{% url 'category-detail' card.category.pk %}" title="{{ card.category }}">{{ card.category.name|truncatechars:32 }}</a></td>
-                    <td>{% card_controls card %}</td>
+                    <td><a href="{% url 'card-detail' card_placement.card.pk %}" title="{{ card_placement.card.question }}">{{ card_placement.card.question|truncatechars:128 }}</a></td>
+                    <td>{% area_rating card_placement.area %}</td>
+                    <td><a href="{% url 'category-detail' card_placement.card.category.pk %}" title="{{ card_placement.card.category }}">{{ card_placement.card.category.name|truncatechars:32 }}</a></td>
+                    <td>{% card_controls card_placement %}</td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="4">No cards yet.</td>
+                    <td colspan="4">No cards have been created yet.</td>
                 </tr>
             {% endfor %}
             </tbody>

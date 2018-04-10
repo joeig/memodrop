@@ -4,9 +4,9 @@ register = template.Library()
 
 
 @register.inclusion_tag('templatetags/card_controls.html')
-def card_controls(card):
+def card_controls(card_placement):
     """Display control buttons for managing one single card
     """
     return {
-        'card': card,
+        'card_placement': card_placement,
     }

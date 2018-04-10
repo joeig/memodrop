@@ -6,9 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView, View, RedirectView
 
-from cards.models import Card
+from braindump.models import CardPlacement
 from categories.models import Category
 
 
@@ -107,36 +108,38 @@ class BraindumpSession(LoginRequiredMixin, View, BraindumpViewMixin):
 
         # Correct min/max area for getting only options with actually existing cards
         # (this does not exclude areas *between* min_area and max_area!):
-        card_filter = Card.user_objects.all(self.request.user).filter(
-            category_id=category_pk,
+        card_placement_filter = CardPlacement.user_objects.all(self.request.user).filter(
+            card__category_id=category_pk,
             area__gte=min_area,
             area__lte=max_area,
+            postpone_until__lte=timezone.now(),
         ).order_by('area')
 
-        if card_filter.exists():
-            adjusted_min_area = card_filter.first().area
-            adjusted_max_area = card_filter.last().area
+        if card_placement_filter.exists():
+            adjusted_min_area = card_placement_filter.first().area
+            adjusted_max_area = card_placement_filter.last().area
 
             # If no card matches the selected area, retry:
-            card = False
+            card_placement = False
             retries = 0
-            while not card and retries < 10:
+            while not card_placement and retries < 10:
                 # Select an area:
                 randomly_selected_area = self.get_probability_weighted_area(adjusted_min_area, adjusted_max_area)
 
                 # Query a random card of the selected area (order_by('?') returns *one* random Card object):
-                card = Card.user_objects.all(self.request.user).filter(
-                    category_id=category_pk,
+                card_placement = CardPlacement.user_objects.all(self.request.user).filter(
+                    card__category_id=category_pk,
                     area=randomly_selected_area,
-                    postpone_until__lte=timezone.now()
+                    postpone_until__lte=timezone.now(),
                 ).order_by('?').first()
 
                 retries += 1
 
-            if card:
+            if card_placement:
                 # Render a Braindump session containing the selected card:
                 context = {
-                    'card': card,
+                    'card': card_placement.card,
+                    'card_placement': card_placement,
                     'braindump_ok_query_string': query_string,
                     'braindump_nok_query_string': query_string,
                     'braindump_try_again_query_string': query_string,
@@ -163,10 +166,10 @@ class BraindumpOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
     permanent = False
 
     def get_redirect_url(self, card_pk, category_pk):
-        card = get_object_or_404(Card.user_objects.all(self.request.user), pk=card_pk)
-        card.move_forward()
-        card.set_last_interaction()
-        card.category.set_last_interaction()
+        card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
+        card_placement.move_forward()
+        card_placement.set_last_interaction()
+        card_placement.card.category.set_last_interaction()
 
         query_string = self.handle_query_string(self.request)
 
@@ -179,16 +182,15 @@ class BraindumpNOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
     permanent = False
 
     def get_redirect_url(self, card_pk, category_pk):
-        card = get_object_or_404(Card.user_objects.all(self.request.user), pk=card_pk)
-        category = get_object_or_404(Category.user_objects.all(self.request.user), pk=category_pk)
+        card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
 
-        if category.mode == 1:
-            card.reset()
-        elif category.mode == 2:
-            card.move_backward()
+        if card_placement.card.category.mode == 1:
+            card_placement.reset()
+        elif card_placement.card.category.mode == 2:
+            card_placement.move_backward()
 
-        card.set_last_interaction()
-        card.category.set_last_interaction()
+        card_placement.set_last_interaction()
+        card_placement.card.category.set_last_interaction()
 
         query_string = self.handle_query_string(self.request)
 
@@ -201,7 +203,7 @@ class BraindumpPostpone(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
     permanent = False
 
     def get_redirect_url(self, card_pk, category_pk, seconds):
-        card = get_object_or_404(Card.user_objects.all(self.request.user), pk=card_pk)
+        card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
 
         if int(seconds) > settings.BRAINDUMP_MAX_POSTPONE_SECONDS:
             messages.error(
@@ -209,12 +211,68 @@ class BraindumpPostpone(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
                 'Cannot postpone a card for more than {} seconds.'.format(settings.BRAINDUMP_MAX_POSTPONE_SECONDS)
             )
         else:
-            card.postpone_until = timezone.now() + timedelta(seconds=int(seconds))
+            card_placement.postpone_until = timezone.now() + timedelta(seconds=int(seconds))
             messages.info(self.request, 'Ok, I will not show the card for 15 minutes from now.')
 
-        card.set_last_interaction()
-        card.category.set_last_interaction()
+        card_placement.set_last_interaction()
+        card_placement.card.category.set_last_interaction()
 
         query_string = self.handle_query_string(self.request)
 
         return '{}{}'.format(reverse('braindump-session', args=(category_pk,)), query_string)
+
+
+class CardExpedite(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
+    """Expedite a card (undo postpone)
+    """
+    permanent = False
+
+    def get_redirect_url(self, card_pk):
+        card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
+        card_placement.expedite()
+        messages.success(
+            self.request,
+            mark_safe('The postpone marker of <a href="{}">{}</a> has been removed.'.format(
+                reverse('card-detail', args=(card_placement.card.pk,)),
+                card_placement.card
+            ))
+        )
+        return self.request.META.get('HTTP_REFERER', reverse('card-detail', args=(card_placement.card.pk,)))
+
+
+class CardReset(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
+    """Handle clicks on the "Reset" button of a card
+    """
+    permanent = False
+
+    def get_redirect_url(self, card_pk):
+        card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
+        prev_area = card_placement.area
+
+        if prev_area != 1:
+            card_placement.reset()
+            undo_url = reverse('card-set-area', args=(card_placement.pk, prev_area))
+            messages.success(
+                self.request,
+                mark_safe('{} moved from area {} to area 1. <a href="{}">Undo</a>'.format(card_placement, prev_area,
+                                                                                          undo_url))
+            )
+        else:
+            messages.success(self.request, 'Card is already in area 1.')
+
+        return self.request.META.get('HTTP_REFERER', reverse('card-detail', args=(card_placement.pk,)))
+
+
+class CardSetArea(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
+    """Handle manual movements of a card
+    """
+    permanent = False
+
+    def get_redirect_url(self, card_pk, area):
+        card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
+        prev_area = card_placement.area
+        card_placement.area = area
+        card_placement.save()
+        messages.success(self.request, '{} moved from area {} to area {}.'.format(card_placement.card, prev_area,
+                                                                                  card_placement.area))
+        return self.request.META.get('HTTP_REFERER', reverse('card-detail', args=(card_placement.card.pk,)))
