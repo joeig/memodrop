@@ -11,6 +11,17 @@
     <h1 class="my-2 my-lg-5">
         {{ category.name }}
     </h1>
+    {% if category.is_shared_with %}
+        <p>
+            This category is owned by
+            {% if category.owner == user %}
+                you
+            {% else %}
+                {{ category.owner }}
+            {% endif %}
+            and shared with {{ category.is_shared_with|join:', ' }}.
+        </p>
+    {% endif %}
     <div class="clearfix"></div>
 
     {% if category.cards.all|length == 0 %}
@@ -123,8 +134,9 @@
             <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary"
                title="Start a Braindump session for all cards in this category">Start Braindump</a>
         {% endif %}
-        <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary" title="Edit this category">Update
+        <a href="{% url 'category-share-contract-list' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Share this category">Share Category</a>
+        <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Edit this category">Update
             Category</a>
-        <a href="{% url 'category-delete' category.pk %}" class="btn btn-link" title="Delete this category">Delete</a>
+        <a href="{% url 'category-delete' category.pk %}" class="btn btn-link{% if user in category.is_shared_with %} disabled{% endif %}" title="Delete this category">Delete</a>
     </div>
 {% endblock %}

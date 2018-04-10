@@ -12,11 +12,20 @@ from cards.models import Card
 from categories.models import Category
 
 
+class CardBelongsOwnerMixin:
+    """Mixin that returns all cards owned by the authorized user
+    """
+    def get_queryset(self):
+        return Card.owned_objects.all(self.request.user)
+
+
 class CardBelongsUserMixin:
     """Mixin that returns all cards belonging to the authorized user
     """
     def get_queryset(self):
-        return Card.user_objects.all(self.request.user)
+        owned_card_list = Card.owned_objects.all(self.request.user)
+        shared_card_list = Card.shared_objects.all(self.request.user)
+        return owned_card_list | shared_card_list
 
 
 class CardList(LoginRequiredMixin, CardBelongsUserMixin, ListView):
@@ -54,7 +63,8 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
         form.fields['question'].help_text = 'You can use Markdown.'
         form.fields['hint'].help_text = 'You can use Markdown.'
         form.fields['answer'].help_text = 'You can use Markdown.'
-        form.fields['category'].queryset = Category.user_objects.all(self.request.user)
+        form.fields['category'].queryset = Category.owned_objects.all(self.request.user) | \
+            Category.shared_objects.all(self.request.user)
         return form
 
     def get_initial(self):
@@ -107,8 +117,7 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
     """
     fields = ['question',
               'hint',
-              'answer',
-              'category']
+              'answer']
     template_name_suffix = '_update_form'
 
     def get_form(self, form_class=None):
@@ -116,7 +125,6 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
         form.fields['question'].help_text = 'You can use Markdown.'
         form.fields['hint'].help_text = 'You can use Markdown.'
         form.fields['answer'].help_text = 'You can use Markdown.'
-        form.fields['category'].queryset = Category.user_objects.all(self.request.user)
         return form
 
     def form_valid(self, form):
@@ -158,7 +166,7 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
         return resp
 
 
-class CardDelete(LoginRequiredMixin, CardBelongsUserMixin, DeleteView):
+class CardDelete(LoginRequiredMixin, CardBelongsOwnerMixin, DeleteView):
     """Delete a card
     """
     success_url = reverse_lazy('card-list')

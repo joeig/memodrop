@@ -66,7 +66,7 @@
                             <a href="{% url 'braindump-postpone' card.category.pk card.pk 900 %}" class="dropdown-item" title="Do not show this card for 15 min">Postpone for 15 min</a>
                             <div class="dropdown-divider"></div>
                             <a href="{% url 'card-update' card.pk %}" class="dropdown-item" title="Edit this card">Update</a>
-                            <a href="{% url 'card-delete' card.pk %}" class="dropdown-item" title="Delete this card">Delete</a>
+                            <a href="{% url 'card-delete' card.pk %}" class="dropdown-item{% if user in card.is_shared_with %} disabled{% endif %}" title="Delete this card">Delete</a>
                             <div class="dropdown-divider"></div>
                             <a href="{% url 'category-detail' card.category.pk %}" class="dropdown-item" title="Go to the category">Go to Category</a>
                         </div>

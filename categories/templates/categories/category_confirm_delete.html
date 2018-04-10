@@ -5,7 +5,6 @@
     <h1 class="my-2 my-lg-5">Delete Confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
-        <p>Your last interaction with this category was {{ category.last_interaction|timesince }} ago.</p>
         {% if category.cards.all|length %}
             This category contains {{ category.cards.all|length }} card{{ category.cards.all|length|pluralize }}:
             <ul>
@@ -15,11 +14,14 @@
                 {% endfor %}
             </ul>
         {% endif %}
+        {% if category.is_shared_with %}
+            <p>It is shared with {{ category.is_shared_with|length }} user{{ category.is_shared_with|length|pluralize }}. No user will be able to access it anymore. This action cannot be undone.</p>
+        {% endif %}
         <p>Are you sure you want to delete the category <a
                 href="{% url 'category-detail' category.pk %}"
                 title="{{ category }}"><strong>{{ category }}</strong></a>? This action cannot be undone.</p>
         {% buttons %}
-            <input type="submit" class="btn btn-danger" value="Delete"/>
+            <input type="submit" class="btn btn-danger" value="Delete{% if category.is_shared_with %} shared{% endif %} Category"/>
         {% endbuttons %}
     </form>
 {% endblock %}

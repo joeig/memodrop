@@ -5,5 +5,5 @@
     {% endif %}
 
     <a href="{% url 'card-update' card_placement.card.pk %}" class="btn btn-outline-secondary btn-sm" title="Edit this card">Update</a>
-    <a href="{% url 'card-delete' card_placement.card.pk %}" class="btn btn-outline-secondary btn-sm" title="Delete this card">Delete</a>
+    <a href="{% url 'card-delete' card_placement.card.pk %}" class="btn btn-outline-secondary btn-sm{% if user in card_placement.card.is_shared_with %} disabled{% endif %}" title="Delete this card">Delete</a>
 </div>

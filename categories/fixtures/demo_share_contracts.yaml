@@ -1,0 +1,12 @@
+---
+- model: categories.ShareContract
+  pk: 1
+  fields:
+    user: 2
+    category: 7
+    accepted: true
+- model: categories.ShareContract
+  pk: 2
+  fields:
+    user: 2
+    category: 8

@@ -5,12 +5,12 @@ from django.utils import timezone
 
 class CardPlacementUserManager(models.Manager):
     def all(self, user):
-        """Returns all card placements belonging to the authorized user
+        """Returns all card placements belonging to the user
         """
         return self.filter(user=user).all()
 
     def get(self, user, *args, **kwargs):
-        """Returns a card placement belonging to the authorized user
+        """Returns a card placement belonging to the user
         """
         return self.filter(user=user).get(*args, **kwargs)
 
@@ -29,7 +29,7 @@ class CardPlacementCardManager(models.Manager):
 
 class CardPlacementCardUserManager(models.Manager):
     def get(self, card, user, *args, **kwargs):
-        """Returns a card placement belonging to a card and the authorized user
+        """Returns a card placement belonging to a card and the user
         """
         return self.filter(card=card, user=user).get(*args, **kwargs)
 

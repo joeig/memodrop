@@ -4,12 +4,10 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from cards.models import Card
-from categories.models import Category
+from categories.models import Category, ShareContract
 
 
 class CardTestCase(TestCase):
-    test_cards = list()
-
     def setUp(self):
         """Set up test scenario
         """
@@ -19,14 +17,20 @@ class CardTestCase(TestCase):
         self.client = Client()
         self.client.force_login(self.test_user)
 
-        for i in range(1, 11):
-            test_card = Card.objects.create(
-                question='Question {}'.format(i),
-                answer='Answer {}'.format(i),
-                hint='Hint {}'.format(i),
-                category=self.test_category,
-            )
-            self.test_cards.append(test_card)
+        self.foreign_test_user = User.objects.create_user('card foreigner')
+
+    def _create_test_card(self, suffix='', category=False):
+        """Create a single test card
+        """
+        if not category:
+            category = self.test_category
+        card = Card.objects.create(
+            question='Question'.format(suffix),
+            answer='Answer'.format(suffix),
+            hint='Hint'.format(suffix),
+            category=category,
+        )
+        return card
 
     def test_list(self):
         """Test if the card list is displayed successfully
@@ -38,7 +42,7 @@ class CardTestCase(TestCase):
     def test_detail(self):
         """Test if the card list is displayed sucessfully
         """
-        test_card = self.test_cards[0]
+        test_card = self._create_test_card()
         url = reverse('card-detail', args=(test_card.pk,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -52,12 +56,7 @@ class CardTestCase(TestCase):
             description='Description 1337',
             owner=test_user
         )
-        test_card = Card.objects.create(
-            question='Question 1337',
-            answer='Answer 1337',
-            hint='Hint 1337',
-            category=test_category,
-        )
+        test_card = self._create_test_card(category=test_category)
         url = reverse('card-detail', args=(test_card.pk,))
 
         foreign_client = Client()
@@ -71,10 +70,36 @@ class CardTestCase(TestCase):
     def test_delete(self):
         """Test if the "Delete" button works
         """
-        test_card = self.test_cards[3]
+        test_card = self._create_test_card()
         url = reverse('card-delete', args=(test_card.pk,))
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
 
         with self.assertRaises(ObjectDoesNotExist):
             Card.objects.get(pk=test_card.pk)
+
+    def test_not_shared_card(self):
+        """Test if a not shared card is actually not shared
+        """
+        test_category = Category.objects.create(name='Category', description='Description', owner=self.test_user)
+        test_card = self._create_test_card(category=test_category)
+        share_contract = ShareContract.objects.create(user=self.foreign_test_user, category=test_category)
+        share_contract.decline()
+        is_shared_with = Card.objects.get(pk=test_card.pk).is_shared_with()
+        self.assertEqual(list(), is_shared_with)
+        shared_objects = Card.shared_objects.all(user=self.foreign_test_user)
+        self.assertEqual(list(), list(shared_objects))
+        owned_objects = Card.owned_objects.all(user=self.test_user)
+        self.assertEqual([test_card], list(owned_objects))
+
+    def test_shared_card(self):
+        """Test if a shared card is actually shared
+        """
+        test_category = Category.objects.create(name='Category', description='Description', owner=self.test_user)
+        test_card = self._create_test_card(category=test_category)
+        share_contract = ShareContract.objects.create(user=self.foreign_test_user, category=test_category)
+        share_contract.accept()
+        is_shared_with = Card.objects.get(pk=test_card.pk).is_shared_with()
+        self.assertEqual([self.foreign_test_user], is_shared_with)
+        shared_objects = Card.shared_objects.all(user=self.foreign_test_user)
+        self.assertEqual([test_card], list(shared_objects))

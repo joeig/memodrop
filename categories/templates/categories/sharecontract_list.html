@@ -1,0 +1,45 @@
+{% extends "main_authorized.html" %}
+{% load bootstrap4 %}
+{% block title %}Users with access to "{{ category }}"{% endblock %}
+{% block content %}
+    <h1 class="my-2 my-lg-5">
+        Users with access to "{{ category }}"
+        <div class="float-right">
+            <a href="{% url 'category-share-contract-request' category.pk %}" class="btn btn-outline-secondary" title="Share this category with other users">Invite Users</a>
+        </div>
+    </h1>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for share_contract in object_list %}
+                <tr>
+                    <td>
+                        {% if share_contract.user.first_name and share_contract.user.last_name %}
+                            {{ share_contract.user.first_name }} {{ share_contract.user.last_name }}
+                        {% else %}
+                            {{ share_contract.user }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'category-share-contract-revoke' category.pk share_contract.pk %}" class="btn btn-outline-secondary btn-sm" title="Revoke access for this user">Revoke</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">This category has not been shared yet.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% bootstrap_pagination page_obj %}
+{% endblock %}

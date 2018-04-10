@@ -15,7 +15,7 @@ class CategoryForeignKey(serializers.PrimaryKeyRelatedField):
         return user
 
     def get_queryset(self):
-        return Category.user_objects.all(self._get_user())
+        return Category.owned_objects.all(self._get_user())
 
 
 class CardSerializer(serializers.ModelSerializer):

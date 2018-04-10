@@ -21,7 +21,12 @@
             <tbody>
                 {% for category in category_list %}
                     <tr>
-                        <td><a href="{% url 'category-detail' category.pk %}" title="{{ category.name }}">{{ category.name }}</a></td>
+                        <td>
+                            <a href="{% url 'category-detail' category.pk %}" title="{{ category.name }}">{{ category.name }}</a>
+                            {% if user in category.is_shared_with %}
+                                (shared with me)
+                            {% endif %}
+                        </td>
                         <td>{{ category.cards.all|length }}</td>
                         <td>{{ category.get_mode_display }} Mode</td>
                         <td>

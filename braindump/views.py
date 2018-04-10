@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView, View, RedirectView
 
 from braindump.models import CardPlacement
-from categories.models import Category
+from categories.models import Category, ShareContract
 
 
 class BraindumpViewMixin:
@@ -84,9 +84,14 @@ class BraindumpIndex(LoginRequiredMixin, TemplateView):
     template_name = 'braindump/braindump_index.html'
 
     def get_context_data(self):
-        category_list = Category.user_objects.all(self.request.user).order_by('last_interaction').reverse().all()
+        share_contract_requests = ShareContract.user_objects.all(self.request.user).filter(accepted=False)
+
+        owned_category_list = Category.owned_objects.all(self.request.user)
+        shared_category_list = Category.shared_objects.all(self.request.user)
+        category_list = owned_category_list | shared_category_list
 
         context = {
+            'share_contract_requests': share_contract_requests,
             'category_list': category_list,
         }
 
@@ -99,7 +104,10 @@ class BraindumpSession(LoginRequiredMixin, View, BraindumpViewMixin):
     http_method_names = ['get']
 
     def get(self, request, category_pk):
-        get_object_or_404(Category.user_objects.all(self.request.user), pk=category_pk)
+        owned_category_list = Category.owned_objects.all(self.request.user)
+        shared_category_list = Category.shared_objects.all(self.request.user)
+        category_list = owned_category_list | shared_category_list
+        get_object_or_404(category_list, pk=category_pk)
         query_string = self.handle_query_string(request)
 
         # Maybe a better choice: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
@@ -154,10 +162,11 @@ class BraindumpSession(LoginRequiredMixin, View, BraindumpViewMixin):
         if card_error:
             messages.warning(
                 request,
-                'Cannot find any cards for this category in the desired areas. '
-                'Is it possible that you postponed all possible cards?'
+                'I cannot find any cards for this category in the desired areas. '
+                'Is it possible that you postponed all possible cards? '
+                'You can remove the postpone marker with the "Expedite" button.'
             )
-            return redirect(reverse('braindump-index'))
+            return redirect(reverse('category-detail', args=(category_pk,)))
 
 
 class BraindumpOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
@@ -169,7 +178,6 @@ class BraindumpOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
         card_placement = get_object_or_404(CardPlacement.user_objects.all(self.request.user), card_id=card_pk)
         card_placement.move_forward()
         card_placement.set_last_interaction()
-        card_placement.card.category.set_last_interaction()
 
         query_string = self.handle_query_string(self.request)
 
@@ -190,7 +198,6 @@ class BraindumpNOK(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
             card_placement.move_backward()
 
         card_placement.set_last_interaction()
-        card_placement.card.category.set_last_interaction()
 
         query_string = self.handle_query_string(self.request)
 
@@ -215,7 +222,6 @@ class BraindumpPostpone(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
             messages.info(self.request, 'Ok, I will not show the card for 15 minutes from now.')
 
         card_placement.set_last_interaction()
-        card_placement.card.category.set_last_interaction()
 
         query_string = self.handle_query_string(self.request)
 
@@ -234,7 +240,7 @@ class CardExpedite(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
             self.request,
             mark_safe('The postpone marker of <a href="{}">{}</a> has been removed.'.format(
                 reverse('card-detail', args=(card_placement.card.pk,)),
-                card_placement.card
+                card_placement.card,
             ))
         )
         return self.request.META.get('HTTP_REFERER', reverse('card-detail', args=(card_placement.card.pk,)))
@@ -251,11 +257,11 @@ class CardReset(LoginRequiredMixin, RedirectView, BraindumpViewMixin):
 
         if prev_area != 1:
             card_placement.reset()
-            undo_url = reverse('card-set-area', args=(card_placement.pk, prev_area))
+            undo_url = reverse('card-set-area', args=(card_placement.card.pk, prev_area))
             messages.success(
                 self.request,
-                mark_safe('{} moved from area {} to area 1. <a href="{}">Undo</a>'.format(card_placement, prev_area,
-                                                                                          undo_url))
+                mark_safe('{} moved from area {} to area 1. <a href="{}">Undo</a>'.format(card_placement.card,
+                                                                                          prev_area, undo_url))
             )
         else:
             messages.success(self.request, 'Card is already in area 1.')

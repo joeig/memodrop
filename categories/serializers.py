@@ -8,8 +8,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'description', 'mode', 'cards', 'last_interaction')
-        read_only_fields = ('id', 'last_interaction')
+        fields = ('id', 'name', 'description', 'mode', 'cards')
+        read_only_fields = ('id',)
 
     def _get_user(self):
         """Try to retrieve the current user

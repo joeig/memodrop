@@ -12,9 +12,9 @@ Features
 
 Improve your learning effectiveness using the [Leitner system](https://en.wikipedia.org/wiki/Leitner_system). It uses a simple algorithm that asks you for cards in the first areas more frequently. Correctly answered cards are moved to the next area. Incorrectly answered cards are moved back to the previous area ("defensive mode") or first area ("strict mode").
 
-### Categories
+### Collaborative categories
 
-Organize your flash cards in categories and find faster what you're looking for.
+Organize your flash cards in categories and find faster what you're looking for. You can even share your categories with your classmates!
 
 ### Flash cards with hints
 
@@ -114,6 +114,7 @@ There are some fixtures for different scenarios:
 ~~~ bash
 python manage.py loaddata demo_users  # use demo credentials from categories/fixtures/demo_users.yaml
 python manage.py loaddata demo_categories
+python manage.py loaddata demo_share_contracts
 python manage.py loaddata demo_cards
 ~~~
 

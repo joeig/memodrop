@@ -14,8 +14,6 @@ from categories.models import Category
 
 
 class BraindumpTestCase(TestCase):
-    test_cards = list()
-
     def setUp(self):
         """Set up test scenario
         """
@@ -25,17 +23,11 @@ class BraindumpTestCase(TestCase):
         self.client = Client()
         self.client.force_login(self.test_user)
 
-        self.foreign_test_user = User.objects.create_user('foreigner')
+        self.foreign_test_user = User.objects.create_user('braindump foreigner')
         self.foreign_test_category = Category.objects.create(name='Category Foreign', description='Description Foreign',
                                                              owner=self.foreign_test_user)
         self.foreign_client = Client()
         self.foreign_client.force_login(self.foreign_test_user)
-        self.foreign_test_card = Card.objects.create(
-            question='Question Foreign',
-            answer='Answer Foreign',
-            hint='Hint Foreign',
-            category=self.foreign_test_category,
-        )
 
     def _create_test_card(self, suffix='', category=False, user=False):
         """Create a single test card

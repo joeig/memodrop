@@ -1,12 +1,39 @@
 {% extends "main_authorized.html" %}
 {% load static %}
 {% load markdown_deux_tags %}
+
 {% block title %}Braindump{% endblock %}
 {% block custom_stylesheet_links %}
-    <link href="{% static 'braindump.css' %}" rel="stylesheet">{% endblock %}
+    <link href="{% static 'braindump.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <h1 class="my-2 my-lg-5">Braindump</h1>
     <div class="card-columns">
+        {% for req in share_contract_requests %}
+            <div class="card bg-light border-info">
+                <div class="card-body py-3 py-lg-5">
+                    <h4 class="card-title">
+                        {{ req.category.name }}
+                    </h4>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            shared by {{ req.category.owner }}, {{ req.category.cards.all|length }} card{{ req.category.cards.all|length|pluralize }},
+                            {{ req.category.get_mode_display|lower }} mode
+                        </small>
+                    </p>
+                    <div class="card-text">
+                        {{ req.category.description|markdown }}
+                    </div>
+                    <form action="{% url 'category-share-contract-accept' req.pk %}" method="post">
+                        {% csrf_token %}
+                        <input name="decision" class="btn btn-outline-success" type="submit" value="Accept">
+                        <input name="decision" class="btn btn-outline-danger" type="submit" value="Decline">
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+
         {% for category in category_list %}
             <div class="card bg-light">
                 <div class="card-body py-3 py-lg-5">
@@ -15,7 +42,11 @@
                     </h4>
                     <p class="card-text">
                         <small class="text-muted">
-                            {{ category.last_interaction|timesince }} ago,
+                            {% if user in category.is_shared_with %}
+                                shared by {{ category.owner }},
+                            {% elif category.is_shared_with %}
+                                shared,
+                            {% endif %}
                             {{ category.cards.all|length }} card{{ category.cards.all|length|pluralize }},
                             {{ category.get_mode_display|lower }} mode
                         </small>
@@ -44,7 +75,7 @@
                                 <a href="{% url 'card-create' %}?category={{ category.pk }}" class="dropdown-item"
                                    title="Create a new card in this category">Create Card</a>
                             {% endif %}
-                            <a href="{% url 'category-update' category.pk %}" class="dropdown-item"
+                            <a href="{% url 'category-update' category.pk %}" class="dropdown-item{% if user in category.is_shared_with %} disabled{% endif %}"
                                title="Edit this category">Update Category</a>
                         </div>
                     </div>
@@ -52,7 +83,8 @@
             </div>
         {% endfor %}
     </div>
-    {% if category_list|length == 0 %}
+
+    {% if share_contract_requests|length == 0 and category_list|length == 0 %}
         <div class="jumbotron">
             <p class="lead">You have not created any categories yet.</p>
             <p><a href="{% url 'category-create' %}" class="btn btn-primary btn-lg" title="Create the first category">Create

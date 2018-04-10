@@ -1,5 +1,5 @@
 ---
-- model: auth.user
+- model: auth.User
   pk: 1
   fields:
     username: admin
@@ -10,7 +10,7 @@
     password: pbkdf2_sha256$36000$tgUMsUFanHGd$Y/aJ+UVhFIyNMDlvsioOz0rqqYKhMQWFII6bl7p1/zE=
     is_superuser: True
     is_staff: True
-- model: auth.user
+- model: auth.User
   pk: 2
   fields:
     username: user
@@ -19,7 +19,7 @@
     email: jane.doe@example.tld
     # password: regularuser
     password: pbkdf2_sha256$36000$TgHy6u3qsXEt$aoK+YZkmupz4v1HqgttcLckpPMc9+dEPxAJ3enFlCCs=
-- model: auth.user
+- model: auth.User
   pk: 3
   fields:
     username: empty

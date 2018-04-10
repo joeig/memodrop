@@ -1,1 +1,1 @@
-{% load font_awesome %}<div class="area-rating" title="Area {{ areas|length }}">{% for a in areas %}{% fa 'fa-check-square' %}&nbsp;{% endfor %}{% for a in missing_areas %}{% fa 'fa-square' %}&nbsp;{% endfor %}</div>
+{% load font_awesome %}<div class="area-rating" title="Card is in area {{ areas|length|add:1 }}">{% for a in areas %}{% fa 'fa-check-square' %}&nbsp;{% endfor %}{% for a in missing_areas %}{% fa 'fa-square' %}&nbsp;{% endfor %}</div>

@@ -1,37 +1,33 @@
 ---
-- model: categories.category
+- model: categories.Category
   pk: 1
   fields:
     name: Strict Category
     description: The first demo category.
     mode: 1
-    last_interaction: '2018-03-17 13:37:00Z'
     owner: 1
-- model: categories.category
+- model: categories.Category
   pk: 2
   fields:
     name: Defensive Category
     description: The second demo category.
     mode: 2
-    last_interaction: '2018-03-17 13:37:00Z'
     owner: 1
-- model: categories.category
+- model: categories.Category
   pk: 3
   fields:
     name: Category With One Single Card
     description: The third demo category.
     mode: 1
-    last_interaction: '2018-03-17 13:37:00Z'
     owner: 1
-- model: categories.category
+- model: categories.Category
   pk: 4
   fields:
     name: Empty Category
     description: The fourth demo category.
     mode: 2
-    last_interaction: '2018-03-17 13:37:00Z'
     owner: 1
-- model: categories.category
+- model: categories.Category
   pk: 5
   fields:
     name: Markdown Stuff
@@ -41,13 +37,25 @@
 
       [Link to localhost](http://localhost/)
     mode: 1
-    last_interaction: '2018-03-17 13:37:00Z'
     owner: 1
-- model: categories.category
+- model: categories.Category
   pk: 6
   fields:
     name: Category of user number 2
     description: This category belongs to user number 2.
     mode: 1
-    last_interaction: '2018-03-17 13:37:00Z'
     owner: 2
+- model: categories.Category
+  pk: 7
+  fields:
+    name: Shared Category
+    description: This category is owned by user number 1 and shared with user number 2
+    mode: 1
+    owner: 1
+- model: categories.Category
+  pk: 8
+  fields:
+    name: Empty Shared Category
+    description: This category is owned by user number 1, but there is an open share request for user number 2
+    mode: 1
+    owner: 1

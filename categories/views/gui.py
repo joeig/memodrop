@@ -9,11 +9,20 @@ from braindump.models import CardPlacement
 from categories.models import Category
 
 
+class CategoryBelongsOwnerMixin:
+    """Mixin that returns all categories owned by the authorized user
+    """
+    def get_queryset(self):
+        return Category.owned_objects.all(self.request.user)
+
+
 class CategoryBelongsUserMixin:
     """Mixin that returns all categories belonging to the authorized user
     """
     def get_queryset(self):
-        return Category.user_objects.all(self.request.user)
+        owned_category_list = Category.owned_objects.all(self.request.user)
+        shared_category_list = Category.shared_objects.all(self.request.user)
+        return owned_category_list | shared_category_list
 
 
 class CategoryList(LoginRequiredMixin, CategoryBelongsUserMixin, ListView):
@@ -63,7 +72,7 @@ class CategoryCreate(LoginRequiredMixin, CategoryBelongsUserMixin, CreateView):
         return super(CategoryCreate, self).form_valid(form)
 
 
-class CategoryUpdate(LoginRequiredMixin, CategoryBelongsUserMixin, UpdateView):
+class CategoryUpdate(LoginRequiredMixin, CategoryBelongsOwnerMixin, UpdateView):
     """Update a category
     """
     fields = ['name', 'description', 'mode']
@@ -83,7 +92,7 @@ class CategoryUpdate(LoginRequiredMixin, CategoryBelongsUserMixin, UpdateView):
         return super(CategoryUpdate, self).form_valid(form)
 
 
-class CategoryDelete(LoginRequiredMixin, CategoryBelongsUserMixin, DeleteView):
+class CategoryDelete(LoginRequiredMixin, CategoryBelongsOwnerMixin, DeleteView):
     """Delete a category
     """
     success_url = reverse_lazy('category-list')
