@@ -47,7 +47,7 @@ class CardPlacement(models.Model):
     card = models.ForeignKey('cards.Card', on_delete=models.CASCADE, related_name='card_placements')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     last_interaction = models.DateTimeField(auto_now_add=True, blank=True, editable=False)
-    postpone_until = models.DateTimeField(auto_now_add=True, blank=True)
+    postpone_until = models.DateTimeField(default=timezone.now, blank=True)
     objects = models.Manager()
     user_objects = CardPlacementUserManager()
     card_objects = CardPlacementCardManager()
