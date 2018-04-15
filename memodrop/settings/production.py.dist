@@ -32,3 +32,8 @@ DATABASES = {
 
 # STATIC_ROOT = '/absolute/path/to/collected/static/files/'
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# ADMINS = [('John', 'john@example.com'), ('Mary', 'mary@example.com')]
+
+# DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+# EMAIL_BACKEND = 'django_sendmail_backend.backends.EmailBackend'

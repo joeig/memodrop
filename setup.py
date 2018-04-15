@@ -25,6 +25,7 @@ setup(
         'django-bootstrap4==0.0.6',
         'django-fa==1.0.0',
         'django-markdown-deux==1.0.5',
+        'django-sendmail-backend==0.1.2',
         'djangorestframework==3.7.7',
         'markdown2==2.3.5',
         'numpy==1.14.1',
