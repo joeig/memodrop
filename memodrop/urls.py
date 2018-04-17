@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
 from rest_framework.authtoken import views as auth_token_views
@@ -24,12 +23,7 @@ urlpatterns = [
     url(r'^$',
         RedirectView.as_view(url=reverse_lazy('braindump-index'), permanent=False),
         name='index'),
-    url(r'^auth/login/$',
-        auth_views.LoginView.as_view(template_name='auth/login.html'),
-        name='auth-login'),
-    url(r'^auth/logout/$',
-        auth_views.logout_then_login,
-        name='auth-logout'),
+    url(r'^auth/', include('authentication.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/auth/', include('rest_framework.urls')),
     url(r'^api/auth-token/', auth_token_views.obtain_auth_token),
