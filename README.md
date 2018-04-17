@@ -133,7 +133,6 @@ flake8
 Commit and tag your work (following the [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) guidelines):
 
 ~~~ bash
-git commit
-git tag v1.2.3
+bumpversion patch  # use major, minor or patch
 git push origin master --tags
 ~~~
