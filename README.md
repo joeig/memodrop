@@ -47,36 +47,44 @@ Installation
 
 ~~~ bash
 docker pull joeig/memodrop:latest
-docker run -d -p 8000:8000 joeig/memodrop:latest
+docker run -d -P --name memodrop joeig/memodrop:latest
+docker exec -ti memodrop python manage.py createsuperuser
+docker port memodrop
 ~~~
 
-This command starts a standalone web service with a local SQlite database in development mode. In this case, the database file is part of the container volume.
+This commands are starting a standalone web service with a local SQlite database in **development mode**. This is the quickest way to get memodrop running.
 
-**A few words about production usage:** You should mount a custom settings file to `memodrop/settings/production.py` (template: `production.py.dist`) containing the configuration for an external DBMS like PostgreSQL or MySQL. Also consider to use the WSGI interface instead of the standalone web service.
+In this case, the database file is part of the container volume. If you remove the container, obviously, your data will be removed as well. Also, this setup doesn't work well if you expect more than a few concurrent users. It should never run anywhere else than on localhost.
 
-Run the production container like this:
+#### Production usage
+
+You should provide a custom settings file in `memodrop/settings/production.py` (template: `production.py.dist`) containing the configuration for an external DBMS like PostgreSQL or MySQL and your own secret key.
+
+The following guide is using Django's development server again, so consider using the WSGI interface in `memodrop/wsgi.py` instead of the standalone web service.
+
+Enable your custom settings as following:
 
 ~~~ bash
-docker run -d -v /path/to/your/production.py:/usr/src/app/memodrop/settings/production.py:ro -e DJANGO_SETTINGS_MODULE=memodrop.settings.production -p 8000:8000 joeig/memodrop:latest
-~~~
+docker run -d -P --name memodrop \
+  -v /path/to/your/production.py:/usr/src/app/memodrop/settings/production.py:ro \
+  -e DJANGO_SETTINGS_MODULE=memodrop.settings.production \
+  joeig/memodrop:latest
 
-Now proceed to create the initial super-user:
-
-~~~ bash
-docker exec -ti <container ID> python manage.py createsuperuser
+docker exec -ti memodrop python manage.py createsuperuser
+docker port memodrop
 ~~~
 
 ### Manual setup
 
 1. Install Python 3.6
-2. You may want to create a virtual environment now
+2. You may want to create a virtual environment now.
 3. Install the dependencies: `python setup.py install`
 4. Production preparation: Copy `memodrop/settings/production.py.dist` to `memodrop/settings/production.py` and adjust the values
 5. Create a database or let Django do that for you (it will choose SQLite3 by default)
 6. Migrate the database: `python manage.py migrate [--settings memodrop.settings.production]`
 7. Create a super-user account: `python manage.py createsuperuser [--settings memodrop.settings.production]`
-8. * Start the application as WSGI
-   * Alternative: Start the standalone web service: `python manage.py runserver [--settings memodrop.settings.production]`
+8. * Start the application with its WSGI interface `memodrop/wsgi.py`
+   * Alternative for developers: Start the standalone web service: `python manage.py runserver [--settings memodrop.settings.production]`
 
 Create regular user accounts
 ----------------------------

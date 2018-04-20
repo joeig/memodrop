@@ -2,6 +2,11 @@
 """
 
 from .base import *
+from ._generate_secret_key import generate_secret_key
+from codecs import open
+from os import path
+
+here = path.abspath(path.dirname(__file__))
 
 print('Loading development settings')
 
@@ -10,7 +15,23 @@ print('Loading development settings')
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q)4!4@-rbkbrb&_+$5$@-y8o)wglp6qgip#@)03n8xmh5m9xs7'
+# We're using the SECRET_KEY stored in "development.key", otherwise we're generating a new one:
+key_file = path.join(here, 'development.key')
+if os.path.exists(key_file):
+    with open(key_file, 'r') as f:
+        SECRET_KEY = f.read().strip()
+else:
+    # key_file does not exist:
+    SECRET_KEY = None
+
+# Key file does not exist or is empty:
+if not SECRET_KEY:
+    print('Generating new secret key')
+    SECRET_KEY = generate_secret_key()
+    with open(key_file, 'w') as f:
+        f.write(SECRET_KEY)
+else:
+    print('Using the secret key stored in "{}"'.format(key_file))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

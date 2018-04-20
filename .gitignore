@@ -5,6 +5,7 @@ build/
 db.sqlite3*
 dist/
 memodrop/settings/production.py
+memodrop/settings/development.key
 local_scripts/
 venv/
 __pycache__
