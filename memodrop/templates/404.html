@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block custom_stylesheet_links %}
+    <link href="{% static 'login.css' %}" rel="stylesheet">{% endblock %}
+{% block custom_body_classes %}text-center{% endblock %}
+{% block title %}Not Found (404){% endblock %}
+{% block body %}
+    <div class="container">
+        <h1 class="my-2 my-lg-5">Not Found!</h1>
+        <p>Sorry, but we were unable to serve the desired resource.</p>
+    </div>
+{% endblock %}
