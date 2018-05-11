@@ -7,7 +7,11 @@ class CardAdmin(admin.ModelAdmin):
     list_display = ('question', 'category')
     list_filter = ('category',)
     search_fields = ('question', 'hint', 'answer')
-    readonly_fields = ('category',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return self.readonly_fields + ('category',)
+        return self.readonly_fields
 
 
 admin.site.register(Card, CardAdmin)
