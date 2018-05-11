@@ -1,6 +1,13 @@
 {% extends "main_authorized.html" %}
+
 {% load bootstrap4 %}
+{% load static %}
+
 {% block title %}Category{% endblock %}
+{% block custom_javascript_tags %}
+    <script src="{% static 'categories.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <h1 class="my-2 my-lg-5">Create Category</h1>
     <form action="" method="post">
