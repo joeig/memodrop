@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.core.urlresolvers import reverse_lazy
 
-from authentication.views import PasswordChangeDoneView
+from authentication.views import PasswordChangeDoneView, ProfileView
 
 urlpatterns = [
     url(r'^login/$',
@@ -18,4 +18,7 @@ urlpatterns = [
     url(r'^password-change/done/$',
         PasswordChangeDoneView.as_view(),
         name='auth-password-change-done'),
+    url(r'^profile/$',
+        ProfileView.as_view(),
+        name='auth-profile'),
 ]

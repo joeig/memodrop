@@ -1,0 +1,74 @@
+{% extends "main_authorized.html" %}
+{% load bootstrap4 %}
+{% block title %}
+    {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}'s Profile
+{% endblock %}
+{% block content %}
+    <h1 class="my-2 my-lg-5">
+        {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}'s Profile
+    </h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3">
+                {% if request.user.first_name %}
+                    <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
+                    <p>{{ request.user.username }}</p>
+                {% else %}
+                    <h2>{{ request.user.username }}</h2>
+                {% endif %}
+                <p><a href="mailto:{{ request.user.email }}">{{ request.user.email }}</a></p>
+                <hr>
+                <p><a href="{% url 'auth-password-change' %}" title="Change Password">Change password</a></p>
+            </div>
+            <div class="col-9">
+                <h2>Statistics</h2>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th></th>
+                            <th class="text-right">Cards</th>
+                            <th class="text-right">Categories</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Number of cards you own</td>
+                            <td class="text-right">{{ owned_card_count }}</td>
+                            <td class="text-right"></td>
+                        </tr>
+                        <tr>
+                            <td>Number of categories you own</td>
+                            <td class="text-right"></td>
+                            <td class="text-right">{{ owned_category_count }}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of cards which have been shared with you</td>
+                            <td class="text-right">{{ shared_card_count }}</td>
+                            <td class="text-right"></td>
+                        </tr>
+                        <tr>
+                            <td>Number of categories which have been shared with you</td>
+                            <td class="text-right"></td>
+                            <td class="text-right">{{ shared_category_count }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><strong>Σ</strong></td>
+                            <td class="text-right"><strong>{{ total_card_count }}</strong></td>
+                            <td class="text-right"><strong>{{ total_category_count }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {% if request.user.auth_token %}
+                    <h2>API Access</h2>
+                    <p>
+                        Your authentication token is:
+                        <code>
+                            {{ request.user.auth_token.key }}
+                        </code>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
