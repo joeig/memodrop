@@ -1,6 +1,7 @@
 {% load bootstrap4 %}
 {% load font_awesome %}
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +9,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}memodrop{% endblock %}</title>
+
     {% bootstrap_css %}
     {% fa_css %}
+    <link href="{% static 'simplemde-1.11.2/simplemde.min.css' %}" rel="stylesheet">
     <link href="{% static 'memodrop.css' %}" rel="stylesheet">
+    <link href="{% static 'markdown.css' %}" rel="stylesheet">
     {% block custom_stylesheet_links %}{% endblock %}
+
     <script src="{% static 'jquery-3.2.1/jquery.min.js' %}"></script>
     {% bootstrap_javascript %}
+    <script src="{% static 'simplemde-1.11.2/simplemde.min.js' %}"></script>
+    <script src="{% static 'markdown.js' %}"></script>
     {% block custom_javascript_tags %}{% endblock %}
 </head>
+
 <body class="{% block custom_body_classes %}{% endblock %}">
     {% block body %}{% endblock %}
 </body>

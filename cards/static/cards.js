@@ -1,3 +1,5 @@
 $(document).ready(function() {
-    $("#id_question").focus();
+    markdownEditor({element: $("#id_question"), autofocus: true});
+    markdownEditor({element: $("#id_hint")});
+    markdownEditor({element: $("#id_answer")});
 });

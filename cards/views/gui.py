@@ -60,9 +60,6 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['question'].help_text = 'You can use Markdown.'
-        form.fields['hint'].help_text = 'You can use Markdown.'
-        form.fields['answer'].help_text = 'You can use Markdown.'
         form.fields['category'].queryset = Category.owned_objects.all(self.request.user) | \
             Category.shared_objects.all(self.request.user)
         return form
@@ -120,9 +117,6 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['question'].help_text = 'You can use Markdown.'
-        form.fields['hint'].help_text = 'You can use Markdown.'
-        form.fields['answer'].help_text = 'You can use Markdown.'
         return form
 
     def form_valid(self, form):
