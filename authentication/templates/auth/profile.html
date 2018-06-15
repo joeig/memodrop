@@ -9,7 +9,7 @@
     </h1>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3">
+            <div class="col-lg-3 my-3 my-lg-0">
                 {% if request.user.first_name %}
                     <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
                     <p>{{ request.user.username }}</p>
@@ -20,7 +20,7 @@
                 <hr>
                 <p><a href="{% url 'auth-password-change' %}" title="Change Password">Change password</a></p>
             </div>
-            <div class="col-9">
+            <div class="col-lg-9 my-3 my-lg-0">
                 <h2>Statistics</h2>
                 <table class="table">
                     <thead class="thead-light">
