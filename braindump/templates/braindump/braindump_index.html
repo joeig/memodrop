@@ -59,7 +59,7 @@
                         {% if category.cards.all|length == 0 %}
                             <a href="{% url 'card-create' %}?category={{ category.pk }}"
                                class="btn btn-outline-secondary"
-                               title="Create the first card in this category">Create First Card</a>
+                               title="Create the first card in this category">Create first card</a>
                             <button type="button" class="btn btn-outline-secondary dropdown-toggle"
                                     data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false"></button>
@@ -74,10 +74,10 @@
                                title="Show details about this category">Details</a>
                             {% if category.cards.all|length != 0 %}
                                 <a href="{% url 'card-create' %}?category={{ category.pk }}" class="dropdown-item"
-                                   title="Create a new card in this category">Create Card</a>
+                                   title="Create a new card in this category">Create card</a>
                             {% endif %}
                             <a href="{% url 'category-update' category.pk %}" class="dropdown-item{% if user in category.is_shared_with %} disabled{% endif %}"
-                               title="Edit this category">Update Category</a>
+                               title="Edit this category">Update category</a>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
         <div class="jumbotron">
             <p class="lead">You have not created any categories yet.</p>
             <p><a href="{% url 'category-create' %}" class="btn btn-primary btn-lg" title="Create the first category">Create
-                First Category</a></p>
+                first category</a></p>
         </div>
     {% endif %}
 {% endblock %}

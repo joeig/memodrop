@@ -4,7 +4,7 @@
 {% load markdown_deux_tags %}
 {% load area_rating %}
 
-{% block title %}Braindump: {{ card.category }}{% endblock %}
+{% block title %}{{ card.category }}{% endblock %}
 {% block custom_stylesheet_links %}<link href="{% static 'braindump.css' %}" rel="stylesheet">{% endblock %}
 {% block custom_javascript_tags %}<script src="{% static 'braindump.js' %}"></script>{% endblock %}
 
@@ -12,7 +12,7 @@
     <div id="braindump" class="col-lg-8 mx-auto px-0">
         <h1 class="h5 my-3">
             <div class="float-right d-none d-sm-block">
-                <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-link btn-sm" title="Go to the category">Go to Category</a>
+                <a href="{% url 'category-detail' card.category.pk %}" class="btn btn-link btn-sm" title="Go to the category">Go to category</a>
             </div>
             {{ card.category.name }}
         </h1>
@@ -64,7 +64,7 @@
                     <div class="btn-group">
                         <a href="{% url 'braindump-session' card.category.pk %}{{ braindump_try_again_query_string }}" id="next" class="btn btn-outline-secondary btn-sm" title="Choose another card">Try again</a>
                         <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="sr-only">Toggle Dropdown</span>
+                            <span class="sr-only">Toggle dropdown</span>
                         </button>
                         <div class="dropdown-menu">
                             <a href="{% url 'braindump-postpone' card.category.pk card.pk 900 %}" class="dropdown-item" title="Do not show this card for 15 min">Postpone for 15 min</a>
@@ -72,7 +72,7 @@
                             <a href="{% url 'card-update' card.pk %}" class="dropdown-item" title="Edit this card">Update</a>
                             <a href="{% url 'card-delete' card.pk %}" class="dropdown-item{% if user in card.is_shared_with %} disabled{% endif %}" title="Delete this card">Delete</a>
                             <div class="dropdown-divider"></div>
-                            <a href="{% url 'category-detail' card.category.pk %}" class="dropdown-item" title="Go to the category">Go to Category</a>
+                            <a href="{% url 'category-detail' card.category.pk %}" class="dropdown-item" title="Go to the category">Go to category</a>
                         </div>
                     </div>
                 </div>

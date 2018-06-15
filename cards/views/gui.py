@@ -74,7 +74,7 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
         }
 
     def form_valid(self, form):
-        if self.request.POST.get('save') == 'Save and Create New':
+        if self.request.POST.get('save') == 'Save and create new':
             card_object = form.save()
 
             # Pre-select last category:

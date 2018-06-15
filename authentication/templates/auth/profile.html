@@ -1,13 +1,10 @@
 {% extends "main_authorized.html" %}
 {% load bootstrap4 %}
 {% block title %}
-    {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}'s Profile
+    {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}'s profile
 {% endblock %}
 {% block content %}
-    <h1 class="my-2 my-lg-5">
-        {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user.username }}{% endif %}'s Profile
-    </h1>
-    <div class="container-fluid">
+    <div class="container-fluid my-2 my-lg-5">
         <div class="row">
             <div class="col-lg-3 my-3 my-lg-0">
                 {% if request.user.first_name %}
@@ -60,7 +57,7 @@
                 </table>
 
                 {% if request.user.auth_token %}
-                    <h2>API Access</h2>
+                    <h2>API access</h2>
                     <p>
                         Your authentication token is:
                         <code>

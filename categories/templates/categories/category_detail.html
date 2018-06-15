@@ -28,7 +28,7 @@
         <div class="jumbotron">
             <p class="lead">This category does not contain any cards yet.</p>
             <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-primary btn-lg"
-               title="Create the first card in this category">Create First Card</a>
+               title="Create the first card in this category">Create first card</a>
         </div>
     {% endif %}
 
@@ -94,7 +94,7 @@
                 Cards
                 <a href="{% url 'card-create' %}?category={{ category.pk }}"
                    class="btn btn-outline-secondary float-right"
-                   title="Create a new card in this category">Create Card</a>
+                   title="Create a new card in this category">Create card</a>
             </h2>
             <div class="table-responsive">
                 <table class="table">
@@ -134,9 +134,9 @@
             <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary"
                title="Start a Braindump session for all cards in this category">Start Braindump</a>
         {% endif %}
-        <a href="{% url 'category-share-contract-list' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Share this category">Share Category</a>
+        <a href="{% url 'category-share-contract-list' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Share this category">Share category</a>
         <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Edit this category">Update
-            Category</a>
+            category</a>
         <a href="{% url 'category-delete' category.pk %}" class="btn btn-link{% if user in category.is_shared_with %} disabled{% endif %}" title="Delete this category">Delete</a>
     </div>
 {% endblock %}

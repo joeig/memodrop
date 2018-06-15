@@ -1,8 +1,8 @@
 {% extends "main_authorized.html" %}
 {% load bootstrap4 %}
-{% block title %}Accept Confirmation{% endblock %}
+{% block title %}Accept confirmation{% endblock %}
 {% block content %}
-    <h1 class="my-2 my-lg-5">Accept Confirmation</h1>
+    <h1 class="my-2 my-lg-5">Accept confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
         <p>{{ share_contract.category.owner }} invited you to access <strong>{{ share_contract.category }}</strong>.</p>

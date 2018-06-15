@@ -5,7 +5,7 @@
     <h1 class="my-2 my-lg-5">
         Categories
         <div class="float-right">
-            <a href="{% url 'category-create' %}" class="btn btn-outline-secondary" title="Create a new category">Create Category</a>
+            <a href="{% url 'category-create' %}" class="btn btn-outline-secondary" title="Create a new category">Create category</a>
         </div>
     </h1>
     <div class="table-responsive">
@@ -32,8 +32,8 @@
                         <td>
                             <div class="btn-group" role="group">
                                 <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary btn-sm" title="Start a Braindump session for all cards in this category">Start Braindump</a>
-                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary btn-sm" title="Create a new card in this category">Create Card</a>
-                                <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary btn-sm" title="Edit this category">Update Category</a>
+                                <a href="{% url 'card-create' %}?category={{ category.pk }}" class="btn btn-outline-secondary btn-sm" title="Create a new card in this category">Create card</a>
+                                <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary btn-sm" title="Edit this category">Update category</a>
                             </div>
                         </td>
                     </tr>

@@ -1,13 +1,13 @@
 {% extends "main_authorized.html" %}
 {% load bootstrap4 %}
-{% block title %}Share Category{% endblock %}
+{% block title %}Share category{% endblock %}
 {% block content %}
-    <h1 class="my-2 my-lg-5">Share Category</h1>
+    <h1 class="my-2 my-lg-5">Share category</h1>
     <form action="" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
-            <input type="submit" class="btn btn-primary" value="Send Invitation" />
+            <input type="submit" class="btn btn-primary" value="Send invitation" />
        {% endbuttons %}
     </form>
 {% endblock %}

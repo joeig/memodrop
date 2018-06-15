@@ -1,9 +1,9 @@
 {% extends "main_authorized.html" %}
 {% load bootstrap4 %}
 {% load markdown_deux_tags %}
-{% block title %}Confirmation{% endblock %}
+{% block title %}Delete confirmation{% endblock %}
 {% block content %}
-    <h1 class="my-2 my-lg-5">Delete Confirmation</h1>
+    <h1 class="my-2 my-lg-5">Delete confirmation</h1>
     <form action="" method="post">
         {% csrf_token %}
         <div class="card mb-3">
@@ -25,7 +25,7 @@
             This action cannot be undone.
         </p>
         {% buttons %}
-            <input type="submit" class="btn btn-danger" value="Delete{% if card.is_shared_with %} shared{% endif %} Card"/>
+            <input type="submit" class="btn btn-danger" value="Delete{% if card.is_shared_with %} shared{% endif %} card"/>
         {% endbuttons %}
     </form>
 {% endblock %}
