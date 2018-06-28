@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'rest_framework',
     'rest_framework.authtoken',
+    'watchman',
 ]
 
 MIDDLEWARE = [
