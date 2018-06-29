@@ -60,7 +60,7 @@ In this case, the database file is part of the container volume. If you remove t
 
 You should provide a custom settings file in `memodrop/settings/production.py` (template: `production.py.dist`) containing the configuration for an external DBMS like PostgreSQL or MySQL and your own secret key.
 
-The following guide is using Django's development server again, so consider using the WSGI interface in `memodrop/wsgi.py` instead of the standalone web service.
+The following guide is using Django's development server again, so consider using Gunicorn, uWSGI or mod_wsgi (WSGI interface: `memodrop.wsgi:application`, `memodrop/wsgi.py`). The static assets should rather be served by a webserver like nginx rather than WSGI (use `python manage.py collectstatic`).
 
 Enable your custom settings as following:
 
