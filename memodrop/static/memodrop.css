@@ -13,3 +13,8 @@ textarea.form-control {
 .area-rating {
     display: flex;
 }
+
+.card-title,
+.card-text {
+    hyphens: auto;
+}
