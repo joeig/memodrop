@@ -84,9 +84,8 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Created <a href="{}">{}</a> in category <a href="{}">"{}"</a>.'.format(
+                    'Created <a href="{}">card</a> in category <a href="{}">"{}"</a>.'.format(
                         reverse('card-detail', args=(card_object.pk,)),
-                        card_object,
                         reverse('category-detail', args=(card_object.category.pk,)),
                         card_object.category,
                     )
@@ -98,10 +97,9 @@ class CardCreate(LoginRequiredMixin, CardBelongsUserMixin, CreateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Created <a href="{}">{}</a> in category <a href="{}">"{}"</a>. '
+                    'Created <a href="{}">card</a> in category <a href="{}">"{}"</a>. '
                     '<a href="{}">Create New</a>'.format(
                         reverse('card-detail', args=(self.object.pk,)),
-                        self.object,
                         reverse('category-detail', args=(self.object.category.pk,)),
                         self.object.category,
                         reverse('card-create') + '?category={}'.format(self.object.category.pk),
@@ -138,9 +136,8 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Updated <a href="{}">{}</a> in category <a href="{}">"{}"</a>. '.format(
+                    'Updated <a href="{}">card</a> in category <a href="{}">"{}"</a>. '.format(
                         reverse('card-detail', args=(card_object.pk,)),
-                        card_object,
                         reverse('category-detail', args=(card_object.category.pk,)),
                         card_object.category,
                     )
@@ -152,10 +149,9 @@ class CardUpdate(LoginRequiredMixin, CardBelongsUserMixin, UpdateView):
             messages.success(
                 self.request,
                 mark_safe(
-                    'Updated <a href="{}">{}</a> in category <a href="{}">"{}"</a>. '
+                    'Updated <a href="{}">card</a> in category <a href="{}">"{}"</a>. '
                     '<a href="{}">Create New</a>'.format(
                         reverse('card-detail', args=(self.object.pk,)),
-                        self.object,
                         reverse('category-detail', args=(self.object.category.pk,)),
                         self.object.category,
                         reverse('card-create') + '?category={}'.format(self.object.category.pk),
