@@ -26,6 +26,7 @@ setup(
         'django-fa~=1.0.0',
         'django-jsonview~=1.2',
         'django-markdown-deux~=1.0',
+        'django-q~=1.0',
         'django-sendmail-backend~=0.1',
         'django-watchman~=0.15',
         'djangorestframework~=3.7',

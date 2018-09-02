@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_q',
     'bootstrap4',
     'fa',
     'markdown_deux',
@@ -101,6 +102,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_URL = '/static/'
+
+
+# Queue
+
+Q_CLUSTER = {
+    'orm': 'default',
+}
 
 
 # Bootstrap
