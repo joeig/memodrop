@@ -1,0 +1,15 @@
+[Unit]
+Description=memodrop Q
+After=network.target
+
+[Service]
+Type=simple
+User=memodrop
+Group=memodrop
+WorkingDirectory=/opt/memodrop/app/
+ExecStart=/opt/memodrop/venv/bin/python manage.py qcluster --settings memodrop.settings.production
+RestartSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
