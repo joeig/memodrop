@@ -48,10 +48,3 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, '../db.sqlite3'),
     }
 }
-
-# Queue
-
-Q_CLUSTER = {
-    'sync': True,
-    'orm': 'default',
-}

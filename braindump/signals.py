@@ -1,10 +1,11 @@
 from django.db.models import signals
 from django.dispatch import receiver
+from django_q.tasks import async_task, async_chain
 
 from braindump.models import CardPlacement
 from cards.models import Card
-from categories.models import ShareContract, Category
-from categories.signals import share_contract_accepted
+from categories.models import ShareContract
+from categories.signals import share_contract_accepted, share_contract_revoked
 
 
 @receiver(signals.post_save, sender=Card)
@@ -25,39 +26,19 @@ def create_card_placement_for_new_card(instance, created, **kwargs):
 
 
 @receiver(share_contract_accepted, sender=ShareContract)
-def create_card_placements_for_shared_category(share_contract, **kwargs):
-    """Creates card placements for a recently accepted share contract
+def share_contract_accepted(share_contract, **kwargs):
+    """Signal handler for share contracts that have been accepted
     """
-    for card in share_contract.category.cards.all():
-        CardPlacement.objects.create(
-            card=card,
-            user=share_contract.user,
-        )
+    async_task('braindump.tasks.create_card_placements_for_shared_category', share_contract)
 
 
-@receiver(signals.pre_delete, sender=ShareContract)
-def create_independent_category(instance, **kwargs):
-    """Duplicates an existing category with its cards and moves all necessary card placements
+@receiver(share_contract_revoked, sender=ShareContract)
+def share_contract_revoked(share_contract, **kwargs):
+    """Signal handler for shared contracts that have been deleted
     """
     # Do this only if the share contract was accepted:
-    if instance.accepted:
-        # Duplicate category:
-        new_category = Category.objects.get(pk=instance.category.pk)
-        new_category.pk = None
-        new_category.owner = instance.user
-        new_category.save()
-
-        for card in instance.category.cards.all():
-            # Duplicate card:
-            new_card = Card.objects.get(pk=card.pk)
-            new_card.pk = None
-            new_card.category = new_category
-            new_card.save()  # this will be creating a new card placement automatically
-
-            # Remove the auto-generated card placement:
-            CardPlacement.card_user_objects.get(card=new_card, user=instance.user).delete()
-
-            # Move existing card placement to the new card:
-            card_placement = CardPlacement.card_user_objects.get(card=card, user=instance.user)
-            card_placement.card = new_card
-            card_placement.save()
+    if share_contract.accepted:
+        async_chain([
+            ('braindump.tasks.create_independent_category', (share_contract,)),
+            ('braindump.tasks.delete_revoked_share_contract', (share_contract,)),
+         ])

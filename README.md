@@ -105,6 +105,19 @@ $ curl -X POST --data "username=<username>&password=<password>" "http://127.0.0.
 }
 ~~~
 
+High-traffic environments
+-------------------------
+
+### Enable distributed queue workers
+
+Basically, every task is executed synchronously. But under certain circumstances, you don't want to block user requests until time-consuming tasks have finished. If you are considering to run a setup with thousands of cards and users, you can enable asynchronous processing using the `Q_CLUSTER` setting in `production.py.dist`. After that, start the cluster workers using the following command: `python manage.py qcluster [--settings memodrop.settings.production]`
+
+You should also read the official docs regarding [Django Q](https://django-q.readthedocs.io/en/latest/configure.html).
+
+### Health check endpoint
+
+The `/admin/health/` route exposes a status endpoint which usually returns `200 OK` if the application is healthy.
+
 Contribution
 ------------
 

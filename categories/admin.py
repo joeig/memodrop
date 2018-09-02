@@ -11,7 +11,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ShareContractAdmin(admin.ModelAdmin):
-    list_display = ('category', 'user', 'accepted')
+    list_display = ('category', 'user', 'accepted', 'revoked')
     list_filter = list_display
     readonly_fields = list_display
 

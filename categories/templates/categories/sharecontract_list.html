@@ -28,7 +28,11 @@
                     </td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a href="{% url 'category-share-contract-revoke' category.pk share_contract.pk %}" class="btn btn-outline-secondary btn-sm" title="Revoke access for this user">Revoke</a>
+                            {% if not share_contract.revoked %}
+                                <a href="{% url 'category-share-contract-revoke' category.pk share_contract.pk %}" class="btn btn-outline-secondary btn-sm" title="Revoke access for this user">Revoke</a>
+                            {% else %}
+                                will be revoked
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

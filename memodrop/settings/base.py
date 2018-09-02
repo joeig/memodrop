@@ -107,6 +107,7 @@ STATIC_URL = '/static/'
 # Queue
 
 Q_CLUSTER = {
+    'sync': True,
     'orm': 'default',
 }
 

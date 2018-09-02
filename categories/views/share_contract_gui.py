@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views.generic import ListView, View, DeleteView, FormView
 
+from categories.exceptions import ShareContractAlreadyRevoked
 from categories.forms import ShareContractForm
 from categories.models import Category, ShareContract
 
@@ -63,11 +64,18 @@ class CategoryShareContractRevoke(LoginRequiredMixin, ShareContractBelongsOwnerM
     def delete(self, request, *args, **kwargs):
         share_contract = self.get_object()
         success_url = self.get_success_url()
-        share_contract.revoke()
-        messages.success(
-            self.request,
-            mark_safe('Access for {} has been revoked.'.format(share_contract.user))
-        )
+        try:
+            share_contract.revoke()
+        except ShareContractAlreadyRevoked:
+            messages.error(
+                self.request,
+                mark_safe('Access revocation for {} is already in progress.'.format(share_contract.user))
+            )
+        else:
+            messages.success(
+                self.request,
+                mark_safe('Access for {} will be revoked.'.format(share_contract.user))
+            )
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self):

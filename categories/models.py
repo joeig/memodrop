@@ -2,7 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
-from categories.signals import share_contract_accepted
+from categories.exceptions import ShareContractAlreadyRevoked, ShareContractCannotBeAccepted, \
+    ShareContractCannotBeDeclined, ShareContractCannotBeRevoked
+from categories.signals import share_contract_accepted, share_contract_revoked
 
 
 class CategoryOwnerManager(models.Manager):
@@ -101,44 +103,57 @@ class ShareContractUserCategoryManager(models.Manager):
 
 
 class ShareContract(models.Model):
+    """ShareContract
+
+    Workflow:
+    -> Create
+        self.accepted = False
+        self.revoked = False
+        -> Accept
+            self.accepted = True
+            self.revoked = False
+            -> Revoke
+                self.accepted = True
+                self.revoked = True
+                -> Delete
+        -> Decline
+            -> Delete
+    """
     category = models.ForeignKey('categories.Category', on_delete=models.CASCADE, related_name='share_contracts')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     accepted = models.BooleanField(default=False)
+    revoked = models.BooleanField(default=False)
     objects = models.Manager()
     user_objects = ShareContractUserManager()
     category_objects = ShareContractCategoryManager()
     user_category_objects = ShareContractUserCategoryManager()
 
-    __original_accepted = False
-
     class Meta:
         unique_together = (('category', 'user'),)
-
-    def __init__(self, *args, **kwargs):
-        super(ShareContract, self).__init__(*args, **kwargs)
-        self.__original_accepted = self.accepted
-
-    def save(self, **kwargs):
-        if self.accepted and (not self.__original_accepted or not self.pk):
-            share_contract_accepted.send(sender=self.__class__, share_contract=self)
-
-        super(ShareContract, self).save(**kwargs)
-        self.__original_accepted = self.accepted
 
     def accept(self):
         """Accept this share contract
         """
+        if self.accepted or self.revoked:
+            raise ShareContractCannotBeAccepted()
         self.accepted = True
-        self.__original_accepted = True
         self.save()
         share_contract_accepted.send(sender=self.__class__, share_contract=self)
 
     def decline(self):
         """Decline this share contract
         """
+        if self.accepted or self.revoked:
+            raise ShareContractCannotBeDeclined()
         self.delete()
 
     def revoke(self):
         """Revoke this share contract
         """
-        self.delete()
+        if not self.accepted:
+            raise ShareContractCannotBeRevoked()
+        if self.revoked:
+            raise ShareContractAlreadyRevoked()
+        self.revoked = True
+        self.save()
+        share_contract_revoked.send(sender=self.__class__, share_contract=self)
