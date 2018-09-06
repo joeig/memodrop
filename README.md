@@ -30,7 +30,7 @@ Create personalized user accounts for your friends with their own categories and
 
 ### REST API
 
-If you intend to migrate your existing cards, just use the `/api/categories/` and `/api/cards/` endpoints.
+If you intend to migrate your existing cards, just use the `/api/v1/categories/` and `/api/v1/cards/` endpoints.
 
 Screenshots
 -----------
@@ -96,10 +96,10 @@ API Authorization
 
 The API needs a user-specific token to authorize requests. This is accomplished by dispatching an `Authorization: Token <token>` header with all API requests.
 
-Tokens are user-specific and can be optained by perfoming a POST request containing the username and password to the authorization endpoint `/api/auth-token/`. Example:
+Tokens are user-specific and can be optained by perfoming a POST request containing the username and password to the authorization endpoint `/api/v1/auth-token/`. Example:
 
 ~~~ text
-$ curl -X POST --data "username=<username>&password=<password>" "http://127.0.0.1:8000/api/auth-token/"
+$ curl -X POST --data "username=<username>&password=<password>" "http://127.0.0.1:8000/api/v1/auth-token/"
 {
     "token": "091c4c1204422cb682cc9426d097d492a56a2013"
 }
