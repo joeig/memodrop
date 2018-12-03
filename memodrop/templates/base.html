@@ -19,6 +19,8 @@
 
     <script src="{% static 'jquery-3.2.1/jquery.min.js' %}"></script>
     {% bootstrap_javascript %}
+    <script src="{% static 'userguisettings.js' %}"></script>
+    {% block custom_javascript_initialization_tags %}{% endblock %}
     <script src="{% static 'simplemde-1.11.2/simplemde.min.js' %}"></script>
     <script src="{% static 'markdown.js' %}"></script>
     {% block custom_javascript_tags %}{% endblock %}

@@ -144,10 +144,17 @@ REST_FRAMEWORK = {
 
 # Auth
 
-LOGIN_URL = 'auth-login'
+LOGIN_URL = 'authentication-login'
 LOGIN_REDIRECT_URL = 'index'
 
 
 # Braindump
 
 BRAINDUMP_MAX_POSTPONE_SECONDS = 3600
+
+
+# User specific GUI settings (defaults)
+
+USER_GUI_SETTINGS_DEFAULTS = {
+    'enable_markdown_editor': True,
+}

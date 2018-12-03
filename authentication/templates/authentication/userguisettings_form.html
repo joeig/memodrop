@@ -1,0 +1,18 @@
+{% extends "main_authorized.html" %}
+
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}Change your global GUI settings{% endblock %}
+
+{% block content %}
+    <h1 class="my-2 my-lg-5">Change your global GUI settings</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        <p><small class="form-text text-muted">"Unknown" applies the system-wide default behavior.</small></p>
+        {% buttons %}
+            <input type="submit" class="btn btn-primary" value="Save" />
+        {% endbuttons %}
+    </form>
+{% endblock %}

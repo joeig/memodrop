@@ -4,6 +4,12 @@
 {% load bootstrap4 %}
 {% load font_awesome %}
 
+{% block custom_javascript_initialization_tags %}
+    <script type="text/javascript">
+    refreshUserGUISettings("{% url 'api-authentication-settings-with-defaults' version='v1' %}");
+    </script>
+{% endblock %}
+
 {% block body %}
     <nav class="navbar navbar-dark bg-primary sticky-top navbar-expand-lg mb-3">
         <div class="container">
@@ -37,8 +43,8 @@
                             {% endif %}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="{% url 'auth-profile' %}" title="Profile">Your profile</a>
-                            <a class="dropdown-item" href="{% url 'auth-logout' %}" title="Sign out">Sign out</a>
+                            <a class="dropdown-item" href="{% url 'authentication-profile' %}" title="Profile">Your profile</a>
+                            <a class="dropdown-item" href="{% url 'authentication-logout' %}" title="Sign out">Sign out</a>
                             {% if request.user.is_superuser %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'admin:index' %}" title="Django administration">Django

@@ -1,8 +1,11 @@
+from django.shortcuts import get_object_or_404
+
+from authentication.models import UserGUISettings
 from categories.models import Category
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.views.generic import RedirectView, TemplateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import RedirectView, TemplateView, UpdateView
 
 
 class PasswordChangeDoneView(RedirectView):
@@ -45,3 +48,17 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         }
 
         return context
+
+
+class UserGUISettingsUpdate(LoginRequiredMixin, UpdateView):
+    """Update user specific GUI settings
+    """
+    fields = ['enable_markdown_editor']
+    success_url = reverse_lazy('authentication-user-gui-settings-update')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(UserGUISettings, user=self.request.user)
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Settings updated.')
+        return super(UserGUISettingsUpdate, self).form_valid(form)

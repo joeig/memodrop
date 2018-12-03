@@ -1,4 +1,5 @@
 function markdownEditor(parameters) {
+    if(!getUserGUISettingsAttribute("enable_markdown_editor")) return;
     var simplemde = new SimpleMDE({
         element: parameters.element[0],
         autofocus: parameters.autofocus,
@@ -26,6 +27,10 @@ function markdownEditor(parameters) {
             "preview"
         ]
     });
-    parameters.element.attr("required", false);
+    try {
+        parameters.element.attr("required", false);
+    } catch(TypeError) {
+        console.log("Element does not have a \"required\" attribute");
+    }
     return simplemde;
 }

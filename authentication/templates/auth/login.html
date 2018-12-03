@@ -1,10 +1,23 @@
 {% extends "base.html" %}
+
 {% load static %}
+
 {% block custom_stylesheet_links %}
-    <link href="{% static 'login.css' %}" rel="stylesheet">{% endblock %}
-{% block custom_body_classes %}text-center{% endblock %}
+    <link href="{% static 'login.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block custom_body_classes %}
+    text-center
+{% endblock %}
+
+{% block custom_javascript_initialization_tags %}
+    <script type="text/javascript">
+    flushUserGUISettings();
+    </script>
+{% endblock %}
+
 {% block body %}
-    <form method="post" action="{% url 'auth-login' %}" class="form-signin">
+    <form method="post" action="{% url 'authentication-login' %}" class="form-signin">
         <h1 class="mb-4">memodrop</h1>
         <h2 class="h3 mb-3 font-weight-normal">Please sign in</h2>
 
