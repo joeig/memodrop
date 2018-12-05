@@ -16,3 +16,15 @@ class ShareContractCannotBeRevoked(WorkflowException):
 
 class ShareContractAlreadyRevoked(WorkflowException):
     pass
+
+
+class ShareContractUserIsOwner(WorkflowException):
+    pass
+
+
+class ShareContractAlreadyExists(WorkflowException):
+    pass
+
+
+class ShareContractUserDoesNotExist(WorkflowException):
+    pass

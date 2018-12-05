@@ -99,6 +99,16 @@ class CategoryTestCase(TestCase):
                                                                  category=self.test_category)
         self.assertTrue(share_contract.exists())
 
+    def test_share_contract_request_owner(self):
+        """Test if a share contract fails if the target user is equal to the owner of the category
+        """
+        url = reverse('category-share-contract-request', args=(self.test_category.pk,))
+        response = self.client.post(url, data={'username': self.test_user.username})
+        self.assertEqual(response.status_code, 200)
+        share_contract = ShareContract.user_category_objects.all(user=self.test_user,
+                                                                 category=self.test_category)
+        self.assertFalse(share_contract.exists())
+
     def test_share_contract_request_invalid_user(self):
         """Test if a share contract for a invalid user doesn't work (but should respond exactly like a valid user)
         """
