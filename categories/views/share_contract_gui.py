@@ -6,7 +6,8 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views.generic import ListView, View, DeleteView, FormView
 
-from categories.exceptions import ShareContractAlreadyRevoked
+from categories.exceptions import ShareContractAlreadyRevoked, ShareContractUserIsOwner, \
+    ShareContractUserDoesNotExist, ShareContractAlreadyExists
 from categories.forms import ShareContractForm
 from categories.models import Category, ShareContract
 
@@ -47,7 +48,14 @@ class CategoryShareContractRequest(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         category = get_object_or_404(Category.owned_objects.all(self.request.user), pk=self.kwargs['pk'])
-        form.create_share_contract(category=category)
+        try:
+            form.create_share_contract(category=category, requester_user=self.request.user)
+        except ShareContractUserIsOwner:
+            messages.error(self.request, 'You cannot share your category with yourself.')
+            return self.render_to_response(self.get_context_data(form=form))
+        except (ShareContractAlreadyExists, ShareContractUserDoesNotExist):
+            # Pass these errors for privacy reasons (we do not want to expose user names):
+            pass
         messages.info(self.request, 'The invitation has been sent successfully (assuming that the user exists).')
         return super().form_valid(form)
 
