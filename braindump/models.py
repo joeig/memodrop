@@ -56,6 +56,10 @@ class CardPlacement(models.Model):
     class Meta:
         unique_together = (('card', 'user'),)
         ordering = ['area']
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['card']),
+        ]
 
     def move_forward(self):
         """Increase the area
