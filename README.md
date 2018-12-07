@@ -155,5 +155,5 @@ Commit and tag your work (following the [Semantic Versioning 2.0.0](https://semv
 
 ~~~ bash
 bumpversion patch  # use major, minor or patch
-git push origin master --tags
+git push origin master --follow-tags
 ~~~
