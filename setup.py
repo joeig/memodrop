@@ -17,7 +17,7 @@ setup(
     long_description=long_description,
     url=__url__,
     author=__author__,
-    python_requires='~=3.6, <4',
+    python_requires='>=3.6, <4',
     packages=find_packages(exclude=['docs']),
     include_package_data=True,
     install_requires=[
