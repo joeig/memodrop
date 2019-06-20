@@ -10,6 +10,15 @@
 {% block content %}
     <h1 class="my-2 my-lg-5">
         {{ category.name }}
+        <div class="float-right">
+            {% if category.cards.all|length %}
+                <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary"
+                   title="Start a Braindump session for all cards in this category">Start Braindump</a>
+            {% endif %}
+            <a href="{% url 'category-share-contract-list' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Share this category">Share category</a>
+            <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Edit this category">Update
+                category</a>
+        </div>
     </h1>
     {% if category.is_shared_with %}
         <p>
@@ -130,13 +139,6 @@
     {% endif %}
 
     <div class="float-right">
-        {% if category.cards.all|length %}
-            <a href="{% url 'braindump-session' category.pk %}" class="btn btn-outline-secondary"
-               title="Start a Braindump session for all cards in this category">Start Braindump</a>
-        {% endif %}
-        <a href="{% url 'category-share-contract-list' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Share this category">Share category</a>
-        <a href="{% url 'category-update' category.pk %}" class="btn btn-outline-secondary{% if user in category.is_shared_with %} disabled{% endif %}" title="Edit this category">Update
-            category</a>
-        <a href="{% url 'category-delete' category.pk %}" class="btn btn-link{% if user in category.is_shared_with %} disabled{% endif %}" title="Delete this category">Delete</a>
+        <a href="{% url 'category-delete' category.pk %}" class="btn btn-link{% if user in category.is_shared_with %} disabled{% endif %}" title="Delete this category">Delete category</a>
     </div>
 {% endblock %}
