@@ -76,7 +76,7 @@ docker port memodrop
 
 ### Manual setup
 
-1. Install Python 3.6
+1. Install Python 3
 2. You may want to create a virtual environment now.
 3. Install the dependencies: `python setup.py install`
 4. Production preparation: Copy `memodrop/settings/production.py.dist` to `memodrop/settings/production.py` and adjust the values
