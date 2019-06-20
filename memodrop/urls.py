@@ -16,7 +16,7 @@ Including another URLconf
 import watchman.views
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 from rest_framework.authtoken import views as auth_token_views
 
