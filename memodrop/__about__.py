@@ -7,7 +7,7 @@ __all__ = [
 ]
 
 __name__ = 'memodrop'
-__version__ = '1.2.2'
+__version__ = '1.2.3'
 __description__ = 'Rapid learning process for people with tight schedules.'
 __url__ = 'https://github.com/joeig/memodrop'
 __author__ = 'Johannes Eiglsperger'
