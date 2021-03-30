@@ -5,6 +5,13 @@ Rapid learning process for people with tight schedules. Implementation of [flash
 
 [![Build Status](https://travis-ci.org/joeig/memodrop.svg?branch=master)](https://travis-ci.org/joeig/memodrop)
 
+Out of maintenance
+------------------
+
+Although I've enjoyed working on this project and sharing it with the community, I decided to stop putting additional efforts into it. It has been a reliable companion on my journey, and - who knows - perhaps it also helped others to get through a demanding stage of life.
+
+Please mind that dependencies and bugs won't be patched anymore. I'm sure you'll find a lot of great alternatives on GitHub if you search for the term "[leitner system](https://github.com/search?q=leitner+method)".
+
 Features
 --------
 
